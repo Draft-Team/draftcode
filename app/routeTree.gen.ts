@@ -11,122 +11,103 @@
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root"
-import { Route as ZapImport } from "./routes/zap"
-import { Route as SignupImport } from "./routes/signup"
-import { Route as LoginImport } from "./routes/login"
 import { Route as IndexImport } from "./routes/index"
+import { Route as LoginImport } from "./routes/login"
+import { Route as SignupImport } from "./routes/signup"
 
 // Create/Update Routes
 
-const ZapRoute = ZapImport.update({
-  id: "/zap",
-  path: "/zap",
-  getParentRoute: () => rootRoute,
-} as any)
-
 const SignupRoute = SignupImport.update({
-  id: "/signup",
-  path: "/signup",
-  getParentRoute: () => rootRoute,
+	id: "/signup",
+	path: "/signup",
+	getParentRoute: () => rootRoute
 } as any)
 
 const LoginRoute = LoginImport.update({
-  id: "/login",
-  path: "/login",
-  getParentRoute: () => rootRoute,
+	id: "/login",
+	path: "/login",
+	getParentRoute: () => rootRoute
 } as any)
 
 const IndexRoute = IndexImport.update({
-  id: "/",
-  path: "/",
-  getParentRoute: () => rootRoute,
+	id: "/",
+	path: "/",
+	getParentRoute: () => rootRoute
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module "@tanstack/react-router" {
-  interface FileRoutesByPath {
-    "/": {
-      id: "/"
-      path: "/"
-      fullPath: "/"
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    "/login": {
-      id: "/login"
-      path: "/login"
-      fullPath: "/login"
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    "/signup": {
-      id: "/signup"
-      path: "/signup"
-      fullPath: "/signup"
-      preLoaderRoute: typeof SignupImport
-      parentRoute: typeof rootRoute
-    }
-    "/zap": {
-      id: "/zap"
-      path: "/zap"
-      fullPath: "/zap"
-      preLoaderRoute: typeof ZapImport
-      parentRoute: typeof rootRoute
-    }
-  }
+	interface FileRoutesByPath {
+		"/": {
+			id: "/"
+			path: "/"
+			fullPath: "/"
+			preLoaderRoute: typeof IndexImport
+			parentRoute: typeof rootRoute
+		}
+		"/login": {
+			id: "/login"
+			path: "/login"
+			fullPath: "/login"
+			preLoaderRoute: typeof LoginImport
+			parentRoute: typeof rootRoute
+		}
+		"/signup": {
+			id: "/signup"
+			path: "/signup"
+			fullPath: "/signup"
+			preLoaderRoute: typeof SignupImport
+			parentRoute: typeof rootRoute
+		}
+	}
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute
-  "/login": typeof LoginRoute
-  "/signup": typeof SignupRoute
-  "/zap": typeof ZapRoute
+	"/": typeof IndexRoute
+	"/login": typeof LoginRoute
+	"/signup": typeof SignupRoute
 }
 
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute
-  "/login": typeof LoginRoute
-  "/signup": typeof SignupRoute
-  "/zap": typeof ZapRoute
+	"/": typeof IndexRoute
+	"/login": typeof LoginRoute
+	"/signup": typeof SignupRoute
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute
-  "/": typeof IndexRoute
-  "/login": typeof LoginRoute
-  "/signup": typeof SignupRoute
-  "/zap": typeof ZapRoute
+	__root__: typeof rootRoute
+	"/": typeof IndexRoute
+	"/login": typeof LoginRoute
+	"/signup": typeof SignupRoute
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/login" | "/signup" | "/zap"
-  fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/login" | "/signup" | "/zap"
-  id: "__root__" | "/" | "/login" | "/signup" | "/zap"
-  fileRoutesById: FileRoutesById
+	fileRoutesByFullPath: FileRoutesByFullPath
+	fullPaths: "/" | "/login" | "/signup"
+	fileRoutesByTo: FileRoutesByTo
+	to: "/" | "/login" | "/signup"
+	id: "__root__" | "/" | "/login" | "/signup"
+	fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  LoginRoute: typeof LoginRoute
-  SignupRoute: typeof SignupRoute
-  ZapRoute: typeof ZapRoute
+	IndexRoute: typeof IndexRoute
+	LoginRoute: typeof LoginRoute
+	SignupRoute: typeof SignupRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  LoginRoute: LoginRoute,
-  SignupRoute: SignupRoute,
-  ZapRoute: ZapRoute,
+	IndexRoute: IndexRoute,
+	LoginRoute: LoginRoute,
+	SignupRoute: SignupRoute
 }
 
 export const routeTree = rootRoute
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+	._addFileChildren(rootRouteChildren)
+	._addFileTypes<FileRouteTypes>()
 
 /* ROUTE_MANIFEST_START
 {
@@ -136,8 +117,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/login",
-        "/signup",
-        "/zap"
+        "/signup"
       ]
     },
     "/": {
@@ -148,9 +128,6 @@ export const routeTree = rootRoute
     },
     "/signup": {
       "filePath": "signup.tsx"
-    },
-    "/zap": {
-      "filePath": "zap.tsx"
     }
   }
 }

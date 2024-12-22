@@ -35,7 +35,10 @@ export const Route = createRootRouteWithContext<{
 				title: "DraftCode"
 			}
 		],
-		links: [{ rel: "stylesheet", href: css }]
+		links: [
+			{ rel: "stylesheet", href: css },
+			{ rel: "icon", href: "/icon.svg" }
+		]
 	}),
 	beforeLoad: async ({ context }) => {
 		const user = await context.queryClient.ensureQueryData(currentUserQueryOptions)
