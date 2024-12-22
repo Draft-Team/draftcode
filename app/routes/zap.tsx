@@ -12,6 +12,7 @@ import {
 	ChallengeCardTitle
 } from "@/shared/ui/challenge-card"
 import { DifficultyMeter } from "@/shared/ui/difficulty-meter"
+import { PointsBadge } from "@/shared/ui/points-badge"
 
 export const Route = createFileRoute("/zap")({
 	component: RouteComponent
@@ -24,7 +25,12 @@ function RouteComponent() {
 				<ChallengeCardHeader className="flex justify-end">
 					<Ellipsis />
 				</ChallengeCardHeader>
-				<ChallengeCardImage src="https://avatars.githubusercontent.com/u/94739199?v=4" />
+
+				<div className="relative h-48 w-full">
+					<ChallengeCardImage src="https://avatars.githubusercontent.com/u/94739199?v=4" />
+					<PointsBadge points={139} className="absolute right-1 top-1" />
+				</div>
+
 				<ChallengeCardContent>
 					<div className="flex items-center justify-between">
 						<ChallengeCardTitle>Draftlab</ChallengeCardTitle>
