@@ -26,7 +26,7 @@ function RouteComponent() {
 					<Ellipsis />
 				</ChallengeCardHeader>
 
-				<div className="relative h-48 w-full">
+				<div className="relative">
 					<ChallengeCardImage src="https://avatars.githubusercontent.com/u/94739199?v=4" />
 					<PointsBadge points={139} className="absolute right-1 top-1" />
 				</div>
