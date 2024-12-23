@@ -32,10 +32,10 @@ export const LoginCard = () => {
 			onSubmit={handleSubmit(onSubmit)}>
 			<h1 className="text-2xl font-semibold">Entre na sua conta</h1>
 			<fieldset className="flex items-center gap-4">
-				<Button className="w-full" variant="outline">
+				<Button className="w-full" variant="outline" asChild>
 					<a href="/api/login/github">Github</a>
 				</Button>
-				<Button className="w-full" variant="outline">
+				<Button className="w-full" variant="outline" asChild>
 					<a href="/api/login/google">Google</a>
 				</Button>
 			</fieldset>
