@@ -5,16 +5,11 @@ import { getCookie, setCookie } from "vinxi/http"
 
 import { serverEnv } from "@/environment/server"
 import { createDate, isWithinExpirationDate, TimeSpan } from "@/libs/time-span"
-import { db } from "@/server/db/client"
-import {
-	sessionsTable,
-	usersTable,
-	type SessionSelect,
-	type UserSelect
-} from "@/server/db/schema"
+import { db, type DBTypes } from "@/server/db/client"
+import { sessionsTable, usersTable } from "@/server/db/schema"
 
-export type Session = SessionSelect
-export type User = Omit<UserSelect, "passwordHash">
+export type Session = DBTypes["sessionsTable"]
+export type User = Omit<DBTypes["usersTable"], "passwordHash">
 
 type SessionValidationResult =
 	| {
