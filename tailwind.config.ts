@@ -10,7 +10,9 @@ const config: Config = {
 				screens: {
 					xl: "1100px",
 					"2xl": "1100px"
-				}
+				},
+				center: true,
+				padding: "1rem"
 			},
 			colors: {
 				background: "hsl(var(--background))",
