@@ -12,8 +12,6 @@ import {
 	currentSessionQueryOptions,
 	currentUserQueryOptions
 } from "@/features/auth/queries"
-import { Footer } from "@/shared/components/footer"
-import { Header } from "@/shared/components/header"
 import { Toaster } from "@/shared/ui/sonner"
 import css from "@/styles/globals.css?url"
 
@@ -70,10 +68,8 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 			<head>
 				<Meta />
 			</head>
-			<body className="dark flex h-screen flex-col">
-				<Header />
-				<div className="flex-1">{children}</div>
-				<Footer />
+			<body>
+				{children}
 				<Toaster />
 				<ScrollRestoration />
 				<Scripts />

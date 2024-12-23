@@ -6,7 +6,15 @@ import globals from "globals"
 import tseslint from "typescript-eslint"
 
 export default tseslint.config(
-	{ ignores: [".vinxi", ".output", "node_modules", "**/*.config.{ts,tsx}"] },
+	{
+		ignores: [
+			".vinxi",
+			".output",
+			"node_modules",
+			"**/*.config.{ts,tsx}",
+			"**/routeTree.gen.ts"
+		]
+	},
 	{
 		files: ["**/*.{ts,tsx}"],
 		extends: [
