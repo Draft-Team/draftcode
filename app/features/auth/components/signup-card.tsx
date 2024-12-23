@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
 import { Label } from "@/shared/ui/label"
+import { PasswordInput } from "@/shared/ui/password-input"
 
 import { useSignup } from "../hooks/use-signup"
 import { SignupSchema, type SignupData } from "../schemas/signup-schema"
@@ -30,18 +31,18 @@ export const SignupCard = () => {
 			className="flex w-full max-w-md flex-col gap-4"
 			onSubmit={handleSubmit(onSubmit)}>
 			<h1 className="text-2xl font-semibold">Crie sua conta</h1>
-			<section className="flex items-center gap-4">
+			<fieldset className="flex items-center gap-4">
 				<Button className="w-full" variant="outline">
 					<a href="/api/login/github">Github</a>
 				</Button>
 				<Button className="w-full" variant="outline">
 					<a href="/api/login/google">Google</a>
 				</Button>
-			</section>
+			</fieldset>
 
 			<hr />
 
-			<section className="flex flex-col gap-4">
+			<fieldset className="flex flex-col gap-4">
 				<Label className="space-y-2" htmlFor={register("email").name}>
 					<span>Email</span>
 					<Input {...register("email")} />
@@ -56,18 +57,18 @@ export const SignupCard = () => {
 
 				<Label className="space-y-2" htmlFor={register("password").name}>
 					<span>Senha</span>
-					<Input {...register("password")} />
+					<PasswordInput {...register("password")} />
 					{errors.password && (
 						<span className="text-red-500">{errors.password.message}</span>
 					)}
 				</Label>
-			</section>
+			</fieldset>
 
 			<Button disabled={isPending}>
 				{isPending ? "Criando conta..." : "Criar conta"}
 			</Button>
 
-			<div className="flex items-center justify-center space-x-4">
+			<div className="flex items-center justify-center gap-4">
 				<div className="flex-1 border-t" />
 				<span>
 					Já tem uma conta?{" "}

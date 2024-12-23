@@ -30,7 +30,7 @@ export const $signup = createServerFn({ method: "POST" })
 
 		if (existingUser) {
 			throw new Error(
-				"Signup failed. Check your credentials or try another email address."
+				"Falha ao se cadastrar. Verifique seus dados ou tente outro endereço de email."
 			)
 		}
 
@@ -43,7 +43,7 @@ export const $signup = createServerFn({ method: "POST" })
 		const checkForPasswordLeaks = await checkPasswordLeaks(data.password)
 
 		if (checkForPasswordLeaks) {
-			throw new Error("This password has been leaked in a data breach")
+			throw new Error("Esta senha foi vazada em uma violação de dados")
 		}
 
 		const hashedPassword = await hashPassword(data.password)
@@ -59,7 +59,7 @@ export const $signup = createServerFn({ method: "POST" })
 			.then((res) => res[0] ?? null)
 
 		if (!user) {
-			throw new Error("Failed to create user")
+			throw new Error("Falha ao se cadastrar. Tente novamente mais tarde.")
 		}
 
 		await setSession({ userId: user.id })

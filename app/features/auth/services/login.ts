@@ -26,13 +26,13 @@ export const $login = createServerFn({ method: "POST" })
 		const { feedback } = checkPasswordStrength(data.password)
 
 		if (feedback.warning) {
-			throw new Error("Incorrect email or password")
+			throw new Error("Email ou senha incorretos")
 		}
 
 		const checkForPasswordLeaks = await checkPasswordLeaks(data.password)
 
 		if (checkForPasswordLeaks) {
-			throw new Error("Incorrect email or password")
+			throw new Error("Email ou senha incorretos")
 		}
 
 		const existingUser = await db.query.usersTable.findFirst({
@@ -40,13 +40,13 @@ export const $login = createServerFn({ method: "POST" })
 		})
 
 		if (!existingUser?.passwordHash) {
-			throw new Error("Incorrect email or password")
+			throw new Error("Email ou senha incorretos")
 		}
 
 		const validPassword = await verifyPassword(data.password, existingUser.passwordHash)
 
 		if (!validPassword) {
-			throw new Error("Incorrect email or password")
+			throw new Error("Email ou senha incorretos")
 		}
 
 		await setSession({ userId: existingUser.id })
