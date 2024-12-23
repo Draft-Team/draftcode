@@ -11,11 +11,19 @@
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root"
+import { Route as ChallengesImport } from "./routes/challenges"
 import { Route as IndexImport } from "./routes/index"
 import { Route as LoginImport } from "./routes/login"
 import { Route as SignupImport } from "./routes/signup"
+import { Route as SolutionsImport } from "./routes/solutions"
 
 // Create/Update Routes
+
+const SolutionsRoute = SolutionsImport.update({
+	id: "/solutions",
+	path: "/solutions",
+	getParentRoute: () => rootRoute
+} as any)
 
 const SignupRoute = SignupImport.update({
 	id: "/signup",
@@ -26,6 +34,12 @@ const SignupRoute = SignupImport.update({
 const LoginRoute = LoginImport.update({
 	id: "/login",
 	path: "/login",
+	getParentRoute: () => rootRoute
+} as any)
+
+const ChallengesRoute = ChallengesImport.update({
+	id: "/challenges",
+	path: "/challenges",
 	getParentRoute: () => rootRoute
 } as any)
 
@@ -46,6 +60,13 @@ declare module "@tanstack/react-router" {
 			preLoaderRoute: typeof IndexImport
 			parentRoute: typeof rootRoute
 		}
+		"/challenges": {
+			id: "/challenges"
+			path: "/challenges"
+			fullPath: "/challenges"
+			preLoaderRoute: typeof ChallengesImport
+			parentRoute: typeof rootRoute
+		}
 		"/login": {
 			id: "/login"
 			path: "/login"
@@ -60,6 +81,13 @@ declare module "@tanstack/react-router" {
 			preLoaderRoute: typeof SignupImport
 			parentRoute: typeof rootRoute
 		}
+		"/solutions": {
+			id: "/solutions"
+			path: "/solutions"
+			fullPath: "/solutions"
+			preLoaderRoute: typeof SolutionsImport
+			parentRoute: typeof rootRoute
+		}
 	}
 }
 
@@ -67,42 +95,52 @@ declare module "@tanstack/react-router" {
 
 export interface FileRoutesByFullPath {
 	"/": typeof IndexRoute
+	"/challenges": typeof ChallengesRoute
 	"/login": typeof LoginRoute
 	"/signup": typeof SignupRoute
+	"/solutions": typeof SolutionsRoute
 }
 
 export interface FileRoutesByTo {
 	"/": typeof IndexRoute
+	"/challenges": typeof ChallengesRoute
 	"/login": typeof LoginRoute
 	"/signup": typeof SignupRoute
+	"/solutions": typeof SolutionsRoute
 }
 
 export interface FileRoutesById {
 	__root__: typeof rootRoute
 	"/": typeof IndexRoute
+	"/challenges": typeof ChallengesRoute
 	"/login": typeof LoginRoute
 	"/signup": typeof SignupRoute
+	"/solutions": typeof SolutionsRoute
 }
 
 export interface FileRouteTypes {
 	fileRoutesByFullPath: FileRoutesByFullPath
-	fullPaths: "/" | "/login" | "/signup"
+	fullPaths: "/" | "/challenges" | "/login" | "/signup" | "/solutions"
 	fileRoutesByTo: FileRoutesByTo
-	to: "/" | "/login" | "/signup"
-	id: "__root__" | "/" | "/login" | "/signup"
+	to: "/" | "/challenges" | "/login" | "/signup" | "/solutions"
+	id: "__root__" | "/" | "/challenges" | "/login" | "/signup" | "/solutions"
 	fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
 	IndexRoute: typeof IndexRoute
+	ChallengesRoute: typeof ChallengesRoute
 	LoginRoute: typeof LoginRoute
 	SignupRoute: typeof SignupRoute
+	SolutionsRoute: typeof SolutionsRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
 	IndexRoute: IndexRoute,
+	ChallengesRoute: ChallengesRoute,
 	LoginRoute: LoginRoute,
-	SignupRoute: SignupRoute
+	SignupRoute: SignupRoute,
+	SolutionsRoute: SolutionsRoute
 }
 
 export const routeTree = rootRoute
@@ -116,18 +154,26 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/challenges",
         "/login",
-        "/signup"
+        "/signup",
+        "/solutions"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/challenges": {
+      "filePath": "challenges.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
     },
     "/signup": {
       "filePath": "signup.tsx"
+    },
+    "/solutions": {
+      "filePath": "solutions.tsx"
     }
   }
 }

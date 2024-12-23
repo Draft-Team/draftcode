@@ -32,3 +32,6 @@ dist-ssr
 
 # SQLite
 *.sqlite
+
+# routes gen
+routeTree.gen.ts
