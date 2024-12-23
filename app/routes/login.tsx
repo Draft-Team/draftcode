@@ -17,12 +17,12 @@ export const Route = createFileRoute("/login")({
 
 function RouteComponent() {
 	return (
-		<main className="container relative mx-auto px-3">
+		<main className="container relative">
 			<Button className="absolute m-10 ml-0" asChild variant="outline">
 				<Link to="/">Voltar ao site</Link>
 			</Button>
 
-			<div className="container mx-auto flex h-screen items-center justify-center">
+			<div className="container flex h-screen items-center justify-center">
 				<LoginCard />
 			</div>
 		</main>
