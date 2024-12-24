@@ -40,6 +40,30 @@ export const usersTable = sqliteTable(
 	}
 )
 
+export const profilesTable = sqliteTable(
+	"profiles",
+	{
+		userId: text("user_id")
+			.notNull()
+			.references(() => usersTable.id, { onDelete: "cascade" }),
+		totalExperience: integer("total_experience").notNull().default(0),
+		createdAt: integer("created_at", { mode: "timestamp_ms" })
+			.notNull()
+			.$defaultFn(() => new Date()),
+		updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+			.notNull()
+			.$defaultFn(() => new Date())
+			.$onUpdate(() => new Date())
+	},
+	(table) => {
+		return [
+			primaryKey({ columns: [table.userId] }),
+			index("profile_user_id_idx").on(table.userId),
+			index("profile_total_experience_idx").on(table.totalExperience)
+		]
+	}
+)
+
 export const oauthAccountsTable = sqliteTable(
 	"oauth_accounts",
 	{
@@ -87,6 +111,9 @@ export type UserInsert = typeof usersTable.$inferInsert
 
 export type SessionSelect = typeof sessionsTable.$inferSelect
 export type SessionInsert = typeof sessionsTable.$inferInsert
+
+export type UserProfileSelect = typeof profilesTable.$inferSelect
+export type UserProfileInsert = typeof profilesTable.$inferInsert
 
 export type OauthAccountSelect = typeof oauthAccountsTable.$inferSelect
 export type OauthAccountInsert = typeof oauthAccountsTable.$inferInsert

@@ -7,7 +7,7 @@ import { z } from "zod"
 import { github } from "@/server/auth/oauth"
 import { setSession } from "@/server/auth/sessions"
 import { db } from "@/server/db/client"
-import { oauthAccountsTable, usersTable } from "@/server/db/schema"
+import { oauthAccountsTable, profilesTable, usersTable } from "@/server/db/schema"
 
 const GithubUser = z.object({
 	id: z.number(),
@@ -102,6 +102,10 @@ export const APIRoute = createAPIFileRoute("/api/login/github/callback")({
 					statusText: "Error creating github oauth account"
 				})
 			}
+
+			await db.insert(profilesTable).values({
+				userId: newGithubUser.id
+			})
 
 			await setSession({ userId: newGithubUser.id })
 

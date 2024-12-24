@@ -6,7 +6,7 @@ import { z } from "zod"
 
 import { setSession } from "@/server/auth/sessions"
 import { db } from "@/server/db/client"
-import { usersTable } from "@/server/db/schema"
+import { profilesTable, usersTable } from "@/server/db/schema"
 import { csrfProtectionMiddleware } from "@/server/utils/middlewares"
 import {
 	checkPasswordLeaks,
@@ -61,6 +61,10 @@ export const $signup = createServerFn({ method: "POST" })
 		if (!user) {
 			throw new Error("Falha ao se cadastrar. Tente novamente mais tarde.")
 		}
+
+		await db.insert(profilesTable).values({
+			userId: user.id
+		})
 
 		await setSession({ userId: user.id })
 
