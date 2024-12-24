@@ -28,7 +28,7 @@ const ChallengeCardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
 	<div
 		ref={ref}
-		className={cn("text-3xl font-semibold leading-8 tracking-tight", className)}
+		className={cn("text-2xl font-medium leading-8 tracking-tight", className)}
 		{...props}
 	/>
 ))
@@ -38,7 +38,11 @@ const ChallengeCardDescription = React.forwardRef<
 	HTMLDivElement,
 	React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-	<div ref={ref} className={cn("text-muted-foreground", className)} {...props} />
+	<div
+		ref={ref}
+		className={cn("leading-6 text-muted-foreground", className)}
+		{...props}
+	/>
 ))
 ChallengeCardDescription.displayName = "ChallengeCardDescription"
 

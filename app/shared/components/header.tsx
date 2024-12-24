@@ -39,11 +39,11 @@ export const Header = () => {
 				<BrandName as="h1" />
 
 				<nav>
-					<ul className="flex items-center gap-5 font-semibold leading-6 text-muted-foreground">
+					<ul className="flex items-center gap-5 leading-6 text-muted-foreground">
 						<li>
 							<Link
 								to="/"
-								className={cn(buttonVariants({ variant: "outline" }), "font-semibold")}
+								className={cn(buttonVariants({ variant: "outline" }), "font-medium")}
 								activeProps={linkProps.activeProps}>
 								Início
 							</Link>
@@ -51,7 +51,7 @@ export const Header = () => {
 						<li>
 							<Link
 								to="/challenges"
-								className={cn(buttonVariants({ variant: "outline" }), "font-semibold")}
+								className={cn(buttonVariants({ variant: "outline" }), "font-medium")}
 								activeProps={linkProps.activeProps}>
 								Desafios
 							</Link>
@@ -59,7 +59,7 @@ export const Header = () => {
 						<li>
 							<Link
 								to="/solutions"
-								className={cn(buttonVariants({ variant: "outline" }), "font-semibold")}
+								className={cn(buttonVariants({ variant: "outline" }), "font-medium")}
 								activeProps={linkProps.activeProps}>
 								Soluções
 							</Link>
@@ -81,7 +81,7 @@ export const Header = () => {
 								<AvatarFallback>CN</AvatarFallback>
 							</Avatar>
 
-							<span className="text-sm font-semibold">{user.name}</span>
+							<span className="text-sm font-medium">{user.name}</span>
 							<ChevronDown />
 						</DropdownMenuTrigger>
 					</Button>
@@ -113,13 +113,13 @@ export const Header = () => {
 						<SheetDescription>Encontre o desafio perfeito para você.</SheetDescription>
 					</SheetHeader>
 					<nav className="mt-10">
-						<ul className="flex flex-col items-center gap-5 font-semibold leading-6 text-muted-foreground [&>*]:w-full">
+						<ul className="flex flex-col items-center gap-5 leading-6 text-muted-foreground [&>*]:w-full">
 							<li>
 								<Link
 									to="/"
 									className={cn(
 										buttonVariants({ variant: "outline" }),
-										"w-full font-semibold"
+										"w-full font-medium"
 									)}
 									activeProps={linkProps.activeProps}>
 									Início
@@ -130,7 +130,7 @@ export const Header = () => {
 									to="/challenges"
 									className={cn(
 										buttonVariants({ variant: "outline" }),
-										"w-full font-semibold"
+										"w-full font-medium"
 									)}
 									activeProps={linkProps.activeProps}>
 									Desafios
@@ -141,7 +141,7 @@ export const Header = () => {
 									to="/solutions"
 									className={cn(
 										buttonVariants({ variant: "outline" }),
-										"w-full font-semibold"
+										"w-full font-medium"
 									)}
 									activeProps={linkProps.activeProps}>
 									Soluções

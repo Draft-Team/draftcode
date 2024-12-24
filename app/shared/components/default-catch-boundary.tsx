@@ -24,11 +24,11 @@ export const DefaultCatchBoundary = ({ error }: ErrorComponentProps) => {
 					onClick={() => {
 						void router.invalidate()
 					}}>
-					Try Again
+					Tente novamente
 				</Button>
 				{isRoot ? (
 					<Button asChild>
-						<Link to="/">Home</Link>
+						<Link to="/">Início</Link>
 					</Button>
 				) : (
 					<Button asChild>
@@ -38,7 +38,7 @@ export const DefaultCatchBoundary = ({ error }: ErrorComponentProps) => {
 								e.preventDefault()
 								window.history.back()
 							}}>
-							Go Back
+							Voltar
 						</Link>
 					</Button>
 				)}
