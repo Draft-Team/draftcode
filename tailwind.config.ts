@@ -14,6 +14,12 @@ const config: Config = {
 				center: true,
 				padding: "1rem"
 			},
+			fontFamily: {
+				sans: "var(--font-lexend)",
+				inter: "var(--font-inter)",
+				lexend: "var(--font-lexend)",
+				fira: "var(--font-fira-code)"
+			},
 			colors: {
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",

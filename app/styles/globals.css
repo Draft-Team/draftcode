@@ -1,3 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -29,6 +33,10 @@
 		--chart-4: 274 2% 14%;
 		--chart-5: 274 90% 46%;
 		--radius: 0.1rem;
+
+		--font-inter: "Inter", sans-serif;
+		--font-lexend: "Lexend", sans-serif;
+		--font-fira-code: "Fira Code", monospace;
 	}
 }
 

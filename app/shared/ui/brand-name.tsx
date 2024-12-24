@@ -11,7 +11,7 @@ const BrandName = React.forwardRef<HTMLDivElement, BrandNameProps>(
 		const Comp = as ?? "div"
 
 		return (
-			<Comp className={cn("text-lg font-semibold", className)} ref={ref} {...props}>
+			<Comp className={cn("text-lg font-medium", className)} ref={ref} {...props}>
 				Dra
 				<span className="text-primary">ft</span>
 				Code

@@ -23,7 +23,7 @@ const DifficultyMeter = (props: { difficulty: Difficulty }) => {
 
 	return (
 		<div className="space-y-1">
-			<p className="text-end text-muted-foreground">{difficulty}</p>
+			<p className="text-end text-sm text-muted-foreground">{difficulty}</p>
 			<div className="flex gap-1">
 				{Array.from({ length: difficultyQty }).map((_, index) => (
 					<div
