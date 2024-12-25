@@ -10,8 +10,8 @@ interface FeatureCardProps {
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ icon: Icon, title, description }) => {
 	return (
-		<Card className="rounded-none">
-			<CardHeader>{Icon && <Icon size={24} color="#A020F0" />}</CardHeader>
+		<Card className="rounded-none transition-all duration-300 hover:border-primary">
+			<CardHeader>{Icon && <Icon size={24} className="text-primary" />}</CardHeader>
 			<CardContent>
 				<h3 className="font-bold">{title}</h3>
 			</CardContent>
