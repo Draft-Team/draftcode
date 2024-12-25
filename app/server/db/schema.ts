@@ -11,10 +11,17 @@ import {
 import { generateId } from "../utils/generate-id"
 
 export type OauthProviderIds = "github" | "google"
+export type ChallengeDifficulty = "easy" | "medium" | "hard" | "expert"
 
 const oauthProviderIds = customType<{ data: OauthProviderIds }>({
 	dataType() {
 		return "github"
+	}
+})
+
+const challengeDifficulty = customType<{ data: ChallengeDifficulty }>({
+	dataType() {
+		return "easy"
 	}
 })
 
@@ -37,6 +44,54 @@ export const usersTable = sqliteTable(
 	},
 	(table) => {
 		return [uniqueIndex("user_email_idx").on(table.email)]
+	}
+)
+
+export const challengesTable = sqliteTable(
+	"challenges",
+	{
+		id: text("id")
+			.primaryKey()
+			.$defaultFn(() => generateId()),
+		title: text("name").notNull(),
+		description: text("description").notNull(),
+		difficulty: challengeDifficulty("difficulty").notNull(),
+		experienceForCompletion: integer("experience_for_completion").notNull()
+	},
+	(table) => {
+		return [index("challenge_title_idx").on(table.title)]
+	}
+)
+
+export const tagsTable = sqliteTable(
+	"tags",
+	{
+		id: text("id")
+			.primaryKey()
+			.$defaultFn(() => generateId()),
+		name: text("name").notNull().unique()
+	},
+	(table) => {
+		return [index("tag_name_idx").on(table.name)]
+	}
+)
+
+export const challengeTagsTable = sqliteTable(
+	"challenge_tags",
+	{
+		challengeId: text("challenge_id")
+			.notNull()
+			.references(() => challengesTable.id, { onDelete: "cascade" }),
+		tagId: text("tag_id")
+			.notNull()
+			.references(() => tagsTable.id, { onDelete: "cascade" })
+	},
+	(table) => {
+		return [
+			primaryKey({ columns: [table.challengeId, table.tagId] }),
+			index("challenge_tag_challenge_id_idx").on(table.challengeId),
+			index("challenge_tag_tag_id_idx").on(table.tagId)
+		]
 	}
 )
 
@@ -82,11 +137,20 @@ export const sessionsTable = sqliteTable(
 	}
 )
 
+export type TagSelect = typeof tagsTable.$inferSelect
+export type TagInsert = typeof tagsTable.$inferInsert
+
 export type UserSelect = typeof usersTable.$inferSelect
 export type UserInsert = typeof usersTable.$inferInsert
 
 export type SessionSelect = typeof sessionsTable.$inferSelect
 export type SessionInsert = typeof sessionsTable.$inferInsert
 
+export type ChallengeSelect = typeof challengesTable.$inferSelect
+export type ChallengeInsert = typeof challengesTable.$inferInsert
+
 export type OauthAccountSelect = typeof oauthAccountsTable.$inferSelect
 export type OauthAccountInsert = typeof oauthAccountsTable.$inferInsert
+
+export type ChallengeTagSelect = typeof challengeTagsTable.$inferSelect
+export type ChallengeTagInsert = typeof challengeTagsTable.$inferInsert

@@ -4,7 +4,7 @@ import { BrandName } from "../ui/brand-name"
 
 export const Footer = () => {
 	return (
-		<footer className="container mx-auto space-y-10">
+		<footer className="container mx-auto mt-40 space-y-10">
 			<section className="grid sm:grid-cols-2">
 				<div className="space-y-4 text-center sm:text-start">
 					<BrandName as="p" />

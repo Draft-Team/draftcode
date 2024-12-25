@@ -1,6 +1,6 @@
 import { cn } from "@/libs/utils"
 
-type Difficulty = "easy" | "medium" | "hard" | "expert"
+export type Difficulty = "easy" | "medium" | "hard" | "expert"
 
 const difficultyMap: Record<Difficulty, string> = {
 	easy: "Fácil",
@@ -9,7 +9,7 @@ const difficultyMap: Record<Difficulty, string> = {
 	expert: "Expert"
 }
 
-const difficultyBarMap: Record<Difficulty, number> = {
+export const difficultyBarMap: Record<Difficulty, number> = {
 	easy: 1,
 	medium: 2,
 	hard: 3,

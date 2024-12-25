@@ -46,6 +46,18 @@ const ChallengeCardDescription = React.forwardRef<
 ))
 ChallengeCardDescription.displayName = "ChallengeCardDescription"
 
+const ChallengeCardTag = React.forwardRef<
+	HTMLButtonElement,
+	React.ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => (
+	<button
+		ref={ref}
+		className={cn("rounded bg-primary px-2 py-0.5 text-foreground", className)}
+		{...props}
+	/>
+))
+ChallengeCardTag.displayName = "ChallengeCardTag"
+
 const ChallengeCardImage = React.forwardRef<
 	HTMLImageElement,
 	React.ImgHTMLAttributes<HTMLImageElement>
@@ -84,5 +96,6 @@ export {
 	ChallengeCardDescription,
 	ChallengeCardContent,
 	ChallengeCardFooter,
-	ChallengeCardImage
+	ChallengeCardImage,
+	ChallengeCardTag
 }

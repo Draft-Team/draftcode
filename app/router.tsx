@@ -1,6 +1,7 @@
 import { createRouter as createTanStackRouter } from "@tanstack/react-router"
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { NuqsAdapter } from "nuqs/adapters/react"
 import SuperJSON from "superjson"
 
 import { routeTree } from "./routeTree.gen"
@@ -32,7 +33,9 @@ export function createRouter() {
 		defaultPendingComponent: () => <p className="p-2 text-2xl">Loading...</p>,
 		Wrap: (props) => {
 			return (
-				<QueryClientProvider client={queryClient}>{props.children}</QueryClientProvider>
+				<QueryClientProvider client={queryClient}>
+					<NuqsAdapter>{props.children}</NuqsAdapter>
+				</QueryClientProvider>
 			)
 		}
 	})
