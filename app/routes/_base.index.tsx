@@ -57,10 +57,11 @@ function RouteComponent() {
 				</span>
 			</section>
 
-			<section className="container mt-11 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+			<section className="container mt-11 flex flex-col gap-4 md:flex-row">
 				{featureData.map((data, index) => (
 					<FeatureCard
 						key={index}
+						index={index}
 						icon={data.icon}
 						title={data.title}
 						description={data.description}
@@ -185,6 +186,7 @@ function RouteComponent() {
 				<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
 					{benefitsData.map((data, index) => (
 						<BenefitsCard
+							index={index}
 							description={data.description}
 							title={data.title}
 							icon={data.icon}
