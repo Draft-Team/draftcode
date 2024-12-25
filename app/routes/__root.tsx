@@ -12,6 +12,7 @@ import {
 	currentSessionQueryOptions,
 	currentUserQueryOptions
 } from "@/features/auth/queries"
+import { TailwindIndicator } from "@/shared/components/tailwind-indicator"
 import { Toaster } from "@/shared/ui/sonner"
 import css from "@/styles/globals.css?url"
 
@@ -70,6 +71,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 			</head>
 			<body>
 				{children}
+				<TailwindIndicator />
 				<Toaster />
 				<ScrollRestoration />
 				<Scripts />
