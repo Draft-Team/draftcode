@@ -23,19 +23,8 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
 			whileInView={{ opacity: 1, x: 0 }}
 			viewport={{ once: true }}
 			exit={{ opacity: 0, x: -100 }}
-			animate={{ flex: 1 }}
-			whileHover={{ flex: 1.5 }}
-			transition={{
-				duration: 0.3,
-				delay: index * 0.1,
-				ease: "easeInOut",
-				flex: {
-					duration: 0.6,
-					ease: [0.4, 0, 0.2, 1],
-					type: "tween"
-				}
-			}}>
-			<Card className="h-full rounded-none transition-all duration-300 hover:border-primary">
+			transition={{ duration: 0.2, delay: index * 0.1 }}>
+			<Card className="h-full rounded-none transition-all duration-150 hover:border-primary">
 				<CardHeader>{Icon && <Icon size={24} className="text-primary" />}</CardHeader>
 				<CardContent>
 					<h3 className="font-bold">{title}</h3>

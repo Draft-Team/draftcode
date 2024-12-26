@@ -47,9 +47,14 @@ function RouteComponent() {
 				</div>
 				<div className="mb-2 mt-4 flex flex-col gap-4 uppercase sm:flex-row">
 					<Button>Encare o Desafio</Button>
-					<Button variant={"outline"}>
+					<Button
+						variant={"outline"}
+						className="group"
+						onClick={() => {
+							document.getElementById("benefits")?.scrollIntoView({ behavior: "smooth" })
+						}}>
 						saiba mais
-						<ArrowRight />
+						<ArrowRight className="transition-transform duration-300 group-hover:rotate-90" />
 					</Button>
 				</div>
 				<span className="text-xs font-medium text-muted-foreground">
@@ -57,7 +62,7 @@ function RouteComponent() {
 				</span>
 			</section>
 
-			<section className="container mt-11 flex flex-col gap-4 md:flex-row">
+			<section className="container mt-11 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 				{featureData.map((data, index) => (
 					<FeatureCard
 						key={index}
@@ -183,7 +188,7 @@ function RouteComponent() {
 						alt="zap"
 					/>
 				</div>
-				<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+				<div id="benefits" className="grid grid-cols-1 gap-4 lg:grid-cols-2">
 					{benefitsData.map((data, index) => (
 						<BenefitsCard
 							index={index}
