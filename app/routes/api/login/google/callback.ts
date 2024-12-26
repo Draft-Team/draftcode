@@ -7,7 +7,7 @@ import { z } from "zod"
 import { google } from "@/server/auth/oauth"
 import { setSession } from "@/server/auth/sessions"
 import { db } from "@/server/db/client"
-import { oauthAccountsTable, usersTable } from "@/server/db/schema"
+import { oauthAccountsTable, profilesTable, usersTable } from "@/server/db/schema"
 
 const GoogleUser = z.object({
 	sub: z.string(),
@@ -103,6 +103,10 @@ export const APIRoute = createAPIFileRoute("/api/login/google/callback")({
 					statusText: "Error creating google oauth account"
 				})
 			}
+
+			await db.insert(profilesTable).values({
+				userId: newGoogleUser.id
+			})
 
 			await setSession({ userId: newGoogleUser.id })
 
