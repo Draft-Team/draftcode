@@ -10,10 +10,10 @@ import {
 
 import { generateId } from "../utils/generate-id"
 
-export type OauthProviderIds = "github" | "google"
+export type OauthProviderId = "github" | "google"
 export type ChallengeDifficulty = "easy" | "medium" | "hard" | "expert"
 
-const oauthProviderIds = customType<{ data: OauthProviderIds }>({
+const oauthProviderId = customType<{ data: OauthProviderId }>({
 	dataType() {
 		return "github"
 	}
@@ -55,6 +55,7 @@ export const challengesTable = sqliteTable(
 			.$defaultFn(() => generateId()),
 		title: text("name").notNull(),
 		description: text("description").notNull(),
+		blocks: text("blocks", { mode: "json" }).notNull(),
 		difficulty: challengeDifficulty("difficulty").notNull(),
 		experienceForCompletion: integer("experience_for_completion").notNull()
 	},
@@ -123,7 +124,7 @@ export const oauthAccountsTable = sqliteTable(
 	"oauth_accounts",
 	{
 		providerUserId: text("provider_user_id").notNull(),
-		providerId: oauthProviderIds("provider_id").notNull(),
+		providerId: oauthProviderId("provider_id").notNull(),
 		userId: text("user_id")
 			.notNull()
 			.references(() => usersTable.id, { onDelete: "cascade" }),
@@ -160,24 +161,3 @@ export const sessionsTable = sqliteTable(
 		]
 	}
 )
-
-export type TagSelect = typeof tagsTable.$inferSelect
-export type TagInsert = typeof tagsTable.$inferInsert
-
-export type UserSelect = typeof usersTable.$inferSelect
-export type UserInsert = typeof usersTable.$inferInsert
-
-export type SessionSelect = typeof sessionsTable.$inferSelect
-export type SessionInsert = typeof sessionsTable.$inferInsert
-
-export type ChallengeSelect = typeof challengesTable.$inferSelect
-export type ChallengeInsert = typeof challengesTable.$inferInsert
-
-export type UserProfileSelect = typeof profilesTable.$inferSelect
-export type UserProfileInsert = typeof profilesTable.$inferInsert
-
-export type OauthAccountSelect = typeof oauthAccountsTable.$inferSelect
-export type OauthAccountInsert = typeof oauthAccountsTable.$inferInsert
-
-export type ChallengeTagSelect = typeof challengeTagsTable.$inferSelect
-export type ChallengeTagInsert = typeof challengeTagsTable.$inferInsert

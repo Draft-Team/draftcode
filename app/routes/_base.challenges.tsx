@@ -14,11 +14,7 @@ import {
 	ChallengeCardTag,
 	ChallengeCardTitle
 } from "@/shared/ui/challenge-card"
-import {
-	difficultyBarMap,
-	DifficultyMeter,
-	type Difficulty
-} from "@/shared/ui/difficulty-meter"
+import { DifficultyMeter, type Difficulty } from "@/shared/ui/difficulty-meter"
 import { HeroSection } from "@/shared/ui/hero-section"
 import { Input } from "@/shared/ui/input"
 import {
