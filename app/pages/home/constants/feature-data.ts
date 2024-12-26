@@ -8,17 +8,17 @@ const featureData = [
 	},
 	{
 		title: "Feedback Detalhado",
-		description: "Melhore com insights personalizados",
+		description: "Melhore com insights personalizados.",
 		icon: MessageSquare
 	},
 	{
 		title: "Aprendizado Progressivo",
-		description: "Desafios que evoluem com você",
+		description: "Desafios que evoluem com você.",
 		icon: TrendingUp
 	},
 	{
 		title: "Comunidade Ativa",
-		description: "Conecte-se com outros criadores",
+		description: "Conecte-se com outros programadores.",
 		icon: Users
 	}
 ]
