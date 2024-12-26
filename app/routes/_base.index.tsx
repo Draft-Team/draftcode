@@ -13,10 +13,11 @@ import {
 	ChallengeCardDescription,
 	ChallengeCardFooter,
 	ChallengeCardImage,
+	ChallengeCardTag,
 	ChallengeCardTitle
 } from "@/shared/ui/challenge-card"
 import { DifficultyMeter } from "@/shared/ui/difficulty-meter"
-import { HeroSection } from "@/shared/ui/hero-section"
+import { HeroSection, HeroSectionContent } from "@/shared/ui/hero-section"
 import { PointsBadge } from "@/shared/ui/points-badge"
 
 export const Route = createFileRoute("/_base/")({
@@ -27,17 +28,17 @@ function RouteComponent() {
 	return (
 		<main>
 			<HeroSection className="border-none bg-background">
-				<div className="container">
+				<HeroSectionContent>
 					<div className="animate-border mb-2 flex w-max items-center gap-1 rounded border border-transparent px-2 py-1 [background:linear-gradient(45deg,#000000,theme(colors.black)_50%,#000000)_padding-box,conic-gradient(from_var(--border-angle),theme(colors.purple.600/.48)_80%,_theme(colors.purple.500)_86%,_theme(colors.purple.300)_90%,_theme(colors.purple.500)_94%,_theme(colors.purple.600/.48))_border-box] sm:mb-5">
 						<StarsIcon size={18} />
-						<span className="text-xs font-medium uppercase">simples e pratico</span>
+						<span className="text-xs font-medium uppercase">Simples e prático</span>
 					</div>
 					<div className="flex max-w-[700px] flex-col gap-2">
 						<h1 className="text-3xl font-bold sm:text-4xl">
 							Eleve seu{" "}
 							<span className="font-fira text-primary">
 								{"{"}
-								<span className="text-foreground">nivel</span>
+								<span className="text-foreground">nível</span>
 								{"}"}
 							</span>{" "}
 							com desafios que fazem a diferença
@@ -57,14 +58,14 @@ function RouteComponent() {
 									.getElementById("benefits")
 									?.scrollIntoView({ behavior: "smooth" })
 							}}>
-							saiba mais
+							Saiba mais
 							<ArrowRight className="transition-transform duration-300 group-hover:rotate-90" />
 						</Button>
 					</div>
 					<span className="text-xs font-medium text-muted-foreground">
 						Mais de 430 desafiantes
 					</span>
-				</div>
+				</HeroSectionContent>
 			</HeroSection>
 
 			<section className="container mt-11 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -99,15 +100,9 @@ function RouteComponent() {
 							</ChallengeCardDescription>
 
 							<div className="space-x-3">
-								<button className="h-6 w-14 rounded bg-primary text-foreground">
-									HTML
-								</button>
-								<button className="h-6 w-14 rounded bg-primary text-foreground">
-									CSS
-								</button>
-								<button className="h-6 w-14 rounded bg-primary text-foreground">
-									JS
-								</button>
+								<ChallengeCardTag>HTML</ChallengeCardTag>
+								<ChallengeCardTag>CSS</ChallengeCardTag>
+								<ChallengeCardTag>JS</ChallengeCardTag>
 							</div>
 						</ChallengeCardContent>
 						<ChallengeCardFooter className="flex items-center justify-between">
@@ -132,15 +127,9 @@ function RouteComponent() {
 							</ChallengeCardDescription>
 
 							<div className="space-x-3">
-								<button className="h-6 w-14 rounded bg-primary text-foreground">
-									HTML
-								</button>
-								<button className="h-6 w-14 rounded bg-primary text-foreground">
-									CSS
-								</button>
-								<button className="h-6 w-14 rounded bg-primary text-foreground">
-									JS
-								</button>
+								<ChallengeCardTag>HTML</ChallengeCardTag>
+								<ChallengeCardTag>CSS</ChallengeCardTag>
+								<ChallengeCardTag>JS</ChallengeCardTag>
 							</div>
 						</ChallengeCardContent>
 						<ChallengeCardFooter className="flex items-center justify-between">
@@ -165,15 +154,9 @@ function RouteComponent() {
 							</ChallengeCardDescription>
 
 							<div className="space-x-3">
-								<button className="h-6 w-14 rounded bg-primary text-foreground">
-									HTML
-								</button>
-								<button className="h-6 w-14 rounded bg-primary text-foreground">
-									CSS
-								</button>
-								<button className="h-6 w-14 rounded bg-primary text-foreground">
-									JS
-								</button>
+								<ChallengeCardTag>HTML</ChallengeCardTag>
+								<ChallengeCardTag>CSS</ChallengeCardTag>
+								<ChallengeCardTag>JS</ChallengeCardTag>
 							</div>
 						</ChallengeCardContent>
 						<ChallengeCardFooter className="flex items-center justify-between">
