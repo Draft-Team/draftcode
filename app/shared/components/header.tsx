@@ -36,6 +36,12 @@ export const Header = () => {
 		}
 	})
 
+	const NavData = [
+		{ to: "/", label: "Inicio" },
+		{ to: "/challenges", label: "Desafios" },
+		{ to: "/solutions", label: "Soluções" }
+	]
+
 	return (
 		<header className="container mx-auto flex min-h-16 items-center justify-between">
 			<div className="hidden items-center gap-6 sm:flex">
@@ -45,27 +51,15 @@ export const Header = () => {
 
 				<nav>
 					<ul className="flex items-center gap-5 font-lexend leading-6 text-muted-foreground">
-						<li>
-							<Link to="/" className="" activeProps={linkProps.activeProps}>
-								{({ isActive }) => {
-									return <>{isActive ? "Inicio" : "_Inicio"}</>
-								}}
-							</Link>
-						</li>
-						<li>
-							<Link to="/challenges" className="" activeProps={linkProps.activeProps}>
-								{({ isActive }) => {
-									return <>{isActive ? "Desafios" : "_Desafios"}</>
-								}}
-							</Link>
-						</li>
-						<li>
-							<Link to="/solutions" className="" activeProps={linkProps.activeProps}>
-								{({ isActive }) => {
-									return <>{isActive ? "Soluções" : "_Soluções"}</>
-								}}
-							</Link>
-						</li>
+						{NavData.map((item) => (
+							<li>
+								<Link to={item.to} className="" activeProps={linkProps.activeProps}>
+									{({ isActive }) => {
+										return <>{isActive ? item.label : `_${item.label}`}</>
+									}}
+								</Link>
+							</li>
+						))}
 					</ul>
 				</nav>
 			</div>
@@ -116,39 +110,19 @@ export const Header = () => {
 					</SheetHeader>
 					<nav className="mt-10">
 						<ul className="flex flex-col items-center gap-5 leading-6 text-muted-foreground [&>*]:w-full">
-							<li>
-								<Link
-									to="/"
-									className={cn(
-										buttonVariants({ variant: "outline" }),
-										"w-full font-medium"
-									)}
-									activeProps={linkProps.activeProps}>
-									Início
-								</Link>
-							</li>
-							<li>
-								<Link
-									to="/challenges"
-									className={cn(
-										buttonVariants({ variant: "outline" }),
-										"w-full font-medium"
-									)}
-									activeProps={linkProps.activeProps}>
-									Desafios
-								</Link>
-							</li>
-							<li>
-								<Link
-									to="/solutions"
-									className={cn(
-										buttonVariants({ variant: "outline" }),
-										"w-full font-medium"
-									)}
-									activeProps={linkProps.activeProps}>
-									Soluções
-								</Link>
-							</li>
+							{NavData.map((item) => (
+								<li>
+									<Link
+										to={item.to}
+										className={cn(
+											buttonVariants({ variant: "outline" }),
+											"w-full font-medium"
+										)}
+										activeProps={linkProps.activeProps}>
+										{item.label}
+									</Link>
+								</li>
+							))}
 						</ul>
 					</nav>
 				</SheetContent>
