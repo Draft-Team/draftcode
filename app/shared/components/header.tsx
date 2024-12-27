@@ -74,7 +74,7 @@ export const Header = () => {
 						<DropdownMenuTrigger>
 							<Avatar>
 								<AvatarImage
-									src="https://github.com/shadcn.png"
+									src="https://avatars.githubusercontent.com/u/94739199?v=4"
 									className="size-6 rounded-full"
 									alt="Imagem de perfil"
 								/>
