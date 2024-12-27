@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import React from "react"
 import {
 	createRootRouteWithContext,
 	Outlet,
@@ -8,12 +9,21 @@ import {
 import type { QueryClient } from "@tanstack/react-query"
 import { Meta, Scripts } from "@tanstack/start"
 
+import { clientEnv } from "@/environment/client"
 import {
 	currentSessionQueryOptions,
 	currentUserQueryOptions
 } from "@/features/auth/queries"
 import { Toaster } from "@/shared/ui/sonner"
 import css from "@/styles/globals.css?url"
+
+const TailwindIndicator = clientEnv.PROD
+	? () => null
+	: React.lazy(() =>
+			import("@/shared/components/tailwind-indicator").then((res) => ({
+				default: res.TailwindIndicator
+			}))
+		)
 
 export const Route = createRootRouteWithContext<{
 	queryClient: QueryClient
@@ -70,6 +80,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 			</head>
 			<body>
 				{children}
+				<TailwindIndicator />
 				<Toaster />
 				<ScrollRestoration />
 				<Scripts />

@@ -52,7 +52,7 @@ const ChallengeCardTag = React.forwardRef<
 >(({ className, ...props }, ref) => (
 	<button
 		ref={ref}
-		className={cn("rounded bg-primary px-2 py-0.5 text-foreground", className)}
+		className={cn("h-6 rounded bg-primary px-1.5 text-foreground", className)}
 		{...props}
 	/>
 ))
