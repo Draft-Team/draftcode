@@ -30,38 +30,40 @@ export const Header = () => {
 	const { mutate: logout } = useLogout()
 
 	const linkProps = linkOptions({
-		activeProps: { className: "border-primary" }
+		activeProps: {
+			className:
+				'before:content-[">"] font-semibold before:text-primary border-b-2 border-primary text-foreground'
+		}
 	})
 
 	return (
 		<header className="container mx-auto flex min-h-16 items-center justify-between">
 			<div className="hidden items-center gap-6 sm:flex">
-				<BrandName as="h1" />
+				<Link to="/">
+					<BrandName as="h1" />
+				</Link>
 
 				<nav>
-					<ul className="flex items-center gap-5 leading-6 text-muted-foreground">
+					<ul className="flex items-center gap-5 font-lexend leading-6 text-muted-foreground">
 						<li>
-							<Link
-								to="/"
-								className={cn(buttonVariants({ variant: "outline" }), "font-medium")}
-								activeProps={linkProps.activeProps}>
-								Início
+							<Link to="/" className="" activeProps={linkProps.activeProps}>
+								{({ isActive }) => {
+									return <>{isActive ? "Inicio" : "_Inicio"}</>
+								}}
 							</Link>
 						</li>
 						<li>
-							<Link
-								to="/challenges"
-								className={cn(buttonVariants({ variant: "outline" }), "font-medium")}
-								activeProps={linkProps.activeProps}>
-								Desafios
+							<Link to="/challenges" className="" activeProps={linkProps.activeProps}>
+								{({ isActive }) => {
+									return <>{isActive ? "Desafios" : "_Desafios"}</>
+								}}
 							</Link>
 						</li>
 						<li>
-							<Link
-								to="/solutions"
-								className={cn(buttonVariants({ variant: "outline" }), "font-medium")}
-								activeProps={linkProps.activeProps}>
-								Soluções
+							<Link to="/solutions" className="" activeProps={linkProps.activeProps}>
+								{({ isActive }) => {
+									return <>{isActive ? "Soluções" : "_Soluções"}</>
+								}}
 							</Link>
 						</li>
 					</ul>
