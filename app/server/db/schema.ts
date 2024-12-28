@@ -10,12 +10,12 @@ import {
 
 import { generateId } from "../utils/generate-id"
 
-export type OauthProviderId = "github" | "google"
-export type UserRole = "user" | "admin" | "superadmin"
-export type ChallengeStatus = "draft" | "published" | "archived"
-export type ChallengeDifficulty = "easy" | "medium" | "hard" | "expert"
-export type ImageType = "profile-avatar" | "profile-cover" | "challenge-cover"
-export type ProfileLinkType = "github" | "linkedin" | "twitch" | "youtube" | "website"
+type OauthProviderId = "github" | "google"
+type UserRole = "user" | "admin" | "superadmin"
+type ChallengeStatus = "draft" | "published" | "archived"
+type ChallengeDifficulty = "easy" | "medium" | "hard" | "expert"
+type ImageType = "profile-avatar" | "profile-cover" | "challenge-cover"
+type ProfileLinkType = "github" | "linkedin" | "twitch" | "youtube" | "website"
 
 const oauthProviderId = customType<{ data: OauthProviderId }>({
 	dataType() {

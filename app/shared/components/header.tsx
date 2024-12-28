@@ -1,10 +1,11 @@
-import { Link, linkOptions } from "@tanstack/react-router"
+import { Link, linkOptions, type LinkOptions } from "@tanstack/react-router"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { ChevronDown, Menu } from "lucide-react"
 
 import { useAuth } from "@/features/auth/hooks/use-auth"
 import { useLogout } from "@/features/auth/hooks/use-logout"
+import { useProfile } from "@/features/profile/hooks/use-profile"
 import { cn } from "@/libs/utils"
 import { BrandName } from "@/shared/ui/brand-name"
 import { Button, buttonVariants } from "@/shared/ui/button"
@@ -27,6 +28,7 @@ import {
 
 export const Header = () => {
 	const { user } = useAuth()
+	const { profile } = useProfile()
 	const { mutate: logout } = useLogout()
 
 	const linkProps = linkOptions({
@@ -36,7 +38,7 @@ export const Header = () => {
 		}
 	})
 
-	const NavData = [
+	const NavData: { to: LinkOptions["to"]; label: string }[] = [
 		{ to: "/", label: "Inicio" },
 		{ to: "/challenges", label: "Desafios" },
 		{ to: "/solutions", label: "Soluções" }
@@ -52,8 +54,8 @@ export const Header = () => {
 				<nav>
 					<ul className="flex items-center gap-5 font-lexend leading-6 text-muted-foreground">
 						{NavData.map((item) => (
-							<li>
-								<Link to={item.to} className="" activeProps={linkProps.activeProps}>
+							<li key={item.to}>
+								<Link to={item.to} activeProps={linkProps.activeProps}>
 									{({ isActive }) => {
 										return <>{isActive ? item.label : `_${item.label}`}</>
 									}}
@@ -64,13 +66,15 @@ export const Header = () => {
 				</nav>
 			</div>
 
-			{user ? (
+			{user && profile ? (
 				<DropdownMenu>
 					<Button variant="secondary" className="border" asChild>
 						<DropdownMenuTrigger>
 							<Avatar>
 								<AvatarImage
-									src="https://avatars.githubusercontent.com/u/94739199?v=4"
+									src={
+										profile.images.find((image) => image.type === "profile-avatar")?.url
+									}
 									className="size-6 rounded-full"
 									alt="Imagem de perfil"
 								/>
@@ -111,7 +115,7 @@ export const Header = () => {
 					<nav className="mt-10">
 						<ul className="flex flex-col items-center gap-5 leading-6 text-muted-foreground [&>*]:w-full">
 							{NavData.map((item) => (
-								<li>
+								<li key={item.to}>
 									<Link
 										to={item.to}
 										className={cn(

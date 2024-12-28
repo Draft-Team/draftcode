@@ -1,10 +1,10 @@
 import { useSuspenseQueries } from "@tanstack/react-query"
 
-import { userProfileQueryOptions } from "../queries"
+import { currentUserProfileQueryOptions } from "../queries"
 
 export const useProfile = () => {
 	const [profile] = useSuspenseQueries({
-		queries: [userProfileQueryOptions]
+		queries: [currentUserProfileQueryOptions]
 	})
 
 	return { profile: profile.data }
