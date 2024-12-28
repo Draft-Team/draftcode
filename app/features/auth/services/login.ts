@@ -1,5 +1,3 @@
-import { redirect } from "@tanstack/react-router"
-
 import { createServerFn } from "@tanstack/start"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
@@ -50,6 +48,4 @@ export const $login = createServerFn({ method: "POST" })
 		}
 
 		await setSession({ userId: existingUser.id })
-
-		throw redirect({ to: "/" })
 	})

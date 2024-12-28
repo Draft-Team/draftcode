@@ -14,6 +14,7 @@ import {
 	currentSessionQueryOptions,
 	currentUserQueryOptions
 } from "@/features/auth/queries"
+import { currentUserProfileQueryOptions } from "@/features/profile/queries"
 import { Toaster } from "@/shared/ui/sonner"
 import css from "@/styles/globals.css?url"
 
@@ -53,12 +54,16 @@ export const Route = createRootRouteWithContext<{
 	beforeLoad: async ({ context }) => {
 		const user = await context.queryClient.ensureQueryData(currentUserQueryOptions)
 		const session = await context.queryClient.ensureQueryData(currentSessionQueryOptions)
+		const profile = await context.queryClient.ensureQueryData(
+			currentUserProfileQueryOptions
+		)
 
 		const isAuthenticated = !!user && !!session
 
 		return {
 			user,
 			session,
+			profile,
 			isAuthenticated
 		}
 	}

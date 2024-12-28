@@ -6,6 +6,7 @@ import { BenefitsCard } from "@/pages/home/components/benefits-card"
 import { FeatureCard } from "@/pages/home/components/feature-card"
 import { benefitsData } from "@/pages/home/constants/benefits-data"
 import { featureData } from "@/pages/home/constants/feature-data"
+import { createChallengeMock } from "@/shared/mocks/challenges"
 import { Button } from "@/shared/ui/button"
 import {
 	ChallengeCard,
@@ -24,12 +25,14 @@ export const Route = createFileRoute("/_base/")({
 	component: RouteComponent
 })
 
+const mockChallenges = createChallengeMock(3)
+
 function RouteComponent() {
 	return (
 		<main>
 			<HeroSection className="border-none bg-background">
 				<HeroSectionContent>
-					<div className="animate-border mb-2 flex w-max items-center gap-1 rounded border border-transparent px-2 py-1 [background:linear-gradient(45deg,#000000,theme(colors.black)_50%,#000000)_padding-box,conic-gradient(from_var(--border-angle),theme(colors.purple.600/.48)_80%,_theme(colors.purple.500)_86%,_theme(colors.purple.300)_90%,_theme(colors.purple.500)_94%,_theme(colors.purple.600/.48))_border-box] sm:mb-5">
+					<div className="mb-2 flex w-max animate-border items-center gap-1 rounded border border-transparent px-2 py-1 [background:linear-gradient(45deg,#000000,theme(colors.black)_50%,#000000)_padding-box,conic-gradient(from_var(--border-angle),theme(colors.purple.600/.48)_80%,_theme(colors.purple.500)_86%,_theme(colors.purple.300)_90%,_theme(colors.purple.500)_94%,_theme(colors.purple.600/.48))_border-box] sm:mb-5">
 						<StarsIcon size={18} />
 						<span className="text-xs font-medium uppercase">Simples e prático</span>
 					</div>
@@ -83,87 +86,38 @@ function RouteComponent() {
 			<section className="container mt-11">
 				<h1 className="mb-4 text-2xl font-bold">Desafios</h1>
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-					<ChallengeCard className="w-full">
-						<div className="relative">
-							<ChallengeCardImage src="https://avatars.githubusercontent.com/u/94739199?v=4" />
-							<PointsBadge points={139} className="absolute right-1 top-1" />
-						</div>
-						<ChallengeCardContent>
-							<div className="flex items-center justify-between">
-								<ChallengeCardTitle>Draftlab</ChallengeCardTitle>
-								<DifficultyMeter difficulty="expert" />
+					{mockChallenges.map((challenge) => (
+						<ChallengeCard key={challenge.id}>
+							<div className="relative">
+								<ChallengeCardImage src="https://avatars.githubusercontent.com/u/94739199?v=4" />
+								<PointsBadge
+									points={challenge.experienceForCompletion}
+									className="absolute right-1 top-1"
+								/>
 							</div>
+							<ChallengeCardContent>
+								<div className="flex items-center justify-between">
+									<ChallengeCardTitle>{challenge.title}</ChallengeCardTitle>
+									<DifficultyMeter difficulty={challenge.difficulty} />
+								</div>
+								<ChallengeCardDescription>
+									{challenge.description}
+								</ChallengeCardDescription>
 
-							<ChallengeCardDescription>
-								Supere desafios, conecte talentos e brilhe na plataforma de inovação
-								colaborativa. Desperte seu potencial.
-							</ChallengeCardDescription>
-
-							<div className="space-x-3">
-								<ChallengeCardTag>HTML</ChallengeCardTag>
-								<ChallengeCardTag>CSS</ChallengeCardTag>
-								<ChallengeCardTag>JS</ChallengeCardTag>
-							</div>
-						</ChallengeCardContent>
-						<ChallengeCardFooter className="flex items-center justify-between">
-							<Bookmark />
-							<Eye />
-						</ChallengeCardFooter>
-					</ChallengeCard>
-					<ChallengeCard className="w-full">
-						<div className="relative">
-							<ChallengeCardImage src="https://avatars.githubusercontent.com/u/94739199?v=4" />
-							<PointsBadge points={139} className="absolute right-1 top-1" />
-						</div>
-						<ChallengeCardContent>
-							<div className="flex items-center justify-between">
-								<ChallengeCardTitle>Draftlab</ChallengeCardTitle>
-								<DifficultyMeter difficulty="hard" />
-							</div>
-
-							<ChallengeCardDescription>
-								Supere desafios, conecte talentos e brilhe na plataforma de inovação
-								colaborativa. Desperte seu potencial.
-							</ChallengeCardDescription>
-
-							<div className="space-x-3">
-								<ChallengeCardTag>HTML</ChallengeCardTag>
-								<ChallengeCardTag>CSS</ChallengeCardTag>
-								<ChallengeCardTag>JS</ChallengeCardTag>
-							</div>
-						</ChallengeCardContent>
-						<ChallengeCardFooter className="flex items-center justify-between">
-							<Bookmark />
-							<Eye />
-						</ChallengeCardFooter>
-					</ChallengeCard>
-					<ChallengeCard className="w-full">
-						<div className="relative">
-							<ChallengeCardImage src="https://avatars.githubusercontent.com/u/94739199?v=4" />
-							<PointsBadge points={139} className="absolute right-1 top-1" />
-						</div>
-						<ChallengeCardContent>
-							<div className="flex items-center justify-between">
-								<ChallengeCardTitle>Draftlab</ChallengeCardTitle>
-								<DifficultyMeter difficulty="hard" />
-							</div>
-
-							<ChallengeCardDescription>
-								Supere desafios, conecte talentos e brilhe na plataforma de inovação
-								colaborativa. Desperte seu potencial.
-							</ChallengeCardDescription>
-
-							<div className="space-x-3">
-								<ChallengeCardTag>HTML</ChallengeCardTag>
-								<ChallengeCardTag>CSS</ChallengeCardTag>
-								<ChallengeCardTag>JS</ChallengeCardTag>
-							</div>
-						</ChallengeCardContent>
-						<ChallengeCardFooter className="flex items-center justify-between">
-							<Bookmark />
-							<Eye />
-						</ChallengeCardFooter>
-					</ChallengeCard>
+								<div className="flex flex-wrap gap-3">
+									<ChallengeCardTag>HTML</ChallengeCardTag>
+									<ChallengeCardTag>CSS</ChallengeCardTag>
+									<ChallengeCardTag>Javascript</ChallengeCardTag>
+								</div>
+							</ChallengeCardContent>
+							<ChallengeCardFooter className="flex items-center justify-between">
+								<Bookmark />
+								<div className="flex gap-1">
+									<Eye /> <span className="font-light">382</span>
+								</div>
+							</ChallengeCardFooter>
+						</ChallengeCard>
+					))}
 				</div>
 			</section>
 

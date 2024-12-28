@@ -1,4 +1,4 @@
-import { Link, linkOptions } from "@tanstack/react-router"
+import { Link, linkOptions, type LinkOptions } from "@tanstack/react-router"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { ChevronDown, Menu } from "lucide-react"
@@ -30,13 +30,10 @@ export const Header = () => {
 	const { mutate: logout } = useLogout()
 
 	const linkProps = linkOptions({
-		activeProps: {
-			className:
-				'before:content-[">"] font-semibold before:text-primary border-b-2 border-primary text-foreground'
-		}
+		activeProps: { className: "border-primary" }
 	})
 
-	const NavData = [
+	const navData: { to: LinkOptions["to"]; label: string }[] = [
 		{ to: "/", label: "Inicio" },
 		{ to: "/challenges", label: "Desafios" },
 		{ to: "/solutions", label: "Soluções" }
@@ -45,18 +42,17 @@ export const Header = () => {
 	return (
 		<header className="container mx-auto flex min-h-16 items-center justify-between">
 			<div className="hidden items-center gap-6 sm:flex">
-				<Link to="/">
-					<BrandName as="h1" />
-				</Link>
+				<BrandName as="h1" />
 
 				<nav>
-					<ul className="flex items-center gap-5 font-lexend leading-6 text-muted-foreground">
-						{NavData.map((item) => (
-							<li>
-								<Link to={item.to} className="" activeProps={linkProps.activeProps}>
-									{({ isActive }) => {
-										return <>{isActive ? item.label : `_${item.label}`}</>
-									}}
+					<ul className="flex items-center gap-5 leading-6 text-muted-foreground">
+						{navData.map(({ to, label }) => (
+							<li key={to}>
+								<Link
+									to={to}
+									className={cn(buttonVariants({ variant: "outline" }), "font-medium")}
+									activeProps={linkProps.activeProps}>
+									{label}
 								</Link>
 							</li>
 						))}
@@ -70,7 +66,7 @@ export const Header = () => {
 						<DropdownMenuTrigger>
 							<Avatar>
 								<AvatarImage
-									src="https://avatars.githubusercontent.com/u/94739199?v=4"
+									src="https://github.com/shadcn.png"
 									className="size-6 rounded-full"
 									alt="Imagem de perfil"
 								/>
@@ -110,16 +106,16 @@ export const Header = () => {
 					</SheetHeader>
 					<nav className="mt-10">
 						<ul className="flex flex-col items-center gap-5 leading-6 text-muted-foreground [&>*]:w-full">
-							{NavData.map((item) => (
-								<li>
+							{navData.map(({ to, label }) => (
+								<li key={to}>
 									<Link
-										to={item.to}
+										to={to}
 										className={cn(
 											buttonVariants({ variant: "outline" }),
 											"w-full font-medium"
 										)}
 										activeProps={linkProps.activeProps}>
-										{item.label}
+										{label}
 									</Link>
 								</li>
 							))}

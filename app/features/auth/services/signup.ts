@@ -1,5 +1,3 @@
-import { redirect } from "@tanstack/react-router"
-
 import { createServerFn } from "@tanstack/start"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
@@ -48,25 +46,24 @@ export const $signup = createServerFn({ method: "POST" })
 
 		const hashedPassword = await hashPassword(data.password)
 
-		const user = await db
-			.insert(usersTable)
-			.values({
-				name: data.name,
-				email: data.email,
-				passwordHash: hashedPassword
+		const newUser = await db.transaction(async (tx) => {
+			const user = await tx
+				.insert(usersTable)
+				.values({
+					role: "user",
+					name: data.name,
+					email: data.email,
+					passwordHash: hashedPassword
+				})
+				.returning()
+				.get()
+
+			await tx.insert(profilesTable).values({
+				userId: user.id
 			})
-			.returning()
-			.then((res) => res[0] ?? null)
 
-		if (!user) {
-			throw new Error("Falha ao se cadastrar. Tente novamente mais tarde.")
-		}
-
-		await db.insert(profilesTable).values({
-			userId: user.id
+			return user
 		})
 
-		await setSession({ userId: user.id })
-
-		throw redirect({ to: "/" })
+		await setSession({ userId: newUser.id })
 	})
