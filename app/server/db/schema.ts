@@ -10,10 +10,12 @@ import {
 
 import { generateId } from "../utils/generate-id"
 
-export type OauthProviderId = "github" | "google"
-export type ChallengeStatus = "draft" | "published" | "archived"
-export type ChallengeDifficulty = "easy" | "medium" | "hard" | "expert"
-export type ProfileLinkType = "github" | "linkedin" | "twitch" | "youtube" | "website"
+type OauthProviderId = "github" | "google"
+type UserRole = "user" | "admin" | "superadmin"
+type ChallengeStatus = "draft" | "published" | "archived"
+type ChallengeDifficulty = "easy" | "medium" | "hard" | "expert"
+type ImageType = "profile-avatar" | "profile-cover" | "challenge-cover"
+type ProfileLinkType = "github" | "linkedin" | "twitch" | "youtube" | "website"
 
 const oauthProviderId = customType<{ data: OauthProviderId }>({
 	dataType() {
@@ -39,12 +41,25 @@ const challengeStatus = customType<{ data: ChallengeStatus }>({
 	}
 })
 
+const userRole = customType<{ data: UserRole }>({
+	dataType() {
+		return "user"
+	}
+})
+
+const imageType = customType<{ data: ImageType }>({
+	dataType() {
+		return "profile"
+	}
+})
+
 export const imagesTable = sqliteTable("images", {
 	id: text("id")
 		.primaryKey()
 		.$defaultFn(() => generateId()),
+	key: text("key"),
 	url: text("url").notNull(),
-	key: text("key").notNull(),
+	type: imageType("type").notNull(),
 	createdAt: integer("created_at", { mode: "timestamp_ms" })
 		.notNull()
 		.$defaultFn(() => new Date()),
@@ -59,6 +74,9 @@ export const profilesTable = sqliteTable("profiles", {
 		.primaryKey()
 		.$defaultFn(() => generateId()),
 	bio: text("bio"),
+	userId: text("user_id")
+		.notNull()
+		.references(() => usersTable.id, { onDelete: "cascade" }),
 	totalExperience: integer("total_experience")
 		.notNull()
 		.$defaultFn(() => 0),
@@ -99,6 +117,7 @@ export const usersTable = sqliteTable(
 			.$defaultFn(() => generateId()),
 		passwordHash: text("password_hash"),
 		name: text("name").notNull(),
+		role: userRole("role").notNull(),
 		email: text("email").unique().notNull(),
 		createdAt: integer("created_at", { mode: "timestamp_ms" })
 			.notNull()

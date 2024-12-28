@@ -64,15 +64,15 @@ export const SignupCard = () => {
 				</Label>
 			</fieldset>
 
-			<Button disabled={isPending} type="submit">
-				{isPending ? "Criando conta..." : "Criar conta"}
+			<Button type="submit" mode="loading" isLoading={isPending}>
+				Criar conta
 			</Button>
 
 			<div className="flex items-center justify-center gap-4">
 				<div className="flex-1 border-t" />
 				<span>
 					Já tem uma conta?{" "}
-					<Link to="/login" className="text-primary">
+					<Link to="/login" className="text-primary hover:underline">
 						Acesse
 					</Link>
 				</span>

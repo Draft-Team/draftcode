@@ -5,20 +5,28 @@ import { getCookie, setCookie } from "vinxi/http"
 
 import { serverEnv } from "@/environment/server"
 import { createDate, isWithinExpirationDate, TimeSpan } from "@/libs/time-span"
-import { db, type DBTypes } from "@/server/db/client"
-import { sessionsTable, usersTable } from "@/server/db/schema"
+import { db } from "@/server/db/client"
+import {
+	imagesTable,
+	profileImagesTable,
+	profilesTable,
+	sessionsTable,
+	usersTable
+} from "@/server/db/schema"
 
-export type Session = DBTypes["sessionsTable"]
-export type User = Omit<DBTypes["usersTable"], "passwordHash">
+import type { DBTypes } from "../db/db-types"
+
+type Session = DBTypes["sessionsTable"]
+type User = Omit<DBTypes["usersTable"], "passwordHash">
 
 type SessionValidationResult =
 	| {
-			session: Session
 			user: User
+			session: Session
 	  }
 	| {
-			session: undefined
 			user: undefined
+			session: undefined
 	  }
 
 const SESSION_DURATION = new TimeSpan(30, "d")
@@ -71,6 +79,7 @@ export const validateSessionToken = async ({
 			user: {
 				id: usersTable.id,
 				name: usersTable.name,
+				role: usersTable.role,
 				email: usersTable.email,
 				createdAt: usersTable.createdAt,
 				updatedAt: usersTable.updatedAt
@@ -174,6 +183,53 @@ export const getCurrentUser = async () => {
 	}
 
 	return user
+}
+
+export const getCurrentUserProfile = async () => {
+	const token = getCookie("session")
+
+	if (!token) {
+		return undefined
+	}
+
+	const { user } = await validateSessionToken({ token })
+
+	if (!user) {
+		deleteSessionTokenCookie()
+		return undefined
+	}
+
+	return await db.transaction(async (tx) => {
+		const profile = await tx
+			.select({
+				id: profilesTable.id,
+				bio: profilesTable.bio,
+				totalExperience: profilesTable.totalExperience
+			})
+			.from(profilesTable)
+			.where(eq(profilesTable.userId, user.id))
+			.get()
+
+		if (!profile) {
+			throw new Error("Profile not found")
+		}
+
+		const profileImage = await tx
+			.select({
+				id: imagesTable.id,
+				key: imagesTable.key,
+				url: imagesTable.url,
+				type: imagesTable.type
+			})
+			.from(imagesTable)
+			.innerJoin(profileImagesTable, eq(imagesTable.id, profileImagesTable.imageId))
+			.where(eq(profileImagesTable.profileId, profile.id))
+
+		return {
+			...profile,
+			images: profileImage
+		}
+	})
 }
 
 export const setSession = async ({ userId }: { userId: string }) => {

@@ -4,6 +4,7 @@ import { createFileRoute } from "@tanstack/react-router"
 import { Bookmark, Eye } from "lucide-react"
 import { parseAsString, useQueryState } from "nuqs"
 
+import { createChallengeMock } from "@/shared/mocks/challenges"
 import { Button } from "@/shared/ui/button"
 import {
 	ChallengeCard,
@@ -14,7 +15,7 @@ import {
 	ChallengeCardTag,
 	ChallengeCardTitle
 } from "@/shared/ui/challenge-card"
-import { DifficultyMeter, type Difficulty } from "@/shared/ui/difficulty-meter"
+import { DifficultyMeter } from "@/shared/ui/difficulty-meter"
 import { HeroSection } from "@/shared/ui/hero-section"
 import { Input } from "@/shared/ui/input"
 import { PointsBadge } from "@/shared/ui/points-badge"
@@ -30,104 +31,6 @@ export const Route = createFileRoute("/_base/challenges")({
 	component: RouteComponent
 })
 
-const mockChallenges: {
-	id: number
-	title: string
-	description: string
-	difficulty: Difficulty
-	tags: string[]
-	points: number
-}[] = [
-	{
-		id: 1,
-		title: "Desafio 1",
-		difficulty: "easy",
-		points: 100,
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-		tags: ["HTML", "CSS", "Javascript"]
-	},
-	{
-		id: 2,
-		title: "Desafio 2",
-		difficulty: "medium",
-		points: 200,
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-		tags: ["HTML", "CSS", "Javascript"]
-	},
-	{
-		id: 3,
-		title: "Desafio 3",
-		difficulty: "hard",
-		points: 300,
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-		tags: ["HTML", "CSS", "Javascript"]
-	},
-	{
-		id: 4,
-		title: "Desafio 4",
-		difficulty: "expert",
-		points: 400,
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-		tags: ["HTML", "CSS", "Javascript"]
-	},
-	{
-		id: 5,
-		title: "Desafio 5",
-		difficulty: "easy",
-		points: 500,
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-		tags: ["HTML", "CSS", "Javascript"]
-	},
-	{
-		id: 6,
-		title: "Desafio 6",
-		difficulty: "medium",
-		points: 600,
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-		tags: ["HTML", "CSS", "Javascript"]
-	},
-	{
-		id: 7,
-		title: "Desafio 7",
-		difficulty: "hard",
-		points: 700,
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-		tags: ["HTML", "CSS", "Javascript"]
-	},
-	{
-		id: 8,
-		title: "Desafio 8",
-		difficulty: "expert",
-		points: 800,
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-		tags: ["HTML", "CSS", "Javascript"]
-	},
-	{
-		id: 9,
-		title: "Desafio 9",
-		difficulty: "easy",
-		points: 900,
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-		tags: ["HTML", "CSS", "Javascript"]
-	},
-	{
-		id: 10,
-		title: "Desafio 10",
-		difficulty: "medium",
-		points: 1000,
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-		tags: ["HTML", "CSS", "Javascript"]
-	},
-	{
-		id: 11,
-		title: "Desafio 11",
-		difficulty: "hard",
-		points: 1100,
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-		tags: ["HTML", "CSS", "Javascript"]
-	}
-]
-
 function RouteComponent() {
 	const [search, setSearch] = useQueryState("search", parseAsString.withDefault(""))
 	const [score, setScore] = useQueryState(
@@ -140,6 +43,8 @@ function RouteComponent() {
 	)
 
 	const filteredChallenges = React.useMemo(() => {
+		const mockChallenges = createChallengeMock(10)
+
 		const filteredChallenges = mockChallenges.filter((challenge) => {
 			if (difficulty !== "all" && challenge.difficulty !== difficulty) {
 				return false
@@ -152,16 +57,19 @@ function RouteComponent() {
 			return true
 		})
 
-		// Ordenando os desafios com base no score
 		if (score === "highest-score") {
-			return filteredChallenges.sort((a, b) => b.points - a.points) // Ordenar por maior pontuação
+			return filteredChallenges.sort(
+				(a, b) => b.experienceForCompletion - a.experienceForCompletion
+			)
 		}
 
 		if (score === "lowest-score") {
-			return filteredChallenges.sort((a, b) => a.points - b.points) // Ordenar por menor pontuação
+			return filteredChallenges.sort(
+				(a, b) => a.experienceForCompletion - b.experienceForCompletion
+			)
 		}
 
-		return filteredChallenges // Sem ordenação adicional
+		return filteredChallenges
 	}, [search, difficulty, score])
 
 	return (
@@ -227,7 +135,10 @@ function RouteComponent() {
 					<ChallengeCard key={challenge.id}>
 						<div className="relative">
 							<ChallengeCardImage src="https://avatars.githubusercontent.com/u/94739199?v=4" />
-							<PointsBadge points={challenge.points} className="absolute right-1 top-1" />
+							<PointsBadge
+								points={challenge.experienceForCompletion}
+								className="absolute right-1 top-1"
+							/>
 						</div>
 						<ChallengeCardContent>
 							<div className="flex items-center justify-between">
@@ -237,9 +148,9 @@ function RouteComponent() {
 							<ChallengeCardDescription>{challenge.description}</ChallengeCardDescription>
 
 							<div className="flex flex-wrap gap-3">
-								{challenge.tags.map((tag) => (
-									<ChallengeCardTag key={tag}>{tag}</ChallengeCardTag>
-								))}
+								<ChallengeCardTag>HTML</ChallengeCardTag>
+								<ChallengeCardTag>CSS</ChallengeCardTag>
+								<ChallengeCardTag>Javascript</ChallengeCardTag>
 							</div>
 						</ChallengeCardContent>
 						<ChallengeCardFooter className="flex items-center justify-between">

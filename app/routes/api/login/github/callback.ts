@@ -7,11 +7,18 @@ import { z } from "zod"
 import { github } from "@/server/auth/oauth"
 import { setSession } from "@/server/auth/sessions"
 import { db } from "@/server/db/client"
-import { oauthAccountsTable, profilesTable, usersTable } from "@/server/db/schema"
+import {
+	imagesTable,
+	oauthAccountsTable,
+	profileImagesTable,
+	profilesTable,
+	usersTable
+} from "@/server/db/schema"
 
 const GithubUser = z.object({
 	id: z.number(),
 	name: z.string(),
+	avatar_url: z.string(),
 	email: z.string().email()
 })
 
@@ -70,44 +77,53 @@ export const APIRoute = createAPIFileRoute("/api/login/github/callback")({
 				})
 			}
 
-			const newGithubUser = await db
-				.insert(usersTable)
-				.values({
-					name: githubUser.name,
-					email: githubUser.email
-				})
-				.returning()
-				.then((res) => res[0] ?? null)
+			const newUser = await db.transaction(async (tx) => {
+				const newGithubUser = await tx
+					.insert(usersTable)
+					.values({
+						role: "user",
+						name: githubUser.name,
+						email: githubUser.email
+					})
+					.returning()
+					.get()
 
-			if (!newGithubUser) {
-				return new Response(null, {
-					status: 500,
-					statusText: "Error creating github user"
-				})
-			}
+				await tx
+					.insert(oauthAccountsTable)
+					.values({
+						providerId: "github",
+						providerUserId: githubUser.id.toString(),
+						userId: newGithubUser.id
+					})
+					.returning()
+					.get()
 
-			const newOauthAccount = await db
-				.insert(oauthAccountsTable)
-				.values({
-					providerId: "github",
-					providerUserId: githubUser.id.toString(),
-					userId: newGithubUser.id
-				})
-				.returning()
-				.then((res) => res[0] ?? null)
+				const profile = await tx
+					.insert(profilesTable)
+					.values({
+						userId: newGithubUser.id
+					})
+					.returning()
+					.get()
 
-			if (!newOauthAccount) {
-				return new Response(null, {
-					status: 500,
-					statusText: "Error creating github oauth account"
-				})
-			}
+				const images = await tx
+					.insert(imagesTable)
+					.values({
+						type: "profile-avatar",
+						url: githubUser.avatar_url
+					})
+					.returning()
+					.get()
 
-			await db.insert(profilesTable).values({
-				userId: newGithubUser.id
+				await tx.insert(profileImagesTable).values({
+					imageId: images.id,
+					profileId: profile.id
+				})
+
+				return newGithubUser
 			})
 
-			await setSession({ userId: newGithubUser.id })
+			await setSession({ userId: newUser.id })
 
 			return new Response(null, {
 				status: 302,
