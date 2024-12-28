@@ -58,13 +58,15 @@ export const LoginCard = () => {
 				</Label>
 			</fieldset>
 
-			<Button disabled={isPending}>{isPending ? "Entrando..." : "Entrar"}</Button>
+			<Button type="submit" mode="loading" isLoading={isPending}>
+				Entrar
+			</Button>
 
 			<div className="flex items-center justify-center gap-4">
 				<div className="flex-1 border-t" />
 				<span>
 					Não tem uma conta?{" "}
-					<Link to="/signup" className="text-primary">
+					<Link to="/signup" className="text-primary hover:underline">
 						Criar
 					</Link>
 				</span>

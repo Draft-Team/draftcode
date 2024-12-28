@@ -7,11 +7,18 @@ import { z } from "zod"
 import { google } from "@/server/auth/oauth"
 import { setSession } from "@/server/auth/sessions"
 import { db } from "@/server/db/client"
-import { oauthAccountsTable, profilesTable, usersTable } from "@/server/db/schema"
+import {
+	imagesTable,
+	oauthAccountsTable,
+	profileImagesTable,
+	profilesTable,
+	usersTable
+} from "@/server/db/schema"
 
 const GoogleUser = z.object({
 	sub: z.string(),
 	name: z.string(),
+	picture: z.string(),
 	email: z.string().email()
 })
 
@@ -71,44 +78,53 @@ export const APIRoute = createAPIFileRoute("/api/login/google/callback")({
 				})
 			}
 
-			const newGoogleUser = await db
-				.insert(usersTable)
-				.values({
-					name: googleUser.name,
-					email: googleUser.email
-				})
-				.returning()
-				.then((res) => res[0] ?? null)
+			const newUser = await db.transaction(async (tx) => {
+				const newGoogleUser = await tx
+					.insert(usersTable)
+					.values({
+						role: "user",
+						name: googleUser.name,
+						email: googleUser.email
+					})
+					.returning()
+					.get()
 
-			if (!newGoogleUser) {
-				return new Response(null, {
-					status: 500,
-					statusText: "Error creating google user"
-				})
-			}
+				await tx
+					.insert(oauthAccountsTable)
+					.values({
+						userId: newGoogleUser.id,
+						providerId: "google",
+						providerUserId: googleUser.sub
+					})
+					.returning()
+					.get()
 
-			const newOauthAccount = await db
-				.insert(oauthAccountsTable)
-				.values({
-					userId: newGoogleUser.id,
-					providerId: "google",
-					providerUserId: googleUser.sub
-				})
-				.returning()
-				.then((res) => res[0] ?? null)
+				const profile = await tx
+					.insert(profilesTable)
+					.values({
+						userId: newGoogleUser.id
+					})
+					.returning()
+					.get()
 
-			if (!newOauthAccount) {
-				return new Response(null, {
-					status: 500,
-					statusText: "Error creating google oauth account"
-				})
-			}
+				const images = await tx
+					.insert(imagesTable)
+					.values({
+						type: "profile-avatar",
+						url: googleUser.picture
+					})
+					.returning()
+					.get()
 
-			await db.insert(profilesTable).values({
-				userId: newGoogleUser.id
+				await tx.insert(profileImagesTable).values({
+					imageId: images.id,
+					profileId: profile.id
+				})
+
+				return newGoogleUser
 			})
 
-			await setSession({ userId: newGoogleUser.id })
+			await setSession({ userId: newUser.id })
 
 			return new Response(null, {
 				status: 302,

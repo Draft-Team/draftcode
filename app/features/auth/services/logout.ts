@@ -1,5 +1,3 @@
-import { redirect } from "@tanstack/react-router"
-
 import { createServerFn } from "@tanstack/start"
 
 import { deleteSessionTokenCookie, invalidateSession } from "@/server/auth/sessions"
@@ -10,6 +8,4 @@ export const $logout = createServerFn({ method: "POST" })
 	.handler(async ({ context }) => {
 		await invalidateSession({ sessionId: context.session.id })
 		deleteSessionTokenCookie()
-
-		throw redirect({ to: "/" })
 	})

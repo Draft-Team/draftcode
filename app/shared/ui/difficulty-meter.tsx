@@ -1,6 +1,7 @@
 import { cn } from "@/libs/utils"
+import type { DBTypes } from "@/server/db/db-types"
 
-export type Difficulty = "easy" | "medium" | "hard" | "expert"
+type Difficulty = DBTypes["challengesTable"]["difficulty"]
 
 const difficultyMap: Record<Difficulty, string> = {
 	easy: "Fácil",

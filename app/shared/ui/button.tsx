@@ -2,8 +2,9 @@ import * as React from "react"
 
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
+import { Loader2 } from "lucide-react"
 
-import { cn } from "@/libs/utils"
+import { cn, run } from "@/libs/utils"
 
 const buttonVariants = cva(
 	"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -25,6 +26,9 @@ const buttonVariants = cva(
 				sm: "h-8 rounded-md px-3 text-xs",
 				lg: "h-10 rounded-md px-8",
 				icon: "h-9 w-9"
+			},
+			mode: {
+				loading: "grid grid-cols-1 grid-rows-1"
 			}
 		},
 		defaultVariants: {
@@ -38,17 +42,38 @@ export interface ButtonProps
 	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
 		VariantProps<typeof buttonVariants> {
 	asChild?: boolean
+	isLoading?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-	({ className, variant, size, asChild = false, ...props }, ref) => {
+	({ className, variant, isLoading, size, mode, asChild = false, ...props }, ref) => {
 		const Comp = asChild ? Slot : "button"
+
 		return (
 			<Comp
-				className={cn(buttonVariants({ variant, size, className }))}
+				className={cn(buttonVariants({ variant, size, className, mode }))}
 				ref={ref}
-				{...props}
-			/>
+				disabled={isLoading}
+				{...props}>
+				{run(() => {
+					if (mode === "loading") {
+						return (
+							<>
+								<span
+									className={`col-start-1 row-start-1 flex h-full w-full items-center justify-center ${isLoading ? "invisible" : "visible"}`}>
+									{props.children}
+								</span>
+								<span
+									className={`col-start-1 row-start-1 flex h-full w-full items-center justify-center ${isLoading ? "visible" : "invisible"}`}>
+									<Loader2 className="animate-spin" />
+								</span>
+							</>
+						)
+					}
+
+					return props.children
+				})}
+			</Comp>
 		)
 	}
 )
