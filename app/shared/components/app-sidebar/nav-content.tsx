@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router"
 
-import { Archive, Folders, Star } from "lucide-react"
+import { Hash } from "lucide-react"
 
 import {
 	SidebarGroup,
@@ -15,23 +15,9 @@ export const NavContent = () => {
 			<SidebarMenu>
 				<SidebarMenuItem>
 					<SidebarMenuButton asChild tooltip="Favorites">
-						<Link to="/">
-							<Star />
-							<span>Favorites</span>
-						</Link>
-					</SidebarMenuButton>
-
-					<SidebarMenuButton asChild tooltip="Archived">
-						<Link to="/challenges">
-							<Archive />
-							<span>Archived</span>
-						</Link>
-					</SidebarMenuButton>
-
-					<SidebarMenuButton asChild tooltip="Categories">
-						<Link to="/solutions">
-							<Folders />
-							<span>Categories</span>
+						<Link to="/dashboard">
+							<Hash />
+							<span>Dashboard</span>
 						</Link>
 					</SidebarMenuButton>
 				</SidebarMenuItem>
