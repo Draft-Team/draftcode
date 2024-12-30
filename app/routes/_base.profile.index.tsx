@@ -1,6 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
 
 import { useProfile } from "@/features/profile/hooks/use-profile"
+import { ProfileBadges } from "@/pages/profile/components/profile-badges"
 import ProfileHeader from "@/pages/profile/components/profile-header"
 import ProfileStatistics from "@/pages/profile/components/profile-statistics"
 
@@ -25,7 +26,9 @@ function RouteComponent() {
 				<div>
 					<ProfileStatistics totalExperience={profile?.totalExperience ?? 0} />
 				</div>
-				<div>zap2</div>
+				<>
+					<ProfileBadges />
+				</>
 			</section>
 		</>
 	)
