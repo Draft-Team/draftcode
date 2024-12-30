@@ -52,11 +52,11 @@ export const Route = createRootRouteWithContext<{
 		]
 	}),
 	beforeLoad: async ({ context }) => {
-		const user = await context.queryClient.ensureQueryData(currentUserQueryOptions)
-		const session = await context.queryClient.ensureQueryData(currentSessionQueryOptions)
-		const profile = await context.queryClient.ensureQueryData(
-			currentUserProfileQueryOptions
-		)
+		const $user = context.queryClient.ensureQueryData(currentUserQueryOptions)
+		const $session = context.queryClient.ensureQueryData(currentSessionQueryOptions)
+		const $profile = context.queryClient.ensureQueryData(currentUserProfileQueryOptions)
+
+		const [user, session, profile] = await Promise.all([$user, $session, $profile])
 
 		const isAuthenticated = !!user && !!session
 
