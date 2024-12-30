@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router"
+import { createFileRoute, Link, redirect } from "@tanstack/react-router"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowLeft } from "lucide-react"
@@ -13,7 +13,12 @@ import { Label } from "@/shared/ui/label"
 import { Textarea } from "@/shared/ui/textarea"
 
 export const Route = createFileRoute("/_base/profile/edit")({
-	component: RouteComponent
+	component: RouteComponent,
+	beforeLoad: ({ context }) => {
+		if (!context.isAuthenticated) {
+			throw redirect({ to: "/" })
+		}
+	}
 })
 
 function RouteComponent() {
