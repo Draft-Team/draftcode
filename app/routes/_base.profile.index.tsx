@@ -4,14 +4,13 @@ import { useProfile } from "@/features/profile/hooks/use-profile"
 import ProfileHeader from "@/pages/profile/components/profile-header"
 import ProfileStatistics from "@/pages/profile/components/profile-statistics"
 
-export const Route = createFileRoute("/_base/profile")({
+export const Route = createFileRoute("/_base/profile/")({
 	component: RouteComponent
 })
 
 function RouteComponent() {
 	const { profile } = useProfile()
 
-	console.log(profile)
 	return (
 		<>
 			<ProfileHeader

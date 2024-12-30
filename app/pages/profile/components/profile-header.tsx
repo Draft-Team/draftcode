@@ -3,7 +3,8 @@ import { Link } from "@tanstack/react-router"
 import { Camera, Edit2, LinkIcon } from "lucide-react"
 
 import { useAuth } from "@/features/auth/hooks/use-auth"
-import { Button } from "@/shared/ui/button"
+import { cn } from "@/libs/utils"
+import { Button, buttonVariants } from "@/shared/ui/button"
 
 interface ProfileHeaderProps {
 	bio: string
@@ -20,9 +21,14 @@ export default function ProfileHeader({ bio }: ProfileHeaderProps) {
 					className="h-full w-full object-cover"
 				/>
 
-				<Button variant="secondary" className="absolute right-4 top-4">
+				<Link
+					to="/profile/edit"
+					className={cn(
+						buttonVariants({ variant: "secondary" }),
+						"absolute right-4 top-4"
+					)}>
 					<Edit2 className="mr-2 h-4 w-4" /> Editar Perfil
-				</Button>
+				</Link>
 				<Button variant="secondary" size="icon" className="absolute bottom-4 right-4">
 					<Camera className="h-4 w-4" />
 				</Button>
