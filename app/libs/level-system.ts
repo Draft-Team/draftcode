@@ -2,7 +2,7 @@ export class LevelSystem {
 	private baseExperience: number
 	private multiplier: number
 
-	constructor(baseExperience = 100, multiplier = 1.5) {
+	constructor(baseExperience = 100, multiplier = 1.2) {
 		if (baseExperience <= 0 || multiplier <= 0) {
 			throw new Error("Base experience and multiplier must be greater than 0.")
 		}
@@ -12,10 +12,6 @@ export class LevelSystem {
 	}
 
 	calculateTotalExperienceForLevel(level: number): number {
-		if (level <= 0) {
-			throw new Error("Level must be greater than 0.")
-		}
-
 		let totalExperience = 0
 		for (let i = 1; i <= level; i++) {
 			totalExperience += Math.floor(this.baseExperience * Math.pow(i, this.multiplier))
