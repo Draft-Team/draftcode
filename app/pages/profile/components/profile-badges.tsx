@@ -38,7 +38,7 @@ export const ProfileBadges = () => {
 					<TooltipProvider key={badge.id}>
 						<Tooltip>
 							<TooltipTrigger>
-								<div>
+								<div className={badge.unlocked ? "opacity-100" : "opacity-50"}>
 									<img src="/purple-badge.svg" alt="" />
 								</div>
 							</TooltipTrigger>

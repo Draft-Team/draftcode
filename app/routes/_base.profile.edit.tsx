@@ -8,6 +8,7 @@ import { ProfileSchema, type ProfileData } from "@/features/auth/schemas/profile
 import { useEditProfile } from "@/features/profile/hooks/use-edit-profile"
 import { useProfile } from "@/features/profile/hooks/use-profile"
 import { cn } from "@/libs/utils"
+import { SocialMediaLinks } from "@/pages/profile/components/teste"
 import { Button, buttonVariants } from "@/shared/ui/button"
 import { Label } from "@/shared/ui/label"
 import { Textarea } from "@/shared/ui/textarea"
@@ -47,19 +48,24 @@ function RouteComponent() {
 			</Link>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="mt-6 flex flex-col gap-4 border bg-card p-4">
-				<h1 className="text-2xl font-semibold">Editar Perfil</h1>
-				<fieldset className="flex flex-col gap-4">
-					<Label className="space-y-2" htmlFor={register("bio").name}>
-						<span>Bio</span>
-						<Textarea {...register("bio")} defaultValue={profile?.bio ?? ""} />
-						{errors.bio && <p className="mt-2 text-red-500">{errors.bio.message}</p>}
-					</Label>
-				</fieldset>
+				className="mt-6 grid grid-cols-[2fr_1fr] gap-4">
+				<div className="flex flex-col gap-4 border bg-card p-4">
+					<h1 className="text-2xl font-semibold">Editar Perfil</h1>
+					<fieldset className="flex flex-col gap-4">
+						<Label className="space-y-2" htmlFor={register("bio").name}>
+							<span>Bio</span>
+							<Textarea {...register("bio")} defaultValue={profile?.bio ?? ""} />
+							{errors.bio && <p className="mt-2 text-red-500">{errors.bio.message}</p>}
+						</Label>
+					</fieldset>
 
-				<Button type="submit" mode="loading" isLoading={isPending}>
-					Salvar
-				</Button>
+					<Button type="submit" mode="loading" isLoading={isPending}>
+						Salvar
+					</Button>
+				</div>
+				<div>
+					<SocialMediaLinks />
+				</div>
 			</form>
 		</main>
 	)
