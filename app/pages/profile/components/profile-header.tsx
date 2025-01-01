@@ -1,16 +1,24 @@
 import { Link } from "@tanstack/react-router"
 
-import { Camera, Edit2, LinkIcon } from "lucide-react"
+import { Camera, Edit2 } from "lucide-react"
 
 import { useAuth } from "@/features/auth/hooks/use-auth"
 import { cn } from "@/libs/utils"
+import { socialIcons, type SocialPlatform } from "@/routes/_base.profile.edit"
 import { Button, buttonVariants } from "@/shared/ui/button"
+
+interface SocialLink {
+	id: string
+	type: SocialPlatform
+	url: string
+}
 
 interface ProfileHeaderProps {
 	bio: string
+	links?: SocialLink[]
 }
 
-export default function ProfileHeader({ bio }: ProfileHeaderProps) {
+export default function ProfileHeader({ bio, links }: ProfileHeaderProps) {
 	const { user } = useAuth()
 	return (
 		<div className="overflow-hidden rounded-lg border-y bg-card shadow">
@@ -56,21 +64,25 @@ export default function ProfileHeader({ bio }: ProfileHeaderProps) {
 					</div>
 
 					<div className="flex items-center gap-2">
-						<Link to="/">
-							<Button variant="outline" size={"icon"}>
-								<LinkIcon />
-							</Button>
-						</Link>
-						<Link to="/">
-							<Button variant="outline" size={"icon"}>
-								<LinkIcon />
-							</Button>
-						</Link>
-						<Link to="/">
-							<Button variant="outline" size={"icon"}>
-								<LinkIcon />
-							</Button>
-						</Link>
+						{links
+							? links
+									.filter(({ url }) => url)
+									.map(({ id, type, url }) => {
+										const Icon = socialIcons[type]
+										return (
+											<a
+												key={id}
+												href={url}
+												target="_blank"
+												rel="noopener noreferrer"
+												className={cn(
+													buttonVariants({ variant: "outline", size: "icon" })
+												)}>
+												<Icon />
+											</a>
+										)
+									})
+							: ""}
 					</div>
 				</div>
 			</div>

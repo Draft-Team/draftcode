@@ -1,22 +1,14 @@
 import { createServerFn } from "@tanstack/start"
 import { eq } from "drizzle-orm"
-import { z } from "zod"
 
+import { ProfileSchema } from "@/features/auth/schemas/profile-schema"
 import { db } from "@/server/db/client"
-import { profilesTable } from "@/server/db/schema"
+import { profileLinksTable, profilesTable } from "@/server/db/schema"
 import { authedMiddleware } from "@/server/utils/middlewares"
 
 export const $editprofile = createServerFn({ method: "POST" })
 	.middleware([authedMiddleware])
-	.validator(
-		z.object({
-			bio: z
-				.string()
-				.min(3, { message: "A bio deve ter pelo menos 3 caracteres." })
-				.max(255, { message: "A bio não pode ter mais de 255 caracteres." })
-				.default("")
-		})
-	)
+	.validator(ProfileSchema)
 	.handler(async ({ data, context }) => {
 		const updatedProfile = await db
 			.update(profilesTable)
@@ -27,6 +19,22 @@ export const $editprofile = createServerFn({ method: "POST" })
 
 		if (!updatedProfile) {
 			throw new Error("Perfil não encontrado ou erro ao atualizar")
+		}
+
+		await db
+			.delete(profileLinksTable)
+			.where(eq(profileLinksTable.profileId, updatedProfile.id))
+
+		const activeLinks = data.socialLinks
+			.filter((link) => link.active && link.url !== "")
+			.map((link) => ({
+				profileId: updatedProfile.id,
+				type: link.platform,
+				url: link.url
+			}))
+
+		if (activeLinks.length > 0) {
+			await db.insert(profileLinksTable).values(activeLinks)
 		}
 
 		return { message: "Perfil atualizado com sucesso" }

@@ -9,6 +9,7 @@ import { db } from "@/server/db/client"
 import {
 	imagesTable,
 	profileImagesTable,
+	profileLinksTable,
 	profilesTable,
 	sessionsTable,
 	usersTable
@@ -225,9 +226,19 @@ export const getCurrentUserProfile = async () => {
 			.innerJoin(profileImagesTable, eq(imagesTable.id, profileImagesTable.imageId))
 			.where(eq(profileImagesTable.profileId, profile.id))
 
+		const profileLinks = await tx
+			.select({
+				id: profileLinksTable.id,
+				type: profileLinksTable.type,
+				url: profileLinksTable.url
+			})
+			.from(profileLinksTable)
+			.where(eq(profileLinksTable.profileId, profile.id))
+
 		return {
 			...profile,
-			images: profileImage
+			images: profileImage,
+			link: profileLinks
 		}
 	})
 }
