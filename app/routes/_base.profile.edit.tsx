@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { createFileRoute, Link, redirect } from "@tanstack/react-router"
 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -33,16 +34,6 @@ export const Route = createFileRoute("/_base/profile/edit")({
 })
 
 export type SocialPlatform = "github" | "linkedin" | "twitch" | "youtube" | "website"
-type SocialLink = ProfileData["socialLinks"][number]
-
-const platformsList: SocialPlatform[] = [
-	"github",
-	"linkedin",
-	"twitch",
-	"youtube",
-	"website"
-]
-
 export const socialIcons: Record<SocialPlatform, LucideIcon> = {
 	github: Github,
 	linkedin: Linkedin,
@@ -53,49 +44,53 @@ export const socialIcons: Record<SocialPlatform, LucideIcon> = {
 
 function RouteComponent() {
 	const { profile } = useProfile()
-
 	const { mutate: edit, isPending } = useEditProfile()
 
-	const getInitialLinks = () => {
-		const initialLinks = platformsList.map((platform) => {
-			const existingLink = profile?.link?.find((link) => link.type === platform)
-			return {
-				platform,
-				url: existingLink?.url ?? "",
-				active: !!existingLink
-			}
-		})
-		return initialLinks
+	const links = profile?.link.reduce<Record<string, string>>((acc, item) => {
+		acc[item.type] = item.url
+		return acc
+	}, {})
+
+	const initialActiveState = {
+		githubUrl: !!links?.github,
+		linkedinUrl: !!links?.linkedin,
+		twitchUrl: !!links?.twitch,
+		youtubeUrl: !!links?.youtube,
+		websiteUrl: !!links?.website
 	}
+
+	const [activeFields, setActiveFields] = useState(initialActiveState)
 
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
-		watch,
-		setValue
+		setValue,
+		clearErrors,
+		formState: { errors }
 	} = useForm<ProfileData>({
 		resolver: zodResolver(ProfileSchema),
 		defaultValues: {
 			bio: profile?.bio ?? "",
-			socialLinks: getInitialLinks()
+			githubUrl: links?.github ?? "",
+			linkedinUrl: links?.linkedin ?? "",
+			twitchUrl: links?.twitch ?? "",
+			youtubeUrl: links?.youtube ?? "",
+			websiteUrl: links?.website ?? ""
 		}
 	})
 
-	const socialLinks = watch("socialLinks")
-
-	const toggleLinkActive = (index: number): void => {
-		if (!socialLinks) return
-
-		const newLinks: SocialLink[] = [...socialLinks].map((link, i) =>
-			i === index ? { ...link, active: !link.active } : link
-		)
-
-		setValue("socialLinks", newLinks, { shouldValidate: true })
+	const toggleField = (field: keyof typeof initialActiveState) => {
+		setActiveFields((prev) => {
+			const isActive = !prev[field]
+			if (!isActive) {
+				setValue(field as keyof ProfileData, "")
+				clearErrors(field as keyof ProfileData)
+			}
+			return { ...prev, [field]: isActive }
+		})
 	}
 
 	const onSubmit = (data: ProfileData): void => {
-		console.log(data)
 		edit({ data })
 	}
 
@@ -106,11 +101,9 @@ function RouteComponent() {
 				className={cn(buttonVariants({ variant: "outline" }), "font-medium")}>
 				<ArrowLeft /> Voltar ao perfil
 			</Link>
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				className="mt-6 grid grid-cols-[2fr_1fr] gap-4">
+			<h1 className="mb-4 mt-6 text-2xl font-semibold">Editar Perfil</h1>
+			<form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-[2fr_1fr] gap-4">
 				<div className="flex h-max flex-col gap-4 border bg-card p-4">
-					<h1 className="text-2xl font-semibold">Editar Perfil</h1>
 					<fieldset className="flex flex-col gap-4">
 						<Label className="space-y-2" htmlFor="bio">
 							<span>Bio</span>
@@ -125,44 +118,56 @@ function RouteComponent() {
 				</div>
 
 				<div className="flex flex-col gap-4 border bg-card p-4">
-					{socialLinks?.map((link, index) => {
-						const Icon = socialIcons[link.platform]
-						return (
-							<div key={index} className="flex items-center space-x-2">
+					{Object.keys(initialActiveState).map((field) => (
+						<fieldset className="flex flex-col gap-2" key={field}>
+							<div className="flex items-center gap-2">
 								<div className="relative flex-grow">
-									<Icon
-										className="absolute left-3 top-1/2 -translate-y-1/2 transform text-gray-400"
-										size={20}
-									/>
+									{(() => {
+										const platform = field
+											.replace("Url", "")
+											.toLowerCase() as SocialPlatform
+										const Icon = socialIcons[platform]
+										return (
+											<Icon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+										)
+									})()}
 									<Input
-										type="url"
-										placeholder={`Seu perfil ${link.platform}`}
-										{...register(`socialLinks.${index}.url`)}
 										className="pl-10"
-										disabled={!link.active}
+										{...register(field as keyof ProfileData)}
+										disabled={!activeFields[field as keyof typeof initialActiveState]}
 									/>
-									{errors.socialLinks?.[index]?.url && (
-										<p className="mt-1 text-sm text-red-500">
-											{errors.socialLinks[index]?.url?.message}
-										</p>
-									)}
 								</div>
+
 								<Button
 									type="button"
 									variant="outline"
 									size="icon"
-									onClick={() => toggleLinkActive(index)}
+									onClick={() => toggleField(field as keyof typeof initialActiveState)}
 									className={cn(
-										link.active
+										activeFields[field as keyof typeof initialActiveState]
 											? "text-red-500 hover:text-red-600"
 											: "text-green-500 hover:text-green-600"
 									)}>
-									<span className="sr-only">{link.active ? "Desativar" : "Ativar"}</span>
-									{link.active ? <X size={20} /> : <Plus size={20} />}
+									<span className="sr-only">
+										{activeFields[field as keyof typeof initialActiveState]
+											? "Desativar"
+											: "Ativar"}
+									</span>
+									{activeFields[field as keyof typeof initialActiveState] ? (
+										<X size={20} />
+									) : (
+										<Plus size={20} />
+									)}
 								</Button>
 							</div>
-						)
-					})}
+
+							{errors[field as keyof ProfileData] && (
+								<p className="mt-2 text-red-500">
+									{errors[field as keyof ProfileData]?.message}
+								</p>
+							)}
+						</fieldset>
+					))}
 				</div>
 			</form>
 		</main>
