@@ -49,7 +49,7 @@ export const ProfileActivityHistory: React.FC = () => {
 	return (
 		<div className="mt-4 border bg-card p-6 shadow">
 			<h2 className="mb-4 text-xl font-semibold">Histórico de Atividades</h2>
-			<div className="mb-4 flex space-x-2">
+			<div className="mb-4 flex flex-wrap gap-3 md:flex-nowrap">
 				<FilterButton
 					label="Todos"
 					value="all"
