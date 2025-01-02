@@ -101,73 +101,78 @@ function RouteComponent() {
 				className={cn(buttonVariants({ variant: "outline" }), "font-medium")}>
 				<ArrowLeft /> Voltar ao perfil
 			</Link>
-			<h1 className="mb-4 mt-6 text-2xl font-semibold">Editar Perfil</h1>
-			<form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-[2fr_1fr] gap-4">
-				<div className="flex h-max flex-col gap-4 border bg-card p-4">
-					<fieldset className="flex flex-col gap-4">
-						<Label className="space-y-2" htmlFor="bio">
-							<span>Bio</span>
-							<Textarea {...register("bio")} />
-							{errors.bio && <p className="mt-2 text-red-500">{errors.bio.message}</p>}
-						</Label>
-					</fieldset>
 
-					<Button type="submit" mode="loading" isLoading={isPending}>
+			<form onSubmit={handleSubmit(onSubmit)} className="mt-4">
+				<div className="mb-4 flex items-center justify-between">
+					<h1 className="text-2xl font-semibold">Editar Perfil</h1>
+					<Button type="submit" mode="loading" className="mb-4" isLoading={isPending}>
 						Salvar
 					</Button>
 				</div>
 
-				<div className="flex flex-col gap-4 border bg-card p-4">
-					{Object.keys(initialActiveState).map((field) => (
-						<fieldset className="flex flex-col gap-2" key={field}>
-							<div className="flex items-center gap-2">
-								<div className="relative flex-grow">
-									{(() => {
-										const platform = field
-											.replace("Url", "")
-											.toLowerCase() as SocialPlatform
-										const Icon = socialIcons[platform]
-										return (
-											<Icon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-										)
-									})()}
-									<Input
-										className="pl-10"
-										{...register(field as keyof ProfileData)}
-										disabled={!activeFields[field as keyof typeof initialActiveState]}
-									/>
+				<div className="grid grid-cols-1 gap-4 md:grid-cols-[2fr_1fr]">
+					<div className="flex h-max flex-col gap-4 border bg-card p-4">
+						<fieldset className="flex flex-col gap-4">
+							<Label className="space-y-2" htmlFor="bio">
+								<span>Bio</span>
+								<Textarea {...register("bio")} />
+								{errors.bio && <p className="mt-2 text-red-500">{errors.bio.message}</p>}
+							</Label>
+						</fieldset>
+					</div>
+
+					<div className="flex flex-col gap-4 border bg-card p-4">
+						{Object.keys(initialActiveState).map((field) => (
+							<fieldset className="flex flex-col gap-2" key={field}>
+								<div className="flex items-center gap-2">
+									<div className="relative flex-grow">
+										{(() => {
+											const platform = field
+												.replace("Url", "")
+												.toLowerCase() as SocialPlatform
+											const Icon = socialIcons[platform]
+											return (
+												<Icon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+											)
+										})()}
+										<Input
+											className="pl-10"
+											{...register(field as keyof ProfileData)}
+											disabled={!activeFields[field as keyof typeof initialActiveState]}
+										/>
+									</div>
+
+									<Button
+										type="button"
+										variant="outline"
+										size="icon"
+										onClick={() => toggleField(field as keyof typeof initialActiveState)}
+										className={cn(
+											activeFields[field as keyof typeof initialActiveState]
+												? "text-red-500 hover:text-red-600"
+												: "text-green-500 hover:text-green-600"
+										)}>
+										<span className="sr-only">
+											{activeFields[field as keyof typeof initialActiveState]
+												? "Desativar"
+												: "Ativar"}
+										</span>
+										{activeFields[field as keyof typeof initialActiveState] ? (
+											<X size={20} />
+										) : (
+											<Plus size={20} />
+										)}
+									</Button>
 								</div>
 
-								<Button
-									type="button"
-									variant="outline"
-									size="icon"
-									onClick={() => toggleField(field as keyof typeof initialActiveState)}
-									className={cn(
-										activeFields[field as keyof typeof initialActiveState]
-											? "text-red-500 hover:text-red-600"
-											: "text-green-500 hover:text-green-600"
-									)}>
-									<span className="sr-only">
-										{activeFields[field as keyof typeof initialActiveState]
-											? "Desativar"
-											: "Ativar"}
-									</span>
-									{activeFields[field as keyof typeof initialActiveState] ? (
-										<X size={20} />
-									) : (
-										<Plus size={20} />
-									)}
-								</Button>
-							</div>
-
-							{errors[field as keyof ProfileData] && (
-								<p className="mt-2 text-red-500">
-									{errors[field as keyof ProfileData]?.message}
-								</p>
-							)}
-						</fieldset>
-					))}
+								{errors[field as keyof ProfileData] && (
+									<p className="mt-2 text-red-500">
+										{errors[field as keyof ProfileData]?.message}
+									</p>
+								)}
+							</fieldset>
+						))}
+					</div>
 				</div>
 			</form>
 		</main>

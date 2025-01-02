@@ -24,8 +24,8 @@ function RouteComponent() {
 				links={profile?.link}
 				bio={profile?.bio ?? "Este usuário ainda não adicionou uma biografia."}
 			/>
-			<section className="container mt-4 grid grid-cols-[2fr_1fr] gap-4">
-				<div>
+			<section className="grid- container mt-4 grid grid-cols-1 gap-4 md:grid-cols-[2fr_1fr]">
+				<div className="order-2 md:order-first">
 					<ProfileStatistics totalExperience={profile?.totalExperience ?? 0} />
 					<ProfileActivityHistory />
 				</div>
