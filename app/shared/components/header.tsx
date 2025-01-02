@@ -5,6 +5,7 @@ import { ChevronDown, Menu } from "lucide-react"
 
 import { useAuth } from "@/features/auth/hooks/use-auth"
 import { useLogout } from "@/features/auth/hooks/use-logout"
+import { useProfile } from "@/features/profile/hooks/use-profile"
 import { cn } from "@/libs/utils"
 import { BrandName } from "@/shared/ui/brand-name"
 import { Button, buttonVariants } from "@/shared/ui/button"
@@ -27,6 +28,7 @@ import {
 
 export const Header = () => {
 	const { user } = useAuth()
+	const { profile } = useProfile()
 	const { mutate: logout } = useLogout()
 
 	const linkProps = linkOptions({
@@ -66,7 +68,9 @@ export const Header = () => {
 						<DropdownMenuTrigger>
 							<Avatar>
 								<AvatarImage
-									src="https://github.com/shadcn.png"
+									src={
+										profile?.images.find((image) => image.type === "profile-avatar")?.url
+									}
 									className="size-6 rounded-full"
 									alt="Imagem de perfil"
 								/>
