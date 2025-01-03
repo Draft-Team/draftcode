@@ -5,6 +5,7 @@ export const serverEnv = createEnv({
 	server: {
 		DATABASE_URL: z.string(),
 		GITHUB_CLIENT_ID: z.string(),
+		UPLOADTHING_TOKEN: z.string(),
 		GITHUB_CLIENT_SECRET: z.string(),
 		GOOGLE_CLIENT_ID: z.string(),
 		GOOGLE_CLIENT_SECRET: z.string(),

@@ -9,6 +9,7 @@ import { db } from "@/server/db/client"
 import {
 	imagesEntityTable,
 	imagesTable,
+	profileLinksTable,
 	profilesTable,
 	sessionsTable,
 	usersTable
@@ -51,6 +52,7 @@ export const createSession = async ({
 	const session: Session = {
 		id: sessionId,
 		userId,
+		createdAt: new Date(),
 		expiresAt: new Date(Date.now() + SESSION_DURATION.milliseconds())
 	}
 
@@ -230,9 +232,19 @@ export const getCurrentUserProfile = async () => {
 				)
 			)
 
+		const profileLinks = await tx
+			.select({
+				id: profileLinksTable.id,
+				type: profileLinksTable.type,
+				url: profileLinksTable.url
+			})
+			.from(profileLinksTable)
+			.where(eq(profileLinksTable.profileId, profile.id))
+
 		return {
 			...profile,
-			images: profileImage
+			images: profileImage,
+			links: profileLinks
 		}
 	})
 }

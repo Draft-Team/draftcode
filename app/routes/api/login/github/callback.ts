@@ -151,6 +151,7 @@ export const APIRoute = createAPIFileRoute("/api/login/github/callback")({
 				}
 			})
 		} catch (e) {
+			console.log(e)
 			if (e instanceof OAuth2RequestError) {
 				return new Response(null, {
 					status: 400
