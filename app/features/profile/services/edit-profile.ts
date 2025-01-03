@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/start"
 import { eq } from "drizzle-orm"
 
-import { ProfileSchema } from "@/features/auth/schemas/profile-schema"
+import { ProfileSchema } from "@/features/profile/schemas/profile-schema"
 import type { SocialPlatform } from "@/routes/_base.profile.edit"
 import { db } from "@/server/db/client"
 import { profileLinksTable, profilesTable } from "@/server/db/schema"

@@ -15,9 +15,12 @@ import {
 } from "lucide-react"
 import { useForm } from "react-hook-form"
 
-import { ProfileSchema, type ProfileData } from "@/features/auth/schemas/profile-schema"
 import { useEditProfile } from "@/features/profile/hooks/use-edit-profile"
 import { useProfile } from "@/features/profile/hooks/use-profile"
+import {
+	ProfileSchema,
+	type ProfileData
+} from "@/features/profile/schemas/profile-schema"
 import { cn } from "@/libs/utils"
 import { Button, buttonVariants } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
