@@ -10,12 +10,38 @@ import {
 
 import { generateId } from "../utils/generate-id"
 
+export const LOGS_ACTIVITY_TYPE = {
+	SIGN_UP: "SIGN_UP",
+	SIGN_IN: "SIGN_IN",
+	SIGN_OUT: "SIGN_OUT",
+
+	UPDATE_ACCOUNT: "UPDATE_ACCOUNT",
+
+	UPDATE_PROFILE: "UPDATE_PROFILE",
+
+	CREATE_CHALLENGE: "CREATE_CHALLENGE",
+	UPDATE_CHALLENGE: "UPDATE_CHALLENGE",
+	DELETE_CHALLENGE: "DELETE_CHALLENGE",
+	CHALLENGE_COMPLETED: "CHALLENGE_COMPLETED",
+
+	CREATE_CATEGORY: "CREATE_CATEGORY",
+	UPDATE_CATEGORY: "UPDATE_CATEGORY",
+	DELETE_CATEGORY: "DELETE_CATEGORY",
+
+	CREATE_TAG: "CREATE_TAG",
+	UPDATE_TAG: "UPDATE_TAG",
+	DELETE_TAG: "DELETE_TAG"
+} as const
+
 type OauthProviderId = "github" | "google"
+type ImageEntityType = "profile" | "challenge"
 type UserRole = "user" | "admin" | "superadmin"
 type ChallengeStatus = "draft" | "published" | "archived"
 type ChallengeDifficulty = "easy" | "medium" | "hard" | "expert"
 type ImageType = "profile-avatar" | "profile-cover" | "challenge-cover"
+type LogEntityType = "profile" | "challenge" | "category" | "tag" | "users"
 type ProfileLinkType = "github" | "linkedin" | "twitch" | "youtube" | "website"
+type ActivityType = (typeof LOGS_ACTIVITY_TYPE)[keyof typeof LOGS_ACTIVITY_TYPE]
 
 const oauthProviderId = customType<{ data: OauthProviderId }>({
 	dataType() {
@@ -53,6 +79,45 @@ const imageType = customType<{ data: ImageType }>({
 	}
 })
 
+const logEntityType = customType<{ data: LogEntityType }>({
+	dataType() {
+		return "profile"
+	}
+})
+
+const imageEntityType = customType<{ data: ImageEntityType }>({
+	dataType() {
+		return "profile"
+	}
+})
+
+const activityType = customType<{ data: ActivityType }>({
+	dataType() {
+		return "SIGN_UP"
+	}
+})
+
+export const activityLogsTable = sqliteTable(
+	"activity_logs",
+	{
+		id: text("id")
+			.primaryKey()
+			.$defaultFn(() => generateId()),
+		userId: text("user_id")
+			.notNull()
+			.references(() => usersTable.id, { onDelete: "cascade" }),
+		entityType: logEntityType("entity_type").notNull(),
+		entityId: text("entity_id").notNull(),
+		type: activityType("type").notNull(),
+		createdAt: integer("created_at", { mode: "timestamp_ms" })
+			.notNull()
+			.$defaultFn(() => new Date())
+	},
+	(table) => {
+		return [index("activity_logs_user_created_idx").on(table.userId, table.createdAt)]
+	}
+)
+
 export const imagesTable = sqliteTable("images", {
 	id: text("id")
 		.primaryKey()
@@ -68,6 +133,33 @@ export const imagesTable = sqliteTable("images", {
 		.$defaultFn(() => new Date())
 		.$onUpdate(() => new Date())
 })
+
+export const imagesEntityTable = sqliteTable(
+	"images_entity",
+	{
+		id: text("id")
+			.primaryKey()
+			.$defaultFn(() => generateId()),
+		imageId: text("image_id")
+			.notNull()
+			.references(() => imagesTable.id, { onDelete: "cascade" }),
+		entityId: text("entity_id").notNull(),
+		entityType: imageEntityType("entity_type").notNull(),
+		createdAt: integer("created_at", { mode: "timestamp_ms" })
+			.notNull()
+			.$defaultFn(() => new Date())
+	},
+	(table) => {
+		return [
+			index("images_entity_image_id_idx").on(table.imageId),
+			index("images_entity_entity_id_entity_type_idx").on(
+				table.entityId,
+				table.entityType
+			),
+			index("images_entity_entity_id_image_id").on(table.entityId, table.imageId)
+		]
+	}
+)
 
 export const profilesTable = sqliteTable("profiles", {
 	id: text("id")
@@ -98,15 +190,6 @@ export const profileLinksTable = sqliteTable("profile_links", {
 	profileId: text("profile_id")
 		.notNull()
 		.references(() => profilesTable.id, { onDelete: "cascade" })
-})
-
-export const profileImagesTable = sqliteTable("profile_images", {
-	profileId: text("profile_id")
-		.notNull()
-		.references(() => profilesTable.id, { onDelete: "cascade" }),
-	imageId: text("image_id")
-		.notNull()
-		.references(() => imagesTable.id, { onDelete: "cascade" })
 })
 
 export const usersTable = sqliteTable(
@@ -155,19 +238,11 @@ export const challengesTable = sqliteTable(
 	(table) => {
 		return [
 			index("challenge_title_idx").on(table.title),
-			index("challenge_difficulty_idx").on(table.difficulty)
+			index("challenge_difficulty_idx").on(table.difficulty),
+			index("challenge_status_difficulty_idx").on(table.status, table.difficulty)
 		]
 	}
 )
-
-export const challengesImagesTable = sqliteTable("challenges_images", {
-	challengeId: text("challenge_id")
-		.notNull()
-		.references(() => challengesTable.id, { onDelete: "cascade" }),
-	imageId: text("image_id")
-		.notNull()
-		.references(() => imagesTable.id, { onDelete: "cascade" })
-})
 
 export const categoriesTable = sqliteTable(
 	"categories",
@@ -279,12 +354,16 @@ export const sessionsTable = sqliteTable(
 		userId: text("user_id")
 			.notNull()
 			.references(() => usersTable.id, { onDelete: "cascade" }),
-		expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull()
+		expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
+		createdAt: integer("created_at", { mode: "timestamp_ms" })
+			.notNull()
+			.$defaultFn(() => new Date())
 	},
 	(table) => {
 		return [
 			index("session_user_id_idx").on(table.userId),
-			index("session_expires_at_idx").on(table.expiresAt)
+			index("session_expires_at_idx").on(table.expiresAt),
+			index("session_user_id_expires_at_idx").on(table.userId, table.expiresAt)
 		]
 	}
 )

@@ -1,14 +1,14 @@
 import { sha256 } from "@oslojs/crypto/sha2"
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { getCookie, setCookie } from "vinxi/http"
 
 import { serverEnv } from "@/environment/server"
 import { createDate, isWithinExpirationDate, TimeSpan } from "@/libs/time-span"
 import { db } from "@/server/db/client"
 import {
+	imagesEntityTable,
 	imagesTable,
-	profileImagesTable,
 	profileLinksTable,
 	profilesTable,
 	sessionsTable,
@@ -52,6 +52,7 @@ export const createSession = async ({
 	const session: Session = {
 		id: sessionId,
 		userId,
+		createdAt: new Date(),
 		expiresAt: new Date(Date.now() + SESSION_DURATION.milliseconds())
 	}
 
@@ -223,8 +224,13 @@ export const getCurrentUserProfile = async () => {
 				type: imagesTable.type
 			})
 			.from(imagesTable)
-			.innerJoin(profileImagesTable, eq(imagesTable.id, profileImagesTable.imageId))
-			.where(eq(profileImagesTable.profileId, profile.id))
+			.innerJoin(imagesEntityTable, eq(imagesTable.id, imagesEntityTable.imageId))
+			.where(
+				and(
+					eq(imagesEntityTable.entityId, profile.id),
+					eq(imagesEntityTable.entityType, "profile")
+				)
+			)
 
 		const profileLinks = await tx
 			.select({
@@ -238,7 +244,7 @@ export const getCurrentUserProfile = async () => {
 		return {
 			...profile,
 			images: profileImage,
-			link: profileLinks
+			links: profileLinks
 		}
 	})
 }

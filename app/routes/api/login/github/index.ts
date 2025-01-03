@@ -8,7 +8,7 @@ import { github } from "@/server/auth/oauth"
 export const APIRoute = createAPIFileRoute("/api/login/github")({
 	GET: () => {
 		const state = generateState()
-		const url = github.createAuthorizationURL(state, ["user:email"])
+		const url = github.createAuthorizationURL(state, ["user:email", "read:user"])
 
 		setCookie("github_oauth_state", state, {
 			path: "/",

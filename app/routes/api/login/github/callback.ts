@@ -8,9 +8,9 @@ import { github } from "@/server/auth/oauth"
 import { setSession } from "@/server/auth/sessions"
 import { db } from "@/server/db/client"
 import {
+	imagesEntityTable,
 	imagesTable,
 	oauthAccountsTable,
-	profileImagesTable,
 	profilesTable,
 	usersTable
 } from "@/server/db/schema"
@@ -19,8 +19,23 @@ const GithubUser = z.object({
 	id: z.number(),
 	name: z.string(),
 	avatar_url: z.string(),
-	email: z.string().email()
+	email: z.string().email().nullable()
 })
+
+const getPrimaryEmail = async (tokens: { accessToken: () => string }) => {
+	const res = await fetch("https://api.github.com/user/emails", {
+		headers: { Authorization: `token ${tokens.accessToken()}` }
+	})
+
+	const emails = (await res.json()) as { email: string; primary: boolean }[]
+	const primaryEmail = emails.find((email) => email.primary)?.email
+
+	if (!primaryEmail) {
+		throw new Error("No primary email found")
+	}
+
+	return primaryEmail
+}
 
 export const APIRoute = createAPIFileRoute("/api/login/github/callback")({
 	GET: async ({ request }) => {
@@ -54,7 +69,10 @@ export const APIRoute = createAPIFileRoute("/api/login/github/callback")({
 				})
 			}
 
-			const githubUser = githubUserParsed.data
+			const githubUser = {
+				...githubUserParsed.data,
+				email: githubUserParsed.data.email ?? (await getPrimaryEmail(tokens))
+			}
 
 			const existingGithubUser = await db
 				.select({
@@ -115,9 +133,10 @@ export const APIRoute = createAPIFileRoute("/api/login/github/callback")({
 					.returning()
 					.get()
 
-				await tx.insert(profileImagesTable).values({
+				await tx.insert(imagesEntityTable).values({
 					imageId: images.id,
-					profileId: profile.id
+					entityId: profile.id,
+					entityType: "profile"
 				})
 
 				return newGithubUser
