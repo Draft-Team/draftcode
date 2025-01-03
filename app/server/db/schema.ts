@@ -11,6 +11,7 @@ import {
 import { generateId } from "../utils/generate-id"
 
 type OauthProviderId = "github" | "google"
+type ImageEntityType = "profile" | "challenge"
 type UserRole = "user" | "admin" | "superadmin"
 type ChallengeStatus = "draft" | "published" | "archived"
 type ChallengeDifficulty = "easy" | "medium" | "hard" | "expert"
@@ -53,6 +54,12 @@ const imageType = customType<{ data: ImageType }>({
 	}
 })
 
+const imageEntityType = customType<{ data: ImageEntityType }>({
+	dataType() {
+		return "profile"
+	}
+})
+
 export const imagesTable = sqliteTable("images", {
 	id: text("id")
 		.primaryKey()
@@ -68,6 +75,32 @@ export const imagesTable = sqliteTable("images", {
 		.$defaultFn(() => new Date())
 		.$onUpdate(() => new Date())
 })
+
+export const imagesEntityTable = sqliteTable(
+	"images_entity",
+	{
+		id: text("id")
+			.primaryKey()
+			.$defaultFn(() => generateId()),
+		imageId: text("image_id")
+			.notNull()
+			.references(() => imagesTable.id, { onDelete: "cascade" }),
+		entityId: text("entity_id").notNull(),
+		entityType: imageEntityType("entity_type").notNull(),
+		createdAt: integer("created_at", { mode: "timestamp_ms" })
+			.notNull()
+			.$defaultFn(() => new Date())
+	},
+	(table) => {
+		return [
+			index("images_entity_image_id_idx").on(table.imageId),
+			index("images_entity_entity_id_entity_type_idx").on(
+				table.entityId,
+				table.entityType
+			)
+		]
+	}
+)
 
 export const profilesTable = sqliteTable("profiles", {
 	id: text("id")
@@ -98,15 +131,6 @@ export const profileLinksTable = sqliteTable("profile_links", {
 	profileId: text("profile_id")
 		.notNull()
 		.references(() => profilesTable.id, { onDelete: "cascade" })
-})
-
-export const profileImagesTable = sqliteTable("profile_images", {
-	profileId: text("profile_id")
-		.notNull()
-		.references(() => profilesTable.id, { onDelete: "cascade" }),
-	imageId: text("image_id")
-		.notNull()
-		.references(() => imagesTable.id, { onDelete: "cascade" })
 })
 
 export const usersTable = sqliteTable(
@@ -159,15 +183,6 @@ export const challengesTable = sqliteTable(
 		]
 	}
 )
-
-export const challengesImagesTable = sqliteTable("challenges_images", {
-	challengeId: text("challenge_id")
-		.notNull()
-		.references(() => challengesTable.id, { onDelete: "cascade" }),
-	imageId: text("image_id")
-		.notNull()
-		.references(() => imagesTable.id, { onDelete: "cascade" })
-})
 
 export const categoriesTable = sqliteTable(
 	"categories",

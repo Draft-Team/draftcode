@@ -8,9 +8,9 @@ import { google } from "@/server/auth/oauth"
 import { setSession } from "@/server/auth/sessions"
 import { db } from "@/server/db/client"
 import {
+	imagesEntityTable,
 	imagesTable,
 	oauthAccountsTable,
-	profileImagesTable,
 	profilesTable,
 	usersTable
 } from "@/server/db/schema"
@@ -116,9 +116,10 @@ export const APIRoute = createAPIFileRoute("/api/login/google/callback")({
 					.returning()
 					.get()
 
-				await tx.insert(profileImagesTable).values({
+				await tx.insert(imagesEntityTable).values({
 					imageId: images.id,
-					profileId: profile.id
+					entityId: profile.id,
+					entityType: "profile"
 				})
 
 				return newGoogleUser
