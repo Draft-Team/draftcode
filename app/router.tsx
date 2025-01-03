@@ -1,6 +1,7 @@
 import { createRouter as createTanStackRouter } from "@tanstack/react-router"
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { routerWithQueryClient } from "@tanstack/react-router-with-query"
 import { NuqsAdapter } from "nuqs/adapters/react"
 import SuperJSON from "superjson"
 
@@ -40,7 +41,7 @@ export function createRouter() {
 		}
 	})
 
-	return router
+	return routerWithQueryClient(router, queryClient)
 }
 
 declare module "@tanstack/react-router" {
