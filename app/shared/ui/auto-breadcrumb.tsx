@@ -69,7 +69,6 @@ const AutoBreadcrumb = React.forwardRef<HTMLElement, AutoBreadcrumbProps>(
 		)
 	}
 )
-
 AutoBreadcrumb.displayName = "AutoBreadcrumb"
 
 export { AutoBreadcrumb }

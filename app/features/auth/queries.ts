@@ -3,7 +3,7 @@ import { createServerFn } from "@tanstack/start"
 
 import { getCurrentSession, getCurrentUser } from "@/server/auth/sessions"
 
-export const authQueryKeys = {
+const authQueryKeys = {
 	currentUser: ["currentUser"] as const,
 	currentSession: ["currentSession"] as const
 }

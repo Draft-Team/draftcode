@@ -84,6 +84,10 @@ export const Header = () => {
 					<DropdownMenuContent>
 						<DropdownMenuLabel>Minha conta</DropdownMenuLabel>
 						<DropdownMenuSeparator />
+						<DropdownMenuItem className="cursor-pointer" asChild>
+							<Link to="/profile">Perfil</Link>
+						</DropdownMenuItem>
+						<DropdownMenuSeparator />
 						<DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
 							Sair
 						</DropdownMenuItem>

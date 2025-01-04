@@ -105,7 +105,8 @@ const FilterButton: React.FC<FilterButtonProps> = ({
 }) => {
 	return (
 		<Button
-			variant={currentFilter === value ? "default" : "secondary"}
+			className="border"
+			variant={currentFilter === value ? "default" : "ghost"}
 			onClick={() => setFilter(value)}>
 			{label}
 		</Button>

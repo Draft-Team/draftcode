@@ -49,7 +49,7 @@ function RouteComponent() {
 	const { profile } = useProfile()
 	const { mutate: edit, isPending } = useEditProfile()
 
-	const links = profile?.link.reduce<Record<string, string>>((acc, item) => {
+	const links = profile?.links.reduce<Record<string, string>>((acc, item) => {
 		acc[item.type] = item.url
 		return acc
 	}, {})

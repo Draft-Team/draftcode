@@ -21,7 +21,7 @@ function RouteComponent() {
 	return (
 		<>
 			<ProfileHeader
-				links={profile?.link}
+				links={profile?.links}
 				bio={profile?.bio ?? "Este usuário ainda não adicionou uma biografia."}
 			/>
 			<section className="grid- container mt-4 grid grid-cols-1 gap-4 md:grid-cols-[2fr_1fr]">

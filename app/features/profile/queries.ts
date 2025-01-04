@@ -3,7 +3,7 @@ import { createServerFn } from "@tanstack/start"
 
 import { getCurrentUserProfile } from "@/server/auth/sessions"
 
-export const profileQueryKeys = {
+const profileQueryKeys = {
 	userProfile: ["userProfile"] as const
 }
 
