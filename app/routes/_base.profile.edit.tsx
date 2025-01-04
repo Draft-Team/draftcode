@@ -85,7 +85,11 @@ function RouteComponent() {
 						<fieldset className="flex flex-col gap-4">
 							<Label className="relative flex-grow" htmlFor="bio">
 								<Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-								<Input className="pl-10" {...register("githubUrl")} />
+								<Input
+									placeholder="URL do github"
+									className="pl-10"
+									{...register("githubUrl")}
+								/>
 							</Label>
 							{errors.githubUrl && (
 								<p className="mt-2 text-red-500">{errors.githubUrl.message}</p>
@@ -94,7 +98,11 @@ function RouteComponent() {
 						<fieldset className="flex flex-col gap-4">
 							<Label className="relative flex-grow" htmlFor="bio">
 								<Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-								<Input className="pl-10" {...register("linkedinUrl")} />
+								<Input
+									placeholder="URL do linkedin"
+									className="pl-10"
+									{...register("linkedinUrl")}
+								/>
 							</Label>
 							{errors.linkedinUrl && (
 								<p className="mt-2 text-red-500">{errors.linkedinUrl.message}</p>
@@ -103,7 +111,11 @@ function RouteComponent() {
 						<fieldset className="flex flex-col gap-4">
 							<Label className="relative flex-grow" htmlFor="bio">
 								<Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-								<Input className="pl-10" {...register("twitchUrl")} />
+								<Input
+									placeholder="URL da twitch"
+									className="pl-10"
+									{...register("twitchUrl")}
+								/>
 							</Label>
 							{errors.twitchUrl && (
 								<p className="mt-2 text-red-500">{errors.twitchUrl.message}</p>
@@ -112,7 +124,11 @@ function RouteComponent() {
 						<fieldset className="flex flex-col gap-4">
 							<Label className="relative flex-grow" htmlFor="bio">
 								<Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-								<Input className="pl-10" {...register("websiteUrl")} />
+								<Input
+									placeholder="URL do portfolio"
+									className="pl-10"
+									{...register("websiteUrl")}
+								/>
 							</Label>
 							{errors.websiteUrl && (
 								<p className="mt-2 text-red-500">{errors.websiteUrl.message}</p>
@@ -121,7 +137,11 @@ function RouteComponent() {
 						<fieldset className="flex flex-col gap-4">
 							<Label className="relative flex-grow" htmlFor="bio">
 								<Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-								<Input className="pl-10" {...register("youtubeUrl")} />
+								<Input
+									placeholder="URL do youtube"
+									className="pl-10"
+									{...register("youtubeUrl")}
+								/>
 							</Label>
 							{errors.youtubeUrl && (
 								<p className="mt-2 text-red-500">{errors.youtubeUrl.message}</p>
