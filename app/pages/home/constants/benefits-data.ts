@@ -1,4 +1,4 @@
-import { Gift, Rocket, Star, Trophy } from "lucide-react"
+import { Gift, Globe, Lightbulb, Rocket, Star, Trophy } from "lucide-react"
 
 export const benefitsData = [
 	{
@@ -24,5 +24,17 @@ export const benefitsData = [
 		title: "Evolua com a gamificação",
 		description:
 			"Conquiste níveis e insígnias enquanto avança nos desafios. Deixe seu perfil brilhar com suas conquistas!"
+	},
+	{
+		icon: Globe,
+		title: "Conecte-se com a comunidade",
+		description:
+			"Interaja com outros participantes, compartilhe dicas e celebre conquistas. Cresça em conjunto com uma rede de entusiastas!"
+	},
+	{
+		icon: Lightbulb,
+		title: "Desenvolva novas habilidades",
+		description:
+			"Explore novos horizontes e aprenda enquanto resolve desafios únicos. Amplie seu conhecimento e habilidades práticas!"
 	}
 ]

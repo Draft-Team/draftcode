@@ -32,7 +32,7 @@ export const Header = () => {
 	const { mutate: logout } = useLogout()
 
 	const linkProps = linkOptions({
-		activeProps: { className: "border-primary" }
+		activeProps: { className: cn(buttonVariants({ variant: "default" })) }
 	})
 
 	const navData: { to: LinkOptions["to"]; label: string }[] = [
@@ -52,7 +52,7 @@ export const Header = () => {
 							<li key={to}>
 								<Link
 									to={to}
-									className={cn(buttonVariants({ variant: "outline" }), "font-medium")}
+									className={cn(buttonVariants({ variant: "ghost" }), "font-medium")}
 									activeProps={linkProps.activeProps}>
 									{label}
 								</Link>
