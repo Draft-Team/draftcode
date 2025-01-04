@@ -40,6 +40,7 @@ export default tseslint.config(
 		rules: {
 			...reactHooks.configs.recommended.rules,
 			...reactPlugin.configs["jsx-runtime"].rules,
+			"no-console": "error",
 			"@typescript-eslint/only-throw-error": "off",
 			"@typescript-eslint/no-misused-promises": [
 				"error",

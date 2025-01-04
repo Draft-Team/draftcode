@@ -18,8 +18,6 @@ export const Route = createFileRoute("/_base/profile/")({
 function RouteComponent() {
 	const { profile } = useProfile()
 
-	console.log(profile)
-
 	return (
 		<>
 			<ProfileHeader

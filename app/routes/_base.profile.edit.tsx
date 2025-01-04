@@ -51,7 +51,6 @@ function RouteComponent() {
 	})
 
 	const onSubmit = (data: ProfileData): void => {
-		console.log(data)
 		edit({ data })
 	}
 
