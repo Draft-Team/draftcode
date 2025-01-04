@@ -4,8 +4,8 @@ import { BrandName } from "../ui/brand-name"
 
 export const Footer = () => {
 	return (
-		<footer className="container mx-auto mt-40 space-y-10">
-			<section className="grid sm:grid-cols-2">
+		<footer className="mx-auto mt-40 w-full space-y-10 border-t bg-card">
+			<section className="container grid pt-4 sm:grid-cols-2">
 				<div className="space-y-4 text-center sm:text-start">
 					<BrandName as="p" />
 					<p className="text-muted-foreground">Encontre o desafio perfeito para você.</p>
@@ -28,7 +28,7 @@ export const Footer = () => {
 					</div>
 				</div>
 			</section>
-			<section className="grid h-20 border-t-2 sm:grid-cols-2">
+			<section className="container grid h-20 border-t-2 sm:grid-cols-2">
 				<p className="order-2 self-center justify-self-center text-center text-sm sm:order-1 sm:justify-self-start">
 					© 2024 DraftCode Team. Todos os direitos reservados.
 				</p>

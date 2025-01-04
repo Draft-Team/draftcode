@@ -2,7 +2,6 @@ import { createServerFn } from "@tanstack/start"
 import { eq } from "drizzle-orm"
 
 import { ProfileSchema } from "@/features/profile/schemas/profile-schema"
-import type { SocialPlatform } from "@/routes/_base.profile.edit"
 import { db } from "@/server/db/client"
 import { profileLinksTable, profilesTable } from "@/server/db/schema"
 import { authedMiddleware } from "@/server/utils/middlewares"
@@ -26,24 +25,30 @@ export const $editprofile = createServerFn({ method: "POST" })
 			.delete(profileLinksTable)
 			.where(eq(profileLinksTable.profileId, updatedProfile.id))
 
-		const socialLinks = [
-			{ platform: "github", url: data.githubUrl },
-			{ platform: "linkedin", url: data.linkedinUrl },
-			{ platform: "twitch", url: data.twitchUrl },
-			{ platform: "youtube", url: data.youtubeUrl },
-			{ platform: "website", url: data.websiteUrl }
-		]
-
-		const activeLinks = socialLinks
-			.filter((link) => link.url && link.url.trim() !== "")
-			.map((link) => ({
-				profileId: updatedProfile.id,
-				type: link.platform as SocialPlatform,
-				url: link.url!
-			}))
-
-		if (activeLinks.length > 0) {
-			await db.insert(profileLinksTable).values(activeLinks)
+		if (data.githubUrl) {
+			await db
+				.insert(profileLinksTable)
+				.values({ type: "github", url: data.githubUrl, profileId: updatedProfile.id })
+		}
+		if (data.linkedinUrl) {
+			await db
+				.insert(profileLinksTable)
+				.values({ type: "linkedin", url: data.linkedinUrl, profileId: updatedProfile.id })
+		}
+		if (data.twitchUrl) {
+			await db
+				.insert(profileLinksTable)
+				.values({ type: "twitch", url: data.twitchUrl, profileId: updatedProfile.id })
+		}
+		if (data.websiteUrl) {
+			await db
+				.insert(profileLinksTable)
+				.values({ type: "website", url: data.websiteUrl, profileId: updatedProfile.id })
+		}
+		if (data.youtubeUrl) {
+			await db
+				.insert(profileLinksTable)
+				.values({ type: "youtube", url: data.youtubeUrl, profileId: updatedProfile.id })
 		}
 
 		return { message: "Perfil atualizado com sucesso" }
