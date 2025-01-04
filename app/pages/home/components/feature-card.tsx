@@ -10,12 +10,7 @@ interface FeatureCardProps {
 	index: number
 }
 
-const FeatureCard: React.FC<FeatureCardProps> = ({
-	icon: Icon,
-	title,
-	description,
-	index
-}) => {
+const FeatureCard = ({ icon: Icon, title, description, index }: FeatureCardProps) => {
 	return (
 		<motion.div
 			className="flex-1"

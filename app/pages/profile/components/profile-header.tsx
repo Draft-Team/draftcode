@@ -35,7 +35,7 @@ interface ProfileHeaderProps {
 	links?: SocialLink[]
 }
 
-export default function ProfileHeader({ bio, links }: ProfileHeaderProps) {
+export const ProfileHeader = ({ bio, links }: ProfileHeaderProps) => {
 	const { user } = useAuth()
 	return (
 		<div className="overflow-hidden rounded-lg border-y bg-card shadow">

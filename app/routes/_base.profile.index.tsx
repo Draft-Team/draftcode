@@ -3,8 +3,8 @@ import { createFileRoute, redirect } from "@tanstack/react-router"
 import { useProfile } from "@/features/profile/hooks/use-profile"
 import { ProfileActivityHistory } from "@/pages/profile/components/activity-history"
 import { ProfileBadges } from "@/pages/profile/components/profile-badges"
-import ProfileHeader from "@/pages/profile/components/profile-header"
-import ProfileStatistics from "@/pages/profile/components/profile-statistics"
+import { ProfileHeader } from "@/pages/profile/components/profile-header"
+import { ProfileStatistics } from "@/pages/profile/components/profile-statistics"
 
 export const Route = createFileRoute("/_base/profile/")({
 	component: RouteComponent,

@@ -8,12 +8,7 @@ interface BenefitsCardProps {
 	index: number
 }
 
-const BenefitsCard: React.FC<BenefitsCardProps> = ({
-	icon: Icon,
-	title,
-	description,
-	index
-}) => {
+const BenefitsCard = ({ icon: Icon, title, description, index }: BenefitsCardProps) => {
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: -100 }}
