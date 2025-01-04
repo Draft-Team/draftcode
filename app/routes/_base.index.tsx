@@ -121,26 +121,18 @@ function RouteComponent() {
 				</div>
 			</section>
 
-			<section className="container mt-24 grid grid-cols-1 gap-4 sm:grid-cols-[345px_1fr]">
-				<div>
-					<h1 className="mb-4 flex text-2xl font-bold sm:hidden">Benefícios</h1>
-					<img
-						className="hidden sm:flex"
-						src="https://avatars.githubusercontent.com/u/94739199?v=4"
-						alt="zap"
+			<section
+				id="benefits"
+				className="container mt-24 grid grid-cols-1 gap-4 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+				{benefitsData.map((data, index) => (
+					<BenefitsCard
+						index={index}
+						description={data.description}
+						title={data.title}
+						icon={data.icon}
+						key={index}
 					/>
-				</div>
-				<div id="benefits" className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-					{benefitsData.map((data, index) => (
-						<BenefitsCard
-							index={index}
-							description={data.description}
-							title={data.title}
-							icon={data.icon}
-							key={index}
-						/>
-					))}
-				</div>
+				))}
 			</section>
 
 			<section className="container mt-20 flex justify-center">

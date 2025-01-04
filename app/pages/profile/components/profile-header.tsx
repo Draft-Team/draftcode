@@ -1,11 +1,28 @@
 import { Link } from "@tanstack/react-router"
 
-import { Camera, Edit2 } from "lucide-react"
+import {
+	Camera,
+	Edit2,
+	Github,
+	Globe,
+	Linkedin,
+	Twitch,
+	Youtube,
+	type LucideIcon
+} from "lucide-react"
 
 import { useAuth } from "@/features/auth/hooks/use-auth"
 import { cn } from "@/libs/utils"
-import { socialIcons, type SocialPlatform } from "@/routes/_base.profile.edit"
 import { Button, buttonVariants } from "@/shared/ui/button"
+
+export type SocialPlatform = "github" | "linkedin" | "twitch" | "youtube" | "website"
+export const socialIcons: Record<SocialPlatform, LucideIcon> = {
+	github: Github,
+	linkedin: Linkedin,
+	twitch: Twitch,
+	youtube: Youtube,
+	website: Globe
+}
 
 interface SocialLink {
 	id: string
