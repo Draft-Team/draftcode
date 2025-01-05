@@ -11,9 +11,9 @@ import {
 	type LucideIcon
 } from "lucide-react"
 
-import { useUser } from "@/features/auth/hooks/use-user"
 import { cn } from "@/libs/utils"
-import { Button, buttonVariants } from "@/shared/ui/button"
+import { Button, buttonVariants } from "@/shared/components/ui/button"
+import { useUser } from "@/shared/hooks/use-user"
 
 export type SocialPlatform = "github" | "linkedin" | "twitch" | "youtube" | "website"
 export const socialIcons: Record<SocialPlatform, LucideIcon> = {

@@ -3,12 +3,13 @@ import { Link } from "@tanstack/react-router"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
-import { useLogin } from "@/features/auth/hooks/use-login"
-import { LoginSchema, type LoginData } from "@/features/auth/schemas/login-schema"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
 import { Label } from "@/shared/ui/label"
 import { PasswordInput } from "@/shared/ui/password-input"
+
+import { useLogin } from "../hooks/use-login"
+import { LoginSchema, type LoginData } from "../schemas/login-schema"
 
 export const LoginCard = () => {
 	const { mutate: login, isPending } = useLogin()

@@ -10,11 +10,8 @@ import type { QueryClient } from "@tanstack/react-query"
 import { Meta, Scripts } from "@tanstack/start"
 
 import { clientEnv } from "@/environment/client"
-import {
-	currentSessionQueryOptions,
-	currentUserQueryOptions
-} from "@/features/auth/queries"
 import { currentUserProfileQueryOptions } from "@/features/profile/queries"
+import { currentSessionQueryOptions, currentUserQueryOptions } from "@/shared/queries"
 import { Toaster } from "@/shared/ui/sonner"
 import css from "@/styles/globals.css?url"
 

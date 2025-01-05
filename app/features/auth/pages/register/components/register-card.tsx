@@ -3,15 +3,13 @@ import { Link } from "@tanstack/react-router"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
-import { useRegister } from "@/features/auth/hooks/use-register"
-import {
-	RegisterSchema,
-	type RegisterData
-} from "@/features/auth/schemas/register-schema"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
 import { Label } from "@/shared/ui/label"
 import { PasswordInput } from "@/shared/ui/password-input"
+
+import { useRegister } from "../hooks/use-register"
+import { RegisterSchema, type RegisterData } from "../schemas/register-schema"
 
 export const RegisterCard = () => {
 	const { mutate: signup, isPending } = useRegister()

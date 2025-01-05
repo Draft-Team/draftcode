@@ -1,12 +1,12 @@
-import { Button } from "@/shared/ui/button"
-import { Input } from "@/shared/ui/input"
+import { Button } from "@/shared/components/ui/button"
+import { Input } from "@/shared/components/ui/input"
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue
-} from "@/shared/ui/select"
+} from "@/shared/components/ui/select"
 
 import { useChallengesFilters } from "../hooks/use-challenges-filters"
 
