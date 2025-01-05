@@ -4,14 +4,14 @@ import { useMutation } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/start"
 import { toast } from "sonner"
 
-import { $signup } from "../services/signup"
+import { $register } from "../services/register"
 
-export const useSignup = () => {
+export const useRegister = () => {
 	const router = useRouter()
-	const signup = useServerFn($signup)
+	const register = useServerFn($register)
 
 	return useMutation({
-		mutationFn: signup,
+		mutationFn: register,
 		onSuccess: () => {
 			toast.success("Cadastro efetuado com sucesso!")
 

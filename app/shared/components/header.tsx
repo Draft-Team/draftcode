@@ -1,10 +1,10 @@
-import { Link, linkOptions, type LinkOptions } from "@tanstack/react-router"
+import { Link, type ActiveLinkOptions, type LinkOptions } from "@tanstack/react-router"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { ChevronDown, Menu } from "lucide-react"
 
-import { useAuth } from "@/features/auth/hooks/use-auth"
 import { useLogout } from "@/features/auth/hooks/use-logout"
+import { useUser } from "@/features/auth/hooks/use-user"
 import { useProfile } from "@/features/profile/hooks/use-profile"
 import { cn } from "@/libs/utils"
 import { BrandName } from "@/shared/ui/brand-name"
@@ -27,13 +27,13 @@ import {
 } from "@/shared/ui/sheet"
 
 export const Header = () => {
-	const { user } = useAuth()
+	const { user } = useUser()
 	const { profile } = useProfile()
 	const { mutate: logout } = useLogout()
 
-	const linkProps = linkOptions({
+	const linkProps: ActiveLinkOptions = {
 		activeProps: { className: cn(buttonVariants({ variant: "default" })) }
-	})
+	}
 
 	const navData: { to: LinkOptions["to"]; label: string }[] = [
 		{ to: "/", label: "Inicio" },

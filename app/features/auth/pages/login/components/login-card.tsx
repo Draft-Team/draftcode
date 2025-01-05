@@ -3,34 +3,33 @@ import { Link } from "@tanstack/react-router"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
+import { useLogin } from "@/features/auth/hooks/use-login"
+import { LoginSchema, type LoginData } from "@/features/auth/schemas/login-schema"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
 import { Label } from "@/shared/ui/label"
 import { PasswordInput } from "@/shared/ui/password-input"
 
-import { useSignup } from "../hooks/use-signup"
-import { SignupSchema, type SignupData } from "../schemas/signup-schema"
-
-export const SignupCard = () => {
-	const { mutate: signup, isPending } = useSignup()
+export const LoginCard = () => {
+	const { mutate: login, isPending } = useLogin()
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors }
-	} = useForm<SignupData>({
-		resolver: zodResolver(SignupSchema)
+	} = useForm<LoginData>({
+		resolver: zodResolver(LoginSchema)
 	})
 
-	const onSubmit = (data: SignupData) => {
-		signup({ data })
+	const onSubmit = (data: LoginData) => {
+		login({ data })
 	}
 
 	return (
 		<form
 			className="flex w-full max-w-md flex-col gap-4"
 			onSubmit={handleSubmit(onSubmit)}>
-			<h1 className="text-2xl font-semibold">Crie sua conta</h1>
+			<h1 className="text-2xl font-semibold">Entre na sua conta</h1>
 			<fieldset className="flex items-center gap-4">
 				<Button className="w-full" variant="outline" asChild>
 					<a href="/api/login/github">Github</a>
@@ -49,12 +48,6 @@ export const SignupCard = () => {
 					{errors.email && <span className="text-red-500">{errors.email.message}</span>}
 				</Label>
 
-				<Label className="space-y-2" htmlFor={register("name").name}>
-					<span>Nome</span>
-					<Input {...register("name")} />
-					{errors.name && <span className="text-red-500">{errors.name.message}</span>}
-				</Label>
-
 				<Label className="space-y-2" htmlFor={register("password").name}>
 					<span>Senha</span>
 					<PasswordInput {...register("password")} />
@@ -65,15 +58,15 @@ export const SignupCard = () => {
 			</fieldset>
 
 			<Button type="submit" mode="loading" isLoading={isPending}>
-				Criar conta
+				Entrar
 			</Button>
 
 			<div className="flex items-center justify-center gap-4">
 				<div className="flex-1 border-t" />
 				<span>
-					Já tem uma conta?{" "}
-					<Link to="/login" className="text-primary hover:underline">
-						Acesse
+					Não tem uma conta?{" "}
+					<Link to="/register" className="text-primary hover:underline">
+						Criar
 					</Link>
 				</span>
 				<div className="flex-1 border-t" />

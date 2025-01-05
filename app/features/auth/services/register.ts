@@ -12,7 +12,7 @@ import {
 	hashPassword
 } from "@/server/utils/password"
 
-export const $signup = createServerFn({ method: "POST" })
+export const $register = createServerFn({ method: "POST" })
 	.middleware([csrfProtectionMiddleware])
 	.validator(
 		z.object({

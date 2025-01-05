@@ -11,7 +11,7 @@ import {
 	type LucideIcon
 } from "lucide-react"
 
-import { useAuth } from "@/features/auth/hooks/use-auth"
+import { useUser } from "@/features/auth/hooks/use-user"
 import { cn } from "@/libs/utils"
 import { Button, buttonVariants } from "@/shared/ui/button"
 
@@ -36,7 +36,8 @@ interface ProfileHeaderProps {
 }
 
 export const ProfileHeader = ({ bio, links }: ProfileHeaderProps) => {
-	const { user } = useAuth()
+	const { user } = useUser()
+
 	return (
 		<div className="overflow-hidden rounded-lg border-y bg-card shadow">
 			<div className="relative h-48">

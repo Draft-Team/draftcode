@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const SignupSchema = z.object({
+export const RegisterSchema = z.object({
 	email: z.string().email("Endereço de email inválido"),
 	name: z
 		.string()
@@ -12,4 +12,4 @@ export const SignupSchema = z.object({
 		.max(100, "Senha deve ter no máximo 100 caracteres")
 })
 
-export type SignupData = z.infer<typeof SignupSchema>
+export type RegisterData = z.infer<typeof RegisterSchema>
