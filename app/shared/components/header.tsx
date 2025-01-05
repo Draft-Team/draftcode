@@ -3,12 +3,13 @@ import { Link, type ActiveLinkOptions, type LinkOptions } from "@tanstack/react-
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { ChevronDown, Menu } from "lucide-react"
 
-import { useLogout } from "@/features/auth/hooks/use-logout"
-import { useUser } from "@/features/auth/hooks/use-user"
 import { useProfile } from "@/features/profile/hooks/use-profile"
 import { cn } from "@/libs/utils"
-import { BrandName } from "@/shared/ui/brand-name"
-import { Button, buttonVariants } from "@/shared/ui/button"
+
+import { useLogout } from "../hooks/use-logout"
+import { useUser } from "../hooks/use-user"
+import { BrandName } from "./ui/brand-name"
+import { Button, buttonVariants } from "./ui/button"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -16,7 +17,7 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger
-} from "@/shared/ui/dropdown-menu"
+} from "./ui/dropdown-menu"
 import {
 	Sheet,
 	SheetContent,
@@ -24,7 +25,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger
-} from "@/shared/ui/sheet"
+} from "./ui/sheet"
 
 export const Header = () => {
 	const { user } = useUser()

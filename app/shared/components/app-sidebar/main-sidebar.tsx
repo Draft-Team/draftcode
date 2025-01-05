@@ -4,8 +4,7 @@ import {
 	SidebarFooter,
 	SidebarHeader,
 	SidebarRail
-} from "@/shared/ui/sidebar"
-
+} from "../ui/sidebar"
 import { NavContent } from "./nav-content"
 import { NavFooter } from "./nav-footer"
 import { NavHeader } from "./nav-header"

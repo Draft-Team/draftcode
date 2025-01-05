@@ -4,6 +4,7 @@ import { useLocation } from "@tanstack/react-router"
 import { ChevronRight } from "lucide-react"
 
 import { cn } from "@/libs/utils"
+
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -11,7 +12,7 @@ import {
 	BreadcrumbList,
 	BreadcrumbPage,
 	BreadcrumbSeparator
-} from "@/shared/ui/breadcrumb"
+} from "./breadcrumb"
 
 interface AutoBreadcrumbProps extends React.ComponentPropsWithRef<typeof Breadcrumb> {
 	path?: string
