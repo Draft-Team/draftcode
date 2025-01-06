@@ -11,10 +11,10 @@ import {
 	type ProfileData
 } from "@/features/profile/schemas/profile-schema"
 import { cn } from "@/libs/utils"
-import { Button, buttonVariants } from "@/shared/ui/button"
-import { Input } from "@/shared/ui/input"
-import { Label } from "@/shared/ui/label"
-import { Textarea } from "@/shared/ui/textarea"
+import { Button, buttonVariants } from "@/shared/components/ui/button"
+import { Input } from "@/shared/components/ui/input"
+import { Label } from "@/shared/components/ui/label"
+import { Textarea } from "@/shared/components/ui/textarea"
 
 export const Route = createFileRoute("/_base/profile/edit")({
 	component: RouteComponent,
@@ -51,7 +51,6 @@ function RouteComponent() {
 	})
 
 	const onSubmit = (data: ProfileData): void => {
-		console.log(data)
 		edit({ data })
 	}
 

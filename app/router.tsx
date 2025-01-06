@@ -1,6 +1,6 @@
 import { createRouter as createTanStackRouter } from "@tanstack/react-router"
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { MutationCache, QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { routerWithQueryClient } from "@tanstack/react-router-with-query"
 import { NuqsAdapter } from "nuqs/adapters/react"
 import SuperJSON from "superjson"
@@ -11,6 +11,11 @@ import { DefaultNotFound } from "./shared/components/default-not-found"
 
 export function createRouter() {
 	const queryClient = new QueryClient({
+		mutationCache: new MutationCache({
+			onSuccess: () => {
+				void queryClient.invalidateQueries()
+			}
+		}),
 		defaultOptions: {
 			queries: {
 				staleTime: 30 * 1000
@@ -26,9 +31,9 @@ export function createRouter() {
 
 	const router = createTanStackRouter({
 		routeTree,
+		context: { queryClient },
 		defaultPreload: "intent",
 		defaultPreloadStaleTime: 0,
-		context: { queryClient },
 		defaultNotFoundComponent: () => <DefaultNotFound />,
 		defaultErrorComponent: (error) => <DefaultCatchBoundary {...error} />,
 		defaultPendingComponent: () => <p className="p-2 text-2xl">Loading...</p>,

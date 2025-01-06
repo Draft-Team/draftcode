@@ -11,9 +11,9 @@ import {
 	type LucideIcon
 } from "lucide-react"
 
-import { useAuth } from "@/features/auth/hooks/use-auth"
 import { cn } from "@/libs/utils"
-import { Button, buttonVariants } from "@/shared/ui/button"
+import { Button, buttonVariants } from "@/shared/components/ui/button"
+import { useUser } from "@/shared/hooks/use-user"
 
 export type SocialPlatform = "github" | "linkedin" | "twitch" | "youtube" | "website"
 export const socialIcons: Record<SocialPlatform, LucideIcon> = {
@@ -35,8 +35,9 @@ interface ProfileHeaderProps {
 	links?: SocialLink[]
 }
 
-export default function ProfileHeader({ bio, links }: ProfileHeaderProps) {
-	const { user } = useAuth()
+export const ProfileHeader = ({ bio, links }: ProfileHeaderProps) => {
+	const { user } = useUser()
+
 	return (
 		<div className="overflow-hidden rounded-lg border-y bg-card shadow">
 			<div className="relative h-48">

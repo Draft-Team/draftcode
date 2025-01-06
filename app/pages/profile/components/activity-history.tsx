@@ -38,7 +38,7 @@ const activities: Activity[] = [
 	}
 ]
 
-export const ProfileActivityHistory: React.FC = () => {
+export const ProfileActivityHistory = () => {
 	const [filter, setFilter] = useState<"all" | Activity["type"]>("all")
 
 	const filteredActivities =
@@ -97,15 +97,11 @@ interface FilterButtonProps {
 	setFilter: React.Dispatch<React.SetStateAction<"all" | Activity["type"]>>
 }
 
-const FilterButton: React.FC<FilterButtonProps> = ({
-	label,
-	value,
-	currentFilter,
-	setFilter
-}) => {
+const FilterButton = ({ label, value, currentFilter, setFilter }: FilterButtonProps) => {
 	return (
 		<Button
-			variant={currentFilter === value ? "default" : "secondary"}
+			className="border"
+			variant={currentFilter === value ? "default" : "ghost"}
 			onClick={() => setFilter(value)}>
 			{label}
 		</Button>
@@ -116,7 +112,7 @@ interface ActivityIconProps {
 	type: Activity["type"]
 }
 
-const ActivityIcon: React.FC<ActivityIconProps> = ({ type }) => {
+const ActivityIcon = ({ type }: ActivityIconProps) => {
 	switch (type) {
 		case "challenge":
 			return <CheckCircle className="text-green-500" />

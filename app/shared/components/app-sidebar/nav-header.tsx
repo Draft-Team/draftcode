@@ -1,5 +1,5 @@
-import { BrandName } from "@/shared/ui/brand-name"
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/shared/ui/sidebar"
+import { BrandName } from "../ui/brand-name"
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar"
 
 export const NavHeader = () => {
 	return (

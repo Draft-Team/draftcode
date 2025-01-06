@@ -1,6 +1,6 @@
 import { ChevronsUp } from "lucide-react"
 
-import { BrandName } from "../ui/brand-name"
+import { BrandName } from "./ui/brand-name"
 
 export const Footer = () => {
 	return (

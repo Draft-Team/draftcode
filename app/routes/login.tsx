@@ -1,35 +1,15 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router"
+import { createFileRoute, redirect } from "@tanstack/react-router"
 
-import { ChevronLeft } from "lucide-react"
-
-import { LoginCard } from "@/features/auth/components/login-card"
-import { Button } from "@/shared/ui/button"
+import { LoginPage } from "@/features/auth/pages/login/login-page"
 
 export const Route = createFileRoute("/login")({
-	component: RouteComponent,
+	component: LoginPage,
 	beforeLoad: ({ context }) => {
 		if (context.isAuthenticated) {
 			throw redirect({ to: "/" })
 		}
 	},
 	head: () => ({
-		meta: [{ title: "Login" }]
+		meta: [{ title: "Entrar" }]
 	})
 })
-
-function RouteComponent() {
-	return (
-		<main className="container relative">
-			<Button className="absolute m-10 ml-0" asChild variant="outline">
-				<Link to="/">
-					{" "}
-					<ChevronLeft /> Voltar ao site
-				</Link>
-			</Button>
-
-			<div className="container flex h-screen items-center justify-center">
-				<LoginCard />
-			</div>
-		</main>
-	)
-}

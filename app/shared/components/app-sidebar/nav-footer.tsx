@@ -7,10 +7,11 @@ import {
 	Sparkles
 } from "lucide-react"
 
-import { useAuth } from "@/features/auth/hooks/use-auth"
-import { useLogout } from "@/features/auth/hooks/use-logout"
 import { useProfile } from "@/features/profile/hooks/use-profile"
-import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar"
+
+import { useLogout } from "../../hooks/use-logout"
+import { useUser } from "../../hooks/use-user"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -19,16 +20,16 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger
-} from "@/shared/ui/dropdown-menu"
+} from "../ui/dropdown-menu"
 import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
 	useSidebar
-} from "@/shared/ui/sidebar"
+} from "../ui/sidebar"
 
 export const NavFooter = () => {
-	const { user } = useAuth()
+	const { user } = useUser()
 	const { profile } = useProfile()
 	const { isMobile } = useSidebar()
 	const { mutate: logout } = useLogout()

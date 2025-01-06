@@ -7,7 +7,7 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem
-} from "@/shared/ui/sidebar"
+} from "../ui/sidebar"
 
 export const NavContent = () => {
 	return (

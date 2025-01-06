@@ -13,7 +13,7 @@ interface ProfileStatisticsProps {
 	totalExperience: number
 }
 
-export default function ProfileStatistics({ totalExperience }: ProfileStatisticsProps) {
+export const ProfileStatistics = ({ totalExperience }: ProfileStatisticsProps) => {
 	const levelSystem = new LevelSystem()
 
 	const currentLevel = levelSystem.calculateCurrentLevel(totalExperience)
