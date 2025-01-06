@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react"
 import { motion } from "motion/react"
 
-import { Card, CardContent, CardFooter, CardHeader } from "@/shared/ui/card"
+import { Card, CardContent, CardFooter, CardHeader } from "@/shared/components/ui/card"
 
 interface FeatureCardProps {
 	icon?: LucideIcon
