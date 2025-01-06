@@ -1,6 +1,5 @@
 import { createServerFn } from "@tanstack/start"
 import { eq } from "drizzle-orm"
-import { z } from "zod"
 
 import { setSession } from "@/server/auth/sessions"
 import { db } from "@/server/db/client"
@@ -12,14 +11,12 @@ import {
 	verifyPassword
 } from "@/server/utils/password"
 
+import { LoginSchema } from "../schemas/login-schema"
+
 export const $login = createServerFn({ method: "POST" })
 	.middleware([csrfProtectionMiddleware])
-	.validator(
-		z.object({
-			email: z.string().email(),
-			password: z.string().min(6).max(100)
-		})
-	)
+	.validator(LoginSchema)
+
 	.handler(async ({ data }) => {
 		const { feedback } = checkPasswordStrength(data.password)
 

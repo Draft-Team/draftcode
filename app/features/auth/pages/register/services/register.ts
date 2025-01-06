@@ -1,6 +1,5 @@
 import { createServerFn } from "@tanstack/start"
 import { eq } from "drizzle-orm"
-import { z } from "zod"
 
 import { setSession } from "@/server/auth/sessions"
 import { db } from "@/server/db/client"
@@ -12,15 +11,11 @@ import {
 	hashPassword
 } from "@/server/utils/password"
 
+import { RegisterSchema } from "../schemas/register-schema"
+
 export const $register = createServerFn({ method: "POST" })
 	.middleware([csrfProtectionMiddleware])
-	.validator(
-		z.object({
-			email: z.string().email(),
-			name: z.string().min(2).max(100),
-			password: z.string().min(6).max(100)
-		})
-	)
+	.validator(RegisterSchema)
 	.handler(async ({ data }) => {
 		const existingUser = await db.query.usersTable.findFirst({
 			where: eq(usersTable.email, data.email)
