@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/start"
 import { toast } from "sonner"
 
-import { $editprofile } from "../../../services/edit-profile"
+import { $editprofile } from "../services/edit-profile"
 
 export const useEditProfile = () => {
 	const editProfile = useServerFn($editprofile)

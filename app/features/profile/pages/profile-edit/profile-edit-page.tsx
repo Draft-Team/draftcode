@@ -11,8 +11,8 @@ import { Label } from "@/shared/components/ui/label"
 import { Textarea } from "@/shared/components/ui/textarea"
 
 import { useProfile } from "../../hooks/use-profile"
-import { ProfileSchema, type ProfileData } from "../../schemas/profile-schema"
 import { useEditProfile } from "./hooks/use-edit-profile"
+import { ProfileSchema, type ProfileData } from "./schemas/profile-schema"
 
 export const ProfileEditPage = () => {
 	const { profile } = useProfile()

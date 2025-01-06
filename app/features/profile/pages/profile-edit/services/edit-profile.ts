@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/start"
 import { eq } from "drizzle-orm"
 
-import { ProfileSchema } from "@/features/profile/schemas/profile-schema"
+import { ProfileSchema } from "@/features/profile/pages/profile-edit/schemas/profile-schema"
 import { db } from "@/server/db/client"
 import { profileLinksTable, profilesTable } from "@/server/db/schema"
 import { authedMiddleware } from "@/server/utils/middlewares"
