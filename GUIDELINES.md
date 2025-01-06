@@ -10,7 +10,7 @@ O projeto segue a arquitetura de pacotes por funcionalidade, ou seja, cada pacot
 
 ### Colocation
 
-Deve-se manter os arquivos relacionados a uma funcionalidade juntos, ou seja, se um componente, hook ou serviço é utilizado apenas por uma funcionalidade, ele deve estar contido no mesmo pacote.
+Mantenha os arquivos relacionados a uma funcionalidade juntos, ou seja, se um componente, hook ou serviço é utilizado apenas por uma funcionalidade, ele deve estar contido no mesmo pacote.
 
 ### Compartilhamento
 
@@ -79,9 +79,23 @@ features/
 
 ### Código Compartilhado
 
+O objetivo é centralizar funções, componentes e serviços comuns, evitando duplicação. No entanto, é essencial garantir que o código compartilhado seja **genérico**, **independente** e **não dependa do contexto específico de uma feature**.
+
+- O código em `shared/` deve ser autossuficiente e não depender de código de features
 - A pasta `shared/` deve conter apenas código que é verdadeiramente reutilizado em múltiplas features
 - Quando uma funcionalidade começa a ser usada em mais de uma feature, ela deve ser movida para `shared/`
 - A estrutura dentro de `shared/` deve seguir a mesma organização por tipo (components, hooks, utils, etc.)
+- Ao mover algo para `shared/`, garanta que ele seja suficientemente genérico para ser utilizado em múltiplas features, mas sem comprometer a simplificação do código
+- Não mova código específico demais, se o código que você pensa em mover ainda está muito vinculado a uma única feature, não o mova para `shared/` até que ele seja realmente reutilizado em mais de uma feature
+
+### Convenções de Nomenclatura
+
+- Usar PascalCase para nomes de componentes (ex: `MyComponent`)
+- Usar extensão `.ts` para hooks e não `.tsx` (ex: `use-hook.ts`)
+- Usar prefixo `$` para funções criadas usando `createServerFn()` (ex: `$fetchData`)
+- Usar prefixo `use` para hooks customizados (ex: file `use-hook.ts`, hook `useHook`)
+- Usar sufixo `page` para páginas (ex: file: `login-page.tsx`, component: `LoginPage`)
+- Usar kebab-case para nomes de pastas e arquivos (ex: file: `my-component.tsx`, folder: `my-component/`)
 
 # Conclusão
 
