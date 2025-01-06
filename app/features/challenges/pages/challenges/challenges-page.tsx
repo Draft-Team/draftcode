@@ -19,7 +19,7 @@ import { createChallengeMock } from "@/shared/mocks/challenges"
 import { ChallengesFilters } from "./components/challenges-filters"
 import { useChallengesFilters } from "./hooks/use-challenges-filters"
 
-export const ChallengeListPage = () => {
+export const ChallengesPage = () => {
 	const [{ score, search, difficulty }] = useChallengesFilters()
 
 	const filteredChallenges = React.useMemo(() => {

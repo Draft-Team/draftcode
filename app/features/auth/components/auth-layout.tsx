@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router"
 
 import { ChevronLeft } from "lucide-react"
 
-import { Button } from "@/shared/ui/button"
+import { Button } from "@/shared/components/ui/button"
 
 export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
