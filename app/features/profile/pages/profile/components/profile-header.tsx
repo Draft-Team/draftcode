@@ -120,11 +120,11 @@ export const ProfileHeader = () => {
 						{profile
 							? profile.links
 									.filter(({ url }) => url)
-									.map(({ id, type, url }) => {
+									.map(({ type, url }) => {
 										const Icon = socialIcons[type]
 										return (
 											<a
-												key={id}
+												key={url}
 												href={url}
 												target="_blank"
 												rel="noopener noreferrer"

@@ -234,7 +234,6 @@ export const getCurrentUserProfile = async () => {
 
 		const profileLinks = await tx
 			.select({
-				id: profileLinksTable.id,
 				type: profileLinksTable.type,
 				url: profileLinksTable.url
 			})

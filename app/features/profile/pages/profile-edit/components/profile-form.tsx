@@ -16,13 +16,16 @@ interface ProfileFormProps {
 
 export const ProfileForm = ({ defaultValues, onSubmit, isPending }: ProfileFormProps) => {
 	const {
+		watch,
 		register,
 		handleSubmit,
 		formState: { errors }
 	} = useForm<ProfileData>({
-		resolver: zodResolver(ProfileSchema),
-		defaultValues
+		defaultValues,
+		resolver: zodResolver(ProfileSchema)
 	})
+
+	const watchBanner = watch("banner")?.[0]
 
 	const socialLinks = [
 		{ placeholder: "URL do github", fieldName: "githubUrl" as const },
@@ -43,6 +46,33 @@ export const ProfileForm = ({ defaultValues, onSubmit, isPending }: ProfileFormP
 
 			<div className="grid grid-cols-1 gap-4">
 				<div className="flex h-max flex-col gap-4 border bg-card p-4">
+					<fieldset className="flex flex-col gap-4">
+						<Label className="space-y-2" htmlFor={register("banner").name}>
+							<span>Banner</span>
+							<input
+								type="file"
+								className="hidden"
+								{...register("banner")}
+								id={register("banner").name}
+							/>
+							<figure className="max-h-40 w-full overflow-hidden">
+								{watchBanner ? (
+									<img
+										src={URL.createObjectURL(watchBanner)}
+										alt="Banner"
+										className="h-full w-full object-cover"
+									/>
+								) : (
+									<img
+										src="https://placehold.co/1100x160"
+										alt="Banner"
+										className="h-full w-full object-cover"
+									/>
+								)}
+							</figure>
+						</Label>
+					</fieldset>
+
 					<fieldset className="flex flex-col gap-4">
 						<Label className="space-y-2" htmlFor="bio">
 							<span>Bio</span>

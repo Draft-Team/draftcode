@@ -1,55 +1,48 @@
 import { createServerFn } from "@tanstack/start"
 import { eq } from "drizzle-orm"
 
-import { ProfileSchema } from "@/features/profile/pages/profile-edit/schemas/profile-schema"
 import { db } from "@/server/db/client"
+import type { DBTypes } from "@/server/db/db-types"
 import { profileLinksTable, profilesTable } from "@/server/db/schema"
 import { authedMiddleware } from "@/server/utils/middlewares"
+
+import { ProfileSchema } from "../schemas/profile-schema"
 
 export const $editprofile = createServerFn({ method: "POST" })
 	.middleware([authedMiddleware])
 	.validator(ProfileSchema)
 	.handler(async ({ data, context }) => {
-		const updatedProfile = await db
-			.update(profilesTable)
-			.set({ bio: data.bio })
-			.where(eq(profilesTable.userId, context.user.id))
-			.returning()
-			.get()
+		await db.transaction(async (tx) => {
+			const profileUpdated = await tx
+				.update(profilesTable)
+				.set({ bio: data.bio })
+				.where(eq(profilesTable.userId, context.user.id))
+				.returning()
+				.get()
 
-		if (!updatedProfile) {
-			throw new Error("Perfil não encontrado ou erro ao atualizar")
-		}
+			const profileLinksData: Omit<DBTypes["profileLinksTable"], "id" | "profileId">[] = [
+				{ type: "github", url: data.githubUrl ?? "" },
+				{ type: "linkedin", url: data.linkedinUrl ?? "" },
+				{ type: "twitch", url: data.twitchUrl ?? "" },
+				{ type: "website", url: data.websiteUrl ?? "" },
+				{ type: "youtube", url: data.youtubeUrl ?? "" }
+			]
 
-		await db
-			.delete(profileLinksTable)
-			.where(eq(profileLinksTable.profileId, updatedProfile.id))
+			const linksToUpsert = profileLinksData
+				.filter((link): link is Required<typeof link> => !!link.url && !!link.type)
+				.map((link) => ({
+					...link,
+					profileId: profileUpdated.id
+				}))
 
-		if (data.githubUrl) {
-			await db
-				.insert(profileLinksTable)
-				.values({ type: "github", url: data.githubUrl, profileId: updatedProfile.id })
-		}
-		if (data.linkedinUrl) {
-			await db
-				.insert(profileLinksTable)
-				.values({ type: "linkedin", url: data.linkedinUrl, profileId: updatedProfile.id })
-		}
-		if (data.twitchUrl) {
-			await db
-				.insert(profileLinksTable)
-				.values({ type: "twitch", url: data.twitchUrl, profileId: updatedProfile.id })
-		}
-		if (data.websiteUrl) {
-			await db
-				.insert(profileLinksTable)
-				.values({ type: "website", url: data.websiteUrl, profileId: updatedProfile.id })
-		}
-		if (data.youtubeUrl) {
-			await db
-				.insert(profileLinksTable)
-				.values({ type: "youtube", url: data.youtubeUrl, profileId: updatedProfile.id })
-		}
-
-		return { message: "Perfil atualizado com sucesso" }
+			for (const link of linksToUpsert) {
+				await tx
+					.insert(profileLinksTable)
+					.values(link)
+					.onConflictDoUpdate({
+						target: [profileLinksTable.profileId, profileLinksTable.type],
+						set: { url: link.url }
+					})
+			}
+		})
 	})
