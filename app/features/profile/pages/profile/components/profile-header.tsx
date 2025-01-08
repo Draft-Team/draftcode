@@ -45,11 +45,11 @@ export const ProfileHeader = () => {
 					<img
 						src={profileCoverUrl}
 						alt="User banner"
-						className="h-full w-full object-cover"
+						className="h-full w-full object-cover object-center"
 					/>
 				) : (
 					<div className="flex h-full w-full flex-wrap items-center justify-center bg-muted">
-						<div className="grid-cols-banner grid gap-1">
+						<div className="grid grid-cols-banner gap-1">
 							{[...Array(95).keys()].map((_, index: number) => {
 								const activeIndices = [
 									//D

@@ -12,7 +12,7 @@ import { SocialLinkField } from "./social-links-field"
 
 export const ProfileForm = () => {
 	const { profile } = useProfile()
-	const { mutate: edit, isPending } = useEditProfile()
+	const { mutateAsync: edit, isPending } = useEditProfile()
 	const profileCoverImage = profile?.images.find(
 		(image) => image.type === "profile-cover"
 	)
@@ -30,7 +30,7 @@ export const ProfileForm = () => {
 		reset,
 		register,
 		handleSubmit,
-		formState: { errors }
+		formState: { errors, isDirty }
 	} = useForm<ProfileData>({
 		defaultValues: {
 			bio: profile?.bio ?? "",
@@ -54,16 +54,20 @@ export const ProfileForm = () => {
 		{ placeholder: "URL do youtube", fieldName: "youtubeUrl" as const }
 	]
 
-	const onSubmit = (data: ProfileData) => {
-		edit({ ...data })
+	const onSubmit = async (data: ProfileData) => {
+		await edit({ ...data })
 		reset()
 	}
-
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="mt-4">
 			<div className="mb-4 flex items-center justify-between">
 				<h1 className="text-2xl font-semibold">Editar Perfil</h1>
-				<Button type="submit" mode="loading" className="mb-4" isLoading={isPending}>
+				<Button
+					type="submit"
+					mode="loading"
+					disabled={!isDirty}
+					className="mb-4"
+					isLoading={isPending}>
 					Salvar
 				</Button>
 			</div>
