@@ -20,6 +20,7 @@ export const $login = createServerFn({ method: "POST" })
 			password: z.string().min(6).max(100)
 		})
 	)
+
 	.handler(async ({ data }) => {
 		const { feedback } = checkPasswordStrength(data.password)
 
