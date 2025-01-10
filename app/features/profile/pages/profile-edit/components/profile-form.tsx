@@ -13,14 +13,8 @@ import { SocialLinkField } from "./social-links-field"
 export const ProfileForm = () => {
 	const { profile } = useProfile()
 	const { mutateAsync: edit, isPending } = useEditProfile()
-	const profileCoverImage = profile?.images.find(
-		(image) => image.type === "profile-cover"
-	)
-	const profileAvatarImage = profile?.images.find(
-		(image) => image.type === "profile-avatar"
-	)
 
-	const links = profile?.links.reduce<Record<string, string>>((acc, item) => {
+	const links = profile.links?.reduce<Record<string, string>>((acc, item) => {
 		acc[item.type] = item.url
 		return acc
 	}, {})
@@ -58,6 +52,7 @@ export const ProfileForm = () => {
 		await edit({ ...data })
 		reset()
 	}
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="mt-4">
 			<div className="mb-4 flex items-center justify-between">
@@ -92,7 +87,7 @@ export const ProfileForm = () => {
 									/>
 								) : (
 									<img
-										src={profileAvatarImage?.url ?? "https://placehold.co/96x96"}
+										src={profile.images.avatar?.url ?? "https://placehold.co/96x96"}
 										alt="Profile Avatar"
 										className="h-full w-full object-cover"
 									/>
@@ -119,7 +114,7 @@ export const ProfileForm = () => {
 									/>
 								) : (
 									<img
-										src={profileCoverImage?.url ?? "https://placehold.co/1100x160"}
+										src={profile.images.cover?.url ?? "https://placehold.co/1100x160"}
 										alt="Profile Cover"
 										className="h-full w-full object-cover"
 									/>

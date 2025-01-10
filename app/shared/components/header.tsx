@@ -69,9 +69,7 @@ export const Header = () => {
 						<DropdownMenuTrigger>
 							<Avatar>
 								<AvatarImage
-									src={
-										profile?.images.find((image) => image.type === "profile-avatar")?.url
-									}
+									src={profile.images.avatar?.url}
 									className="size-6 rounded-full"
 									alt="Imagem de perfil"
 								/>
