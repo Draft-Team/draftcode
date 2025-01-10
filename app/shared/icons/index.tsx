@@ -1,6 +1,5 @@
 import type { SVGProps } from "react"
 
-<<<<<<< HEAD
 export const YoutubeLogo = (props: SVGProps<SVGSVGElement>) => {
 	return (
 		<svg
@@ -48,8 +47,6 @@ export const LinkedinLogo = (props: SVGProps<SVGSVGElement>) => {
 	)
 }
 
-=======
->>>>>>> develop
 export const SpinnersBarsScale = (props: SVGProps<SVGSVGElement>) => {
 	return (
 		<svg

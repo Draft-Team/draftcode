@@ -5,9 +5,8 @@ const validatePlatformUrl = (platform: string) => {
 		github: /^(https?:\/\/)?(www\.)?github\.com\/[\w-]+(\/[\w-]+)*\/?$/,
 		linkedin: /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[\w-]+(\/[\w-]+)*\/?$/,
 		twitch: /^(https?:\/\/)?(www\.)?twitch\.tv\/[\w-]+(\/[\w-]+)*\/?$/,
-		youtube:
-			/^(https?:\/\/)?(www\.)?youtube\.com\/(channel\/|user\/|c\/)?[\w-]+(\/[\w-]+)*\/?$/,
-		website: /^(https?:\/\/)?(www\.)?[\w-]+\.[a-z]{2,6}(\/[\w-]*)*\/?$/
+		youtube: /^(https:\/\/www\.youtube\.com\/@[\w-]+(\/[\w-]+)*\/?$)/,
+		website: /^(https:\/\/)[\w.-]+\.[a-z]{2,6}(\/[\w-]*)*\/?$/
 	}
 
 	return platformValidators[platform] ?? /^https?:\/\/.+/

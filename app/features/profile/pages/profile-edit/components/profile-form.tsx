@@ -54,95 +54,89 @@ export const ProfileForm = () => {
 	}
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-			<div className="mb-4 flex items-center justify-between">
-				<h1 className="text-2xl font-semibold">Editar Perfil</h1>
-				<Button
-					type="submit"
-					mode="loading"
-					disabled={!isDirty}
-					className="mb-4"
-					isLoading={isPending}>
-					Salvar
-				</Button>
-			</div>
-
-			<div className="grid grid-cols-1 gap-4">
-				<div className="flex h-max flex-col gap-4 border bg-card p-4">
-					<fieldset className="flex flex-col gap-4">
-						<Label className="space-y-2" htmlFor={register("profileAvatar").name}>
-							<span>Avatar</span>
-							<input
-								type="file"
-								className="hidden"
-								{...register("profileAvatar")}
-								id={register("profileAvatar").name}
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			className="mt-4 flex flex-col gap-4 border bg-card p-4">
+			<fieldset className="flex w-max flex-col gap-4">
+				<Label className="space-y-2" htmlFor={register("profileAvatar").name}>
+					<span>Avatar</span>
+					<input
+						type="file"
+						className="hidden"
+						{...register("profileAvatar")}
+						id={register("profileAvatar").name}
+					/>
+					<figure className="h-24 w-24 cursor-pointer overflow-hidden rounded">
+						{watchProfileAvatar ? (
+							<img
+								src={URL.createObjectURL(watchProfileAvatar)}
+								alt="Profile Avatar"
+								className="h-full w-full object-cover"
 							/>
-							<figure className="h-24 w-24 overflow-hidden rounded-full">
-								{watchProfileAvatar ? (
-									<img
-										src={URL.createObjectURL(watchProfileAvatar)}
-										alt="Profile Avatar"
-										className="h-full w-full object-cover"
-									/>
-								) : (
-									<img
-										src={profile.images.avatar?.url ?? "https://placehold.co/96x96"}
-										alt="Profile Avatar"
-										className="h-full w-full object-cover"
-									/>
-								)}
-							</figure>
-						</Label>
-					</fieldset>
-
-					<fieldset className="flex flex-col gap-4">
-						<Label className="space-y-2" htmlFor={register("profileCover").name}>
-							<span>Cover do perfil</span>
-							<input
-								type="file"
-								className="hidden"
-								{...register("profileCover")}
-								id={register("profileCover").name}
+						) : (
+							<img
+								src={profile.images.avatar?.url ?? "https://placehold.co/96x96"}
+								alt="Profile Avatar"
+								className="h-full w-full object-cover"
 							/>
-							<figure className="max-h-40 w-full overflow-hidden">
-								{watchProfileCover ? (
-									<img
-										src={URL.createObjectURL(watchProfileCover)}
-										alt="Profile Cover"
-										className="h-full w-full object-cover"
-									/>
-								) : (
-									<img
-										src={profile.images.cover?.url ?? "https://placehold.co/1100x160"}
-										alt="Profile Cover"
-										className="h-full w-full object-cover"
-									/>
-								)}
-							</figure>
-						</Label>
-					</fieldset>
+						)}
+					</figure>
+				</Label>
+			</fieldset>
 
-					<fieldset className="flex flex-col gap-4">
-						<Label className="space-y-2" htmlFor="bio">
-							<span>Bio</span>
-							<Textarea className="h-24 resize-none" {...register("bio")} />
-							{errors.bio && <p className="mt-2 text-red-500">{errors.bio.message}</p>}
-						</Label>
-					</fieldset>
+			<fieldset className="flex flex-col gap-4">
+				<Label className="space-y-2" htmlFor={register("profileCover").name}>
+					<span>Capa do perfil</span>
+					<input
+						type="file"
+						className="hidden"
+						{...register("profileCover")}
+						id={register("profileCover").name}
+					/>
+					<figure className="max-h-40 w-full overflow-hidden">
+						{watchProfileCover ? (
+							<img
+								src={URL.createObjectURL(watchProfileCover)}
+								alt="Profile Cover"
+								className="h-full w-full object-cover"
+							/>
+						) : (
+							<img
+								src={profile.images.cover?.url ?? "https://placehold.co/1100x160"}
+								alt="Profile Cover"
+								className="h-full w-full object-cover"
+							/>
+						)}
+					</figure>
+				</Label>
+			</fieldset>
 
-					<h1>Links</h1>
-					{socialLinks.map(({ placeholder, fieldName }) => (
-						<SocialLinkField
-							key={fieldName}
-							placeholder={placeholder}
-							fieldName={fieldName}
-							register={register}
-							errors={errors}
-						/>
-					))}
-				</div>
-			</div>
+			<fieldset className="flex flex-col gap-4">
+				<Label className="space-y-2" htmlFor="bio">
+					<span>Bio</span>
+					<Textarea className="h-24 resize-none" {...register("bio")} />
+					{errors.bio && <p className="mt-2 text-red-500">{errors.bio.message}</p>}
+				</Label>
+			</fieldset>
+
+			{socialLinks.map(({ placeholder, fieldName }) => (
+				<SocialLinkField
+					key={fieldName}
+					placeholder={placeholder}
+					fieldName={fieldName}
+					register={register}
+					errors={errors}
+				/>
+			))}
+
+			<Button
+				type="submit"
+				mode="loading"
+				disabled={!isDirty}
+				className="mb-4"
+				isLoading={isPending}>
+				Salvar
+			</Button>
 		</form>
 	)
 }
