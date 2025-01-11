@@ -1,19 +1,19 @@
 import { BarChart, Star, Trophy } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
+import { useProfile } from "@/features/profile/hooks/use-profile"
 import { LevelSystem } from "@/libs/level-system"
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger
-} from "@/shared/ui/tooltip"
+} from "@/shared/components/ui/tooltip"
 
-interface ProfileStatisticsProps {
-	totalExperience: number
-}
+export const ProfileStatistics = () => {
+	const { profile } = useProfile()
+	const totalExperience = profile?.totalExperience ?? 0
 
-export const ProfileStatistics = ({ totalExperience }: ProfileStatisticsProps) => {
 	const levelSystem = new LevelSystem()
 
 	const currentLevel = levelSystem.calculateCurrentLevel(totalExperience)

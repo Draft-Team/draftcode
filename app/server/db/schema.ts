@@ -181,16 +181,23 @@ export const profilesTable = sqliteTable("profiles", {
 		.$onUpdate(() => new Date())
 })
 
-export const profileLinksTable = sqliteTable("profile_links", {
-	id: text("id")
-		.primaryKey()
-		.$defaultFn(() => generateId()),
-	type: profileLinkType("type").notNull(),
-	url: text("url").notNull(),
-	profileId: text("profile_id")
-		.notNull()
-		.references(() => profilesTable.id, { onDelete: "cascade" })
-})
+export const profileLinksTable = sqliteTable(
+	"profile_links",
+	{
+		type: profileLinkType("type").notNull(),
+		url: text("url").notNull(),
+		profileId: text("profile_id")
+			.notNull()
+			.references(() => profilesTable.id, { onDelete: "cascade" })
+	},
+	(table) => {
+		return [
+			primaryKey({ columns: [table.type, table.profileId] }),
+			index("profile_links_profile_id_idx").on(table.profileId),
+			index("profile_links_type_idx").on(table.type)
+		]
+	}
+)
 
 export const usersTable = sqliteTable(
 	"users",

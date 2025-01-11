@@ -3,7 +3,7 @@ import {
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger
-} from "@/shared/ui/tooltip"
+} from "@/shared/components/ui/tooltip"
 
 const badges = [
 	{

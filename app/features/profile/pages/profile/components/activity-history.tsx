@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import { Award, CheckCircle, Share2, Star } from "lucide-react"
 
-import { Button } from "@/shared/ui/button"
+import { Button } from "@/shared/components/ui/button"
 
 interface Activity {
 	id: number
