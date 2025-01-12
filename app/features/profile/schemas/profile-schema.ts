@@ -17,7 +17,8 @@ export const ProfileSchema = z.object({
 		.string()
 		.min(3, { message: "A bio deve ter pelo menos 3 caracteres." })
 		.max(255, { message: "A bio não pode ter mais de 255 caracteres." })
-		.default(""),
+		.optional()
+		.nullable(),
 	profileCover: z.custom<FileList | undefined>(),
 	profileAvatar: z.custom<FileList | undefined>(),
 	githubUrl: z

@@ -1,7 +1,7 @@
-import { ProfileActivityHistory } from "./components/activity-history"
-import { ProfileBadges } from "./components/profile-badges"
-import { ProfileHeader } from "./components/profile-header"
-import { ProfileStatistics } from "./components/profile-statistics"
+import { ProfileActivityHistory } from "../components/activity-history"
+import { ProfileBadges } from "../components/profile-badges"
+import { ProfileHeader } from "../components/profile-header"
+import { ProfileStatistics } from "../components/profile-statistics"
 
 export const ProfilePage = () => {
 	return (

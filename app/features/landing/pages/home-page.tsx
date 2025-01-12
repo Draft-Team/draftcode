@@ -15,10 +15,10 @@ import { HeroSection, HeroSectionContent } from "@/shared/components/ui/hero-sec
 import { PointsBadge } from "@/shared/components/ui/points-badge"
 import { createChallengeMock } from "@/shared/mocks/challenges"
 
-import { BenefitsCard } from "./components/benefits-card"
-import { FeatureCard } from "./components/feature-card"
-import { benefitsData } from "./constants/benefits-data"
-import { featureData } from "./constants/feature-data"
+import { BenefitsCard } from "../components/benefits-card"
+import { FeatureCard } from "../components/feature-card"
+import { benefitsData } from "../constants/benefits-data"
+import { featureData } from "../constants/feature-data"
 
 const mockChallenges = createChallengeMock(3)
 

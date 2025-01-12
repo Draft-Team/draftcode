@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
 
-import { ProfileEditPage } from "@/features/profile/pages/profile-edit/profile-edit-page"
+import { ProfileEditPage } from "@/features/profile/pages/profile-edit-page"
 
 export const Route = createFileRoute("/_base/profile/edit")({
 	component: ProfileEditPage,

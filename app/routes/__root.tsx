@@ -23,6 +23,14 @@ const TailwindIndicator = clientEnv.PROD
 			}))
 		)
 
+const ReactQueryDevTools = clientEnv.PROD
+	? () => null
+	: React.lazy(() =>
+			import("@tanstack/react-query-devtools").then((res) => ({
+				default: res.ReactQueryDevtools
+			}))
+		)
+
 export const Route = createRootRouteWithContext<{
 	queryClient: QueryClient
 }>()({
@@ -83,6 +91,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 			<body>
 				{children}
 				<TailwindIndicator />
+				<ReactQueryDevTools initialIsOpen={false} />
 				<Toaster />
 				<ScrollRestoration />
 				<Scripts />

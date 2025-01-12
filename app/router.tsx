@@ -12,8 +12,8 @@ import { DefaultNotFound } from "./shared/components/default-not-found"
 export function createRouter() {
 	const queryClient = new QueryClient({
 		mutationCache: new MutationCache({
-			onSuccess: () => {
-				void queryClient.invalidateQueries()
+			onSuccess: async () => {
+				await queryClient.invalidateQueries()
 			}
 		}),
 		defaultOptions: {
