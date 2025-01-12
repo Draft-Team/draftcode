@@ -1,9 +1,13 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
 
 import { MainSidebar } from "@/shared/components/app-sidebar/main-sidebar"
-import { AutoBreadcrumb } from "@/shared/ui/auto-breadcrumb"
-import { Separator } from "@/shared/ui/separator"
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/shared/ui/sidebar"
+import { AutoBreadcrumb } from "@/shared/components/ui/auto-breadcrumb"
+import { Separator } from "@/shared/components/ui/separator"
+import {
+	SidebarInset,
+	SidebarProvider,
+	SidebarTrigger
+} from "@/shared/components/ui/sidebar"
 
 export const Route = createFileRoute("/dashboard/_layout")({
 	component: RouteComponent,
