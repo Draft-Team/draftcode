@@ -34,10 +34,6 @@ export const NavFooter = () => {
 	const { isMobile } = useSidebar()
 	const { mutate: logout } = useLogout()
 
-	const avatarImage = profile?.images.find(
-		(image) => image.type === "profile-avatar"
-	)?.url
-
 	return (
 		<SidebarMenu>
 			<SidebarMenuItem>
@@ -47,7 +43,7 @@ export const NavFooter = () => {
 							size="lg"
 							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
 							<Avatar className="h-8 w-8 rounded-lg">
-								<AvatarImage src={avatarImage} alt={user?.name} />
+								<AvatarImage src={profile.images.avatar?.url} alt={user?.name} />
 								<AvatarFallback className="rounded-lg">CN</AvatarFallback>
 							</Avatar>
 							<div className="grid flex-1 text-left text-sm leading-tight">
@@ -65,7 +61,7 @@ export const NavFooter = () => {
 						<DropdownMenuLabel className="p-0 font-normal">
 							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
 								<Avatar className="h-8 w-8 rounded-lg">
-									<AvatarImage src={avatarImage} alt={user?.name} />
+									<AvatarImage src={profile.images.avatar?.url} alt={user?.name} />
 									<AvatarFallback className="rounded-lg">CN</AvatarFallback>
 								</Avatar>
 								<div className="grid flex-1 text-left text-sm leading-tight">

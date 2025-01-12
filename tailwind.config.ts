@@ -86,9 +86,6 @@ const config: Config = {
 						"--border-angle": "360deg"
 					}
 				}
-			},
-			gridTemplateColumns: {
-				banner: "repeat(19, minmax(0, 1fr))"
 			}
 		}
 	},
