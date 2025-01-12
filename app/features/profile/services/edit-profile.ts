@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/start"
-import { eq } from "drizzle-orm"
+import { and, eq, inArray, sql } from "drizzle-orm"
 
 import { db } from "@/server/db/client"
 import type { DBTypes } from "@/server/db/db-types"
@@ -8,40 +8,58 @@ import { authedMiddleware } from "@/server/utils/middlewares"
 
 import { ProfileSchema } from "../schemas/profile-schema"
 
+type ProfileLinkType = DBTypes["profileLinksTable"]["type"]
+
 export const $editprofile = createServerFn({ method: "POST" })
 	.middleware([authedMiddleware])
 	.validator(ProfileSchema)
 	.handler(async ({ data, context }) => {
 		await db.transaction(async (tx) => {
-			const profileUpdated = await tx
+			const profile = await tx
 				.update(profilesTable)
 				.set({ bio: data.bio })
 				.where(eq(profilesTable.userId, context.user.id))
 				.returning()
 				.get()
 
-			const profileLinksData: Omit<DBTypes["profileLinksTable"], "id" | "profileId">[] = [
-				{ type: "github", url: data.githubUrl ?? "" },
-				{ type: "linkedin", url: data.linkedinUrl ?? "" },
-				{ type: "twitch", url: data.twitchUrl ?? "" },
-				{ type: "website", url: data.websiteUrl ?? "" },
-				{ type: "youtube", url: data.youtubeUrl ?? "" }
-			]
+			const linkMap: Record<ProfileLinkType, string | undefined> = {
+				github: data.githubUrl,
+				linkedin: data.linkedinUrl,
+				twitch: data.twitchUrl,
+				website: data.websiteUrl,
+				youtube: data.youtubeUrl
+			}
 
-			const linksToUpsert = profileLinksData
-				.filter((link): link is Required<typeof link> => !!link.url && !!link.type)
-				.map((link) => ({
-					...link,
-					profileId: profileUpdated.id
+			const emptyTypes = Object.entries(linkMap)
+				.filter(([_, url]) => !url)
+				.map(([type]) => type as ProfileLinkType)
+
+			if (emptyTypes.length > 0) {
+				await tx
+					.delete(profileLinksTable)
+					.where(
+						and(
+							eq(profileLinksTable.profileId, profile.id),
+							inArray(profileLinksTable.type, emptyTypes)
+						)
+					)
+			}
+
+			const validLinks = Object.entries(linkMap)
+				.filter((entry): entry is [ProfileLinkType, string] => !!entry[1])
+				.map(([type, url]) => ({
+					type,
+					url,
+					profileId: profile.id
 				}))
 
-			for (const link of linksToUpsert) {
+			if (validLinks.length > 0) {
 				await tx
 					.insert(profileLinksTable)
-					.values(link)
+					.values(validLinks)
 					.onConflictDoUpdate({
 						target: [profileLinksTable.profileId, profileLinksTable.type],
-						set: { url: link.url }
+						set: { url: sql`excluded.url` }
 					})
 			}
 		})

@@ -14,6 +14,11 @@ export const ProfileForm = () => {
 	const { profile } = useProfile()
 	const { mutateAsync: edit, isPending } = useEditProfile()
 
+	const links = profile.links?.reduce<Record<string, string>>((acc, item) => {
+		acc[item.type] = item.url
+		return acc
+	}, {})
+
 	const {
 		watch,
 		reset,
@@ -23,11 +28,11 @@ export const ProfileForm = () => {
 	} = useForm<ProfileData>({
 		defaultValues: {
 			bio: profile?.bio,
-			githubUrl: profile.links?.github,
-			linkedinUrl: profile.links?.linkedin,
-			twitchUrl: profile.links?.twitch,
-			youtubeUrl: profile.links?.youtube,
-			websiteUrl: profile.links?.website
+			githubUrl: links?.github,
+			linkedinUrl: links?.linkedin,
+			twitchUrl: links?.twitch,
+			youtubeUrl: links?.youtube,
+			websiteUrl: links?.website
 		},
 		resolver: zodResolver(ProfileSchema)
 	})
@@ -127,7 +132,7 @@ export const ProfileForm = () => {
 			<Button
 				type="submit"
 				mode="loading"
-				disabled={!isDirty}
+				disabled={!isDirty || isPending}
 				className="mb-4"
 				isLoading={isPending}>
 				Salvar

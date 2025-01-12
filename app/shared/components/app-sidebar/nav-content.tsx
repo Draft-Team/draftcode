@@ -21,15 +21,6 @@ export const NavContent = () => {
 						</Link>
 					</SidebarMenuButton>
 				</SidebarMenuItem>
-
-				<SidebarMenuItem>
-					<SidebarMenuButton asChild tooltip="Criar desafio">
-						<Link to="/dashboard/challenges/create">
-							<Hash />
-							<span>Criar desafio</span>
-						</Link>
-					</SidebarMenuButton>
-				</SidebarMenuItem>
 			</SidebarMenu>
 		</SidebarGroup>
 	)

@@ -20,7 +20,7 @@ interface ImageUploadMetadata {
 }
 
 const IMAGE_CONFIG = {
-	maxFileSize: "4MB",
+	maxFileSize: "2MB",
 	maxFileCount: 1
 } as const
 
@@ -35,19 +35,18 @@ const handleImageUpload = async ({
 	imageType: DBTypes["imagesTable"]["type"]
 	entityType: DBTypes["imagesEntityTable"]["entityType"]
 }) => {
-	return db.transaction(async (tx) => {
-		const { currentImage, entityId } = metadata
+	const { currentImage, entityId } = metadata
 
-		if (currentImage?.key) {
-			await utapi.deleteFiles([currentImage.key])
+	if (currentImage?.key) {
+		await utapi.deleteFiles([currentImage.key])
+	}
+
+	return db.transaction(async (tx) => {
+		if (currentImage) {
 			return tx
 				.update(imagesTable)
 				.set({ key: file.key, url: file.url, type: imageType })
 				.where(eq(imagesTable.id, currentImage.id))
-		}
-
-		if (currentImage) {
-			await tx.delete(imagesTable).where(eq(imagesTable.id, currentImage.id))
 		}
 
 		const image = await tx
