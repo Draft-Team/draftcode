@@ -54,7 +54,18 @@ export const Route = createRootRouteWithContext<{
 		links: [
 			{ rel: "stylesheet", href: css },
 			{ rel: "icon", href: "/icon.svg" }
-		]
+		],
+		scripts: clientEnv.DEV
+			? [
+					{
+						type: "module",
+						children: `import RefreshRuntime from "/_build/@react-refresh";
+            RefreshRuntime.injectIntoGlobalHook(window)
+            window.$RefreshReg$ = () => {}
+            window.$RefreshSig$ = () => (type) => type`
+					}
+				]
+			: []
 	}),
 	beforeLoad: async ({ context }) => {
 		const $user = context.queryClient.ensureQueryData(currentUserQueryOptions)
