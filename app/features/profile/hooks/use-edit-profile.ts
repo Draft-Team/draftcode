@@ -28,7 +28,7 @@ export const useEditProfile = () => {
 			}
 
 			if (profileCover?.[0]) {
-				await validateImageDimensions(profileCover[0], 2560, 199)
+				await validateImageDimensions(profileCover[0], 1100, 199)
 				await uploadFiles("profileCover", {
 					files: [profileCover[0]]
 				})

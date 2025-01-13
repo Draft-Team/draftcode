@@ -3,7 +3,7 @@ import { and, eq, inArray, sql } from "drizzle-orm"
 
 import { db } from "@/server/db/client"
 import type { DBTypes } from "@/server/db/db-types"
-import { profileLinksTable, profilesTable } from "@/server/db/schema"
+import { profileLinksTable, profilesTable, usersTable } from "@/server/db/schema"
 import { authedMiddleware } from "@/server/utils/middlewares"
 
 import { ProfileSchema } from "../schemas/profile-schema"
@@ -15,6 +15,11 @@ export const $editprofile = createServerFn({ method: "POST" })
 	.validator(ProfileSchema)
 	.handler(async ({ data, context }) => {
 		await db.transaction(async (tx) => {
+			await tx
+				.update(usersTable)
+				.set({ name: data.name })
+				.where(eq(usersTable.id, context.user.id))
+
 			const profile = await tx
 				.update(profilesTable)
 				.set({ bio: data.bio })
