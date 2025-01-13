@@ -7,13 +7,13 @@ import { cn } from "@/libs/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar"
 import { buttonVariants } from "@/shared/components/ui/button"
 import { useUser } from "@/shared/hooks/use-user"
-import { GithubLogo, LinkedinLogo, TwitchLogo, YoutubeLogo } from "@/shared/icons"
+import { GithubLogo, LinkedInLogo, TwitchLogo, YouTubeLogo } from "@/shared/icons"
 
 export const socialIcons = {
 	github: GithubLogo,
-	linkedin: LinkedinLogo,
+	linkedin: LinkedInLogo,
 	twitch: TwitchLogo,
-	youtube: YoutubeLogo,
+	youtube: YouTubeLogo,
 	website: Globe
 }
 
