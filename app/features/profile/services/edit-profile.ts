@@ -4,14 +4,14 @@ import { and, eq, inArray, sql } from "drizzle-orm"
 import { db } from "@/server/db/client"
 import type { DBTypes } from "@/server/db/db-types"
 import { profileLinksTable, profilesTable, usersTable } from "@/server/db/schema"
-import { authedMiddleware } from "@/server/utils/middlewares"
+import { authedMiddleware, csrfProtectionMiddleware } from "@/server/utils/middlewares"
 
 import { ProfileSchema } from "../schemas/profile-schema"
 
 type ProfileLinkType = DBTypes["profileLinksTable"]["type"]
 
 export const $editprofile = createServerFn({ method: "POST" })
-	.middleware([authedMiddleware])
+	.middleware([csrfProtectionMiddleware, authedMiddleware])
 	.validator(ProfileSchema)
 	.handler(async ({ data, context }) => {
 		await db.transaction(async (tx) => {
