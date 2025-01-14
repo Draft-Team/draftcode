@@ -7,13 +7,8 @@ import { z } from "zod"
 import { google } from "@/server/auth/oauth"
 import { setSession } from "@/server/auth/sessions"
 import { db } from "@/server/db/client"
-import {
-	imagesEntityTable,
-	imagesTable,
-	oauthAccountsTable,
-	profilesTable,
-	usersTable
-} from "@/server/db/schema"
+import { oauthAccountsTable, usersTable } from "@/server/db/schema"
+import { createOAuthUser } from "@/shared/services/create-oauth-user"
 
 const GoogleUser = z.object({
 	sub: z.string(),
@@ -78,51 +73,12 @@ export const APIRoute = createAPIFileRoute("/api/login/google/callback")({
 				})
 			}
 
-			const newUser = await db.transaction(async (tx) => {
-				const newGoogleUser = await tx
-					.insert(usersTable)
-					.values({
-						role: "user",
-						name: googleUser.name,
-						email: googleUser.email
-					})
-					.returning()
-					.get()
-
-				await tx
-					.insert(oauthAccountsTable)
-					.values({
-						userId: newGoogleUser.id,
-						providerId: "google",
-						providerUserId: googleUser.sub
-					})
-					.returning()
-					.get()
-
-				const profile = await tx
-					.insert(profilesTable)
-					.values({
-						userId: newGoogleUser.id
-					})
-					.returning()
-					.get()
-
-				const images = await tx
-					.insert(imagesTable)
-					.values({
-						type: "profile-avatar",
-						url: googleUser.picture
-					})
-					.returning()
-					.get()
-
-				await tx.insert(imagesEntityTable).values({
-					imageId: images.id,
-					entityId: profile.id,
-					entityType: "profile"
-				})
-
-				return newGoogleUser
+			const newUser = await createOAuthUser({
+				name: googleUser.name,
+				email: googleUser.email,
+				avatarUrl: googleUser.picture,
+				providerUserId: googleUser.sub,
+				providerId: "google"
 			})
 
 			await setSession({ userId: newUser.id })

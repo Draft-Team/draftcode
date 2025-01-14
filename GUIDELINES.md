@@ -27,12 +27,6 @@ app/
             services/                   # Serviços compartilhados pela funcionalidade
             schemas/                    # Schemas compartilhados pela funcionalidade
             pages/                      # Páginas da funcionalidade
-                page-name/              # Ex: login, register, profile
-                    components/         # Componentes específicos da página
-                    hooks/              # Hooks específicos da página
-                    services/           # Serviços específicos da página
-                    schemas/            # Schemas específicos da página
-    
     shared/                             # Código compartilhado globalmente por mais de uma funcionalidade
         components/                     # Componentes compartilhados
         hooks/                          # Hooks compartilhados
@@ -51,29 +45,22 @@ app/
 ### Páginas
 
 - Cada página é um componente completo que representa uma rota da aplicação
-- Páginas devem ser expostas como um único componente (ex: `<ChallengesListPage />`)
-- O código específico da página deve estar contido na pasta da página
+- Páginas devem ser expostas como um único componente (ex: `<ChallengesPage />`)
 
 ```
 features/
     challenges/
         pages/
-            list/
-                components/         # Componentes específicos da página
-                hooks/              # Hooks específicos da página
-                services/           # Serviços específicos da página
-                list-page.tsx       # Componente principal
+            challenges-page.tsx       # Componente principal
 ```
 
 ### Componentes
 
 - Componentes que são usados em múltiplas páginas de uma feature ficam em `features/feature-name/components`
-- Componentes específicos de uma página ficam em `features/feature-name/pages/page-name/components`
 - Componentes compartilhados globalmente ficam em `shared/components`
 
 ### Hooks
 
-- Hooks específicos de uma página ficam em `features/feature-name/pages/page-name/hooks`
 - Hooks compartilhados em uma feature ficam em `features/feature-name/hooks`
 - Hooks globais ficam em `shared/hooks`
 

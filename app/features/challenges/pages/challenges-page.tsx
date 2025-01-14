@@ -16,8 +16,8 @@ import { HeroSection } from "@/shared/components/ui/hero-section"
 import { PointsBadge } from "@/shared/components/ui/points-badge"
 import { createChallengeMock } from "@/shared/mocks/challenges"
 
-import { ChallengesFilters } from "./components/challenges-filters"
-import { useChallengesFilters } from "./hooks/use-challenges-filters"
+import { ChallengesFilters } from "../components/challenges-filters"
+import { useChallengesFilters } from "../hooks/use-challenges-filters"
 
 export const ChallengesPage = () => {
 	const [{ score, search, difficulty }] = useChallengesFilters()

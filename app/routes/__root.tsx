@@ -23,6 +23,14 @@ const TailwindIndicator = clientEnv.PROD
 			}))
 		)
 
+const ReactQueryDevTools = clientEnv.PROD
+	? () => null
+	: React.lazy(() =>
+			import("@tanstack/react-query-devtools").then((res) => ({
+				default: res.ReactQueryDevtools
+			}))
+		)
+
 export const Route = createRootRouteWithContext<{
 	queryClient: QueryClient
 }>()({
@@ -46,7 +54,18 @@ export const Route = createRootRouteWithContext<{
 		links: [
 			{ rel: "stylesheet", href: css },
 			{ rel: "icon", href: "/icon.svg" }
-		]
+		],
+		scripts: clientEnv.DEV
+			? [
+					{
+						type: "module",
+						children: `import RefreshRuntime from "/_build/@react-refresh";
+            RefreshRuntime.injectIntoGlobalHook(window)
+            window.$RefreshReg$ = () => {}
+            window.$RefreshSig$ = () => (type) => type`
+					}
+				]
+			: []
 	}),
 	beforeLoad: async ({ context }) => {
 		const $user = context.queryClient.ensureQueryData(currentUserQueryOptions)
@@ -83,6 +102,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 			<body>
 				{children}
 				<TailwindIndicator />
+				<ReactQueryDevTools initialIsOpen={false} />
 				<Toaster />
 				<ScrollRestoration />
 				<Scripts />

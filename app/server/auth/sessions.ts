@@ -201,51 +201,50 @@ export const getCurrentUserProfile = async () => {
 		return undefined
 	}
 
-	return await db.transaction(async (tx) => {
-		const profile = await tx
-			.select({
-				id: profilesTable.id,
-				bio: profilesTable.bio,
-				totalExperience: profilesTable.totalExperience
-			})
-			.from(profilesTable)
-			.where(eq(profilesTable.userId, user.id))
-			.get()
+	const profile = await db
+		.select({
+			id: profilesTable.id,
+			bio: profilesTable.bio,
+			totalExperience: profilesTable.totalExperience
+		})
+		.from(profilesTable)
+		.where(eq(profilesTable.userId, user.id))
+		.get()
 
-		if (!profile) {
-			throw new Error("Profile not found")
-		}
+	if (!profile) {
+		deleteSessionTokenCookie()
+		return undefined
+	}
 
-		const profileImage = await tx
-			.select({
-				id: imagesTable.id,
-				key: imagesTable.key,
-				url: imagesTable.url,
-				type: imagesTable.type
-			})
-			.from(imagesTable)
-			.innerJoin(imagesEntityTable, eq(imagesTable.id, imagesEntityTable.imageId))
-			.where(
-				and(
-					eq(imagesEntityTable.entityId, profile.id),
-					eq(imagesEntityTable.entityType, "profile")
-				)
+	const profileImage = await db
+		.select({
+			id: imagesTable.id,
+			key: imagesTable.key,
+			url: imagesTable.url,
+			type: imagesTable.type
+		})
+		.from(imagesTable)
+		.innerJoin(imagesEntityTable, eq(imagesTable.id, imagesEntityTable.imageId))
+		.where(
+			and(
+				eq(imagesEntityTable.entityId, profile.id),
+				eq(imagesEntityTable.entityType, "profile")
 			)
+		)
 
-		const profileLinks = await tx
-			.select({
-				type: profileLinksTable.type,
-				url: profileLinksTable.url
-			})
-			.from(profileLinksTable)
-			.where(eq(profileLinksTable.profileId, profile.id))
+	const profileLinks = await db
+		.select({
+			type: profileLinksTable.type,
+			url: profileLinksTable.url
+		})
+		.from(profileLinksTable)
+		.where(eq(profileLinksTable.profileId, profile.id))
 
-		return {
-			...profile,
-			images: profileImage,
-			links: profileLinks
-		}
-	})
+	return {
+		...profile,
+		images: profileImage,
+		links: profileLinks
+	}
 }
 
 export const setSession = async ({ userId }: { userId: string }) => {

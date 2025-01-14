@@ -1,23 +1,41 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Globe } from "lucide-react"
 import { useForm } from "react-hook-form"
 
 import { useProfile } from "@/features/profile/hooks/use-profile"
+import type { DBTypes } from "@/server/db/db-types"
 import { Button } from "@/shared/components/ui/button"
+import { Input } from "@/shared/components/ui/input"
 import { Label } from "@/shared/components/ui/label"
 import { Textarea } from "@/shared/components/ui/textarea"
+import { useUser } from "@/shared/hooks/use-user"
 
 import { useEditProfile } from "../hooks/use-edit-profile"
 import { ProfileSchema, type ProfileData } from "../schemas/profile-schema"
-import { SocialLinkField } from "./social-links-field"
+
+type LinkType = DBTypes["profileLinksTable"]["type"]
+type LinkField = `${LinkType}Url`
+
+const socialLinkFields: LinkField[] = [
+	"githubUrl",
+	"linkedinUrl",
+	"youtubeUrl",
+	"twitchUrl",
+	"websiteUrl"
+]
 
 export const ProfileForm = () => {
+	const { user } = useUser()
 	const { profile } = useProfile()
 	const { mutateAsync: edit, isPending } = useEditProfile()
 
-	const links = profile.links?.reduce<Record<string, string>>((acc, item) => {
-		acc[item.type] = item.url
-		return acc
-	}, {})
+	const links = profile.links?.reduce<Record<LinkType, string>>(
+		(acc, item) => {
+			acc[item.type] = item.url
+			return acc
+		},
+		{} as Record<LinkType, string>
+	)
 
 	const {
 		watch,
@@ -26,27 +44,11 @@ export const ProfileForm = () => {
 		handleSubmit,
 		formState: { errors, isDirty }
 	} = useForm<ProfileData>({
-		defaultValues: {
-			bio: profile?.bio ?? "",
-			githubUrl: links?.github,
-			linkedinUrl: links?.linkedin,
-			twitchUrl: links?.twitch,
-			youtubeUrl: links?.youtube,
-			websiteUrl: links?.website
-		},
 		resolver: zodResolver(ProfileSchema)
 	})
 
 	const watchProfileCover = watch("profileCover")?.[0]
 	const watchProfileAvatar = watch("profileAvatar")?.[0]
-
-	const socialLinks = [
-		{ placeholder: "URL do github", fieldName: "githubUrl" as const },
-		{ placeholder: "URL do linkedin", fieldName: "linkedinUrl" as const },
-		{ placeholder: "URL da twitch", fieldName: "twitchUrl" as const },
-		{ placeholder: "URL do portfolio", fieldName: "websiteUrl" as const },
-		{ placeholder: "URL do youtube", fieldName: "youtubeUrl" as const }
-	]
 
 	const onSubmit = async (data: ProfileData) => {
 		await edit({ ...data })
@@ -56,7 +58,7 @@ export const ProfileForm = () => {
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
-			className="mt-4 flex flex-col gap-4 border bg-card p-4">
+			className="flex flex-col gap-4 border bg-card p-4">
 			<fieldset className="flex w-max flex-col gap-4">
 				<Label className="space-y-2" htmlFor={register("profileAvatar").name}>
 					<span>Avatar</span>
@@ -112,27 +114,46 @@ export const ProfileForm = () => {
 			</fieldset>
 
 			<fieldset className="flex flex-col gap-4">
-				<Label className="space-y-2" htmlFor="bio">
+				<Label className="space-y-2" htmlFor={register("name").name}>
+					<span>Nome</span>
+					<Input {...register("name")} defaultValue={user?.name ?? ""} />
+					{errors.name && <p className="mt-2 text-red-500">{errors.name.message}</p>}
+				</Label>
+			</fieldset>
+
+			<fieldset className="flex flex-col gap-4">
+				<Label className="space-y-2" htmlFor={register("bio").name}>
 					<span>Bio</span>
-					<Textarea className="h-24 resize-none" {...register("bio")} />
+					<Textarea
+						className="h-24 resize-none"
+						{...register("bio")}
+						defaultValue={profile.bio ?? ""}
+					/>
 					{errors.bio && <p className="mt-2 text-red-500">{errors.bio.message}</p>}
 				</Label>
 			</fieldset>
 
-			{socialLinks.map(({ placeholder, fieldName }) => (
-				<SocialLinkField
-					key={fieldName}
-					placeholder={placeholder}
-					fieldName={fieldName}
-					register={register}
-					errors={errors}
-				/>
+			{socialLinkFields.map((fieldName) => (
+				<fieldset className="flex flex-col gap-4" key={fieldName}>
+					<Label className="relative flex-grow" htmlFor={register(fieldName).name}>
+						<Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+						<Input
+							className="pl-10"
+							{...register(fieldName)}
+							defaultValue={links?.[`${fieldName.slice(0, -3)}` as LinkType]}
+							placeholder={`URL do ${fieldName.charAt(0).toUpperCase() + fieldName.slice(1, -3)}`}
+						/>
+					</Label>
+					{errors[fieldName] && (
+						<p className="mt-2 text-red-500">{errors[fieldName]?.message}</p>
+					)}
+				</fieldset>
 			))}
 
 			<Button
 				type="submit"
 				mode="loading"
-				disabled={!isDirty}
+				disabled={!isDirty || isPending}
 				className="mb-4"
 				isLoading={isPending}>
 				Salvar

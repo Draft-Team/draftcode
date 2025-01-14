@@ -7,7 +7,6 @@ export default defineConfig({
 	},
 	tsr: {
 		quoteStyle: "double",
-		autoCodeSplitting: true,
 		routesDirectory: "./app/routes",
 		generatedRouteTree: "./app/routeTree.gen.ts"
 	}

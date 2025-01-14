@@ -7,13 +7,8 @@ import { z } from "zod"
 import { github } from "@/server/auth/oauth"
 import { setSession } from "@/server/auth/sessions"
 import { db } from "@/server/db/client"
-import {
-	imagesEntityTable,
-	imagesTable,
-	oauthAccountsTable,
-	profilesTable,
-	usersTable
-} from "@/server/db/schema"
+import { oauthAccountsTable, usersTable } from "@/server/db/schema"
+import { createOAuthUser } from "@/shared/services/create-oauth-user"
 
 const GithubUser = z.object({
 	id: z.number(),
@@ -95,51 +90,12 @@ export const APIRoute = createAPIFileRoute("/api/login/github/callback")({
 				})
 			}
 
-			const newUser = await db.transaction(async (tx) => {
-				const newGithubUser = await tx
-					.insert(usersTable)
-					.values({
-						role: "user",
-						name: githubUser.name,
-						email: githubUser.email
-					})
-					.returning()
-					.get()
-
-				await tx
-					.insert(oauthAccountsTable)
-					.values({
-						providerId: "github",
-						providerUserId: githubUser.id.toString(),
-						userId: newGithubUser.id
-					})
-					.returning()
-					.get()
-
-				const profile = await tx
-					.insert(profilesTable)
-					.values({
-						userId: newGithubUser.id
-					})
-					.returning()
-					.get()
-
-				const images = await tx
-					.insert(imagesTable)
-					.values({
-						type: "profile-avatar",
-						url: githubUser.avatar_url
-					})
-					.returning()
-					.get()
-
-				await tx.insert(imagesEntityTable).values({
-					imageId: images.id,
-					entityId: profile.id,
-					entityType: "profile"
-				})
-
-				return newGithubUser
+			const newUser = await createOAuthUser({
+				name: githubUser.name,
+				email: githubUser.email,
+				avatarUrl: githubUser.avatar_url,
+				providerUserId: githubUser.id.toString(),
+				providerId: "github"
 			})
 
 			await setSession({ userId: newUser.id })

@@ -13,11 +13,16 @@ const validatePlatformUrl = (platform: string) => {
 }
 
 export const ProfileSchema = z.object({
+	name: z
+		.string()
+		.min(2, "Nome deve ter no mínimo 2 caracteres")
+		.max(100, "Nome deve ter no máximo 100 caracteres"),
 	bio: z
 		.string()
 		.min(3, { message: "A bio deve ter pelo menos 3 caracteres." })
 		.max(255, { message: "A bio não pode ter mais de 255 caracteres." })
-		.default(""),
+		.optional()
+		.nullable(),
 	profileCover: z.custom<FileList | undefined>(),
 	profileAvatar: z.custom<FileList | undefined>(),
 	githubUrl: z
