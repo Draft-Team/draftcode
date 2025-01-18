@@ -1,7 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router"
 
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useSuspenseQueries } from "@tanstack/react-query"
 import { CodeXml, Eye, Figma, GripVertical, ListChecks, Plus, Trash2 } from "lucide-react"
+import { useForm } from "react-hook-form"
 
+import { useCreateCategory } from "@/features/challenges/hooks/use-create-category"
+import { useCreateTag } from "@/features/challenges/hooks/use-create-tag"
+import { categoriesQueryOptions, tagsQueryOptions } from "@/features/challenges/queries"
+import {
+	CreateCategorySchema,
+	type CreateCategoryData
+} from "@/features/challenges/schemas/create-category-schema"
+import {
+	CreateTagSchema,
+	type CreateTagData
+} from "@/features/challenges/schemas/create-tag-schema"
 import { Dropzone } from "@/shared/components/dropzone"
 import { Button } from "@/shared/components/ui/button"
 import {
@@ -13,6 +27,7 @@ import {
 } from "@/shared/components/ui/dialog"
 import { Input } from "@/shared/components/ui/input"
 import { Label } from "@/shared/components/ui/label"
+import { MultiSelect } from "@/shared/components/ui/multi-select"
 import {
 	Select,
 	SelectContent,
@@ -27,6 +42,37 @@ export const Route = createFileRoute("/dashboard/_layout/")({
 })
 
 function RouteComponent() {
+	const [tags, categories] = useSuspenseQueries({
+		queries: [tagsQueryOptions, categoriesQueryOptions]
+	})
+
+	const { mutate: createTag, isPending: isPendingTag } = useCreateTag()
+	const { mutate: createCategory, isPending: isPendingCategory } = useCreateCategory()
+
+	const {
+		register: registerTag,
+		handleSubmit: handleSubmitTag,
+		formState: { errors: tagErrors }
+	} = useForm<CreateTagData>({
+		resolver: zodResolver(CreateTagSchema)
+	})
+
+	const {
+		register: registerCategory,
+		handleSubmit: handleSubmitCategory,
+		formState: { errors: categoryErrors }
+	} = useForm<CreateCategoryData>({
+		resolver: zodResolver(CreateCategorySchema)
+	})
+
+	const onSubmitTag = handleSubmitTag((data) => {
+		createTag({ data })
+	})
+
+	const onSubmitCategory = handleSubmitCategory((data) => {
+		createCategory({ data })
+	})
+
 	return (
 		<div className="grid grid-cols-[1fr_360px] gap-3">
 			<div className="space-y-3">
@@ -46,6 +92,21 @@ function RouteComponent() {
 						</fieldset>
 
 						<fieldset>
+							<Label>Tags</Label>
+							<MultiSelect
+								maxCount={5}
+								placeholder="Selecione as tags"
+								onValueChange={(value) => console.log(value)}
+								options={
+									tags.data?.map((tag) => ({
+										label: tag.name,
+										value: tag.id
+									})) || []
+								}
+							/>
+						</fieldset>
+
+						<fieldset>
 							<Label>Categoria</Label>
 							<div className="flex items-center gap-3">
 								<Select>
@@ -53,10 +114,11 @@ function RouteComponent() {
 										<SelectValue placeholder="Categoria" />
 									</SelectTrigger>
 									<SelectContent>
-										<SelectItem value="frontend">Frontend</SelectItem>
-										<SelectItem value="backend">Backend</SelectItem>
-										<SelectItem value="typescript">Typescript</SelectItem>
-										<SelectItem value="fullstack">Fullstack</SelectItem>
+										{categories.data?.map((category) => (
+											<SelectItem key={category.id} value={category.id}>
+												{category.name}
+											</SelectItem>
+										))}
 									</SelectContent>
 								</Select>
 
@@ -134,7 +196,7 @@ function RouteComponent() {
 
 				<section className="border p-3">
 					<h3 className="mb-3 border-b-2 font-lexend text-xl font-medium">
-						Criar categoria e tags
+						Criar categoria e tag
 					</h3>
 					<div className="flex items-center gap-3">
 						<Dialog>
@@ -149,15 +211,20 @@ function RouteComponent() {
 									<DialogTitle>Dê um nome para sua tag</DialogTitle>
 								</DialogHeader>
 
-								<fieldset>
-									<Label>Nome</Label>
-									<Input placeholder="HTML" />
-								</fieldset>
+								<form onSubmit={onSubmitTag} className="space-y-3">
+									<fieldset>
+										<Label htmlFor={registerTag("name").name}>Nome</Label>
+										<Input placeholder="HTML" {...registerTag("name")} />
+										{tagErrors.name && (
+											<span className="text-red-500">{tagErrors.name.message}</span>
+										)}
+									</fieldset>
 
-								<Button>
-									<Plus />
-									Adicionar
-								</Button>
+									<Button mode="loading" isLoading={isPendingTag} className="w-full">
+										<Plus />
+										Adicionar
+									</Button>
+								</form>
 							</DialogContent>
 						</Dialog>
 
@@ -173,15 +240,20 @@ function RouteComponent() {
 									<DialogTitle>Dê um nome para sua categoria</DialogTitle>
 								</DialogHeader>
 
-								<fieldset>
-									<Label>Nome</Label>
-									<Input placeholder="Frontend" />
-								</fieldset>
+								<form onSubmit={onSubmitCategory} className="space-y-3">
+									<fieldset>
+										<Label htmlFor={registerCategory("name").name}>Nome</Label>
+										<Input placeholder="Frontend" {...registerCategory("name")} />
+										{categoryErrors.name && (
+											<span className="text-red-500">{categoryErrors.name.message}</span>
+										)}
+									</fieldset>
 
-								<Button>
-									<Plus />
-									Adicionar
-								</Button>
+									<Button mode="loading" isLoading={isPendingCategory} className="w-full">
+										<Plus />
+										Adicionar
+									</Button>
+								</form>
 							</DialogContent>
 						</Dialog>
 					</div>
