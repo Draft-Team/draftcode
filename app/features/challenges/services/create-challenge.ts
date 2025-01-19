@@ -7,6 +7,7 @@ import {
 	challengesTable,
 	challengeTagsTable
 } from "@/server/db/schema"
+import { adminMiddleware, csrfProtectionMiddleware } from "@/server/utils/middlewares"
 
 export const $createChallenge = createServerFn()
 	.validator(
@@ -14,26 +15,34 @@ export const $createChallenge = createServerFn()
 			title: z.string().min(5).max(50),
 			tagsId: z.array(z.string().min(1).max(50)),
 			description: z.string().min(10).max(500),
+			blocks: z.string().min(1).max(1000).default(""), // TODO: Add block schema
 			difficulty: z.union([
 				z.literal("easy"),
 				z.literal("medium"),
 				z.literal("hard"),
 				z.literal("expert")
 			]),
-			categoryId: z.string().min(1).max(50)
+			status: z.union([
+				z.literal("draft"),
+				z.literal("published"),
+				z.literal("archived")
+			]),
+			categoryId: z.string().min(1).max(10),
+			experienceForCompletion: z.number().int().min(1)
 		})
 	)
+	.middleware([csrfProtectionMiddleware, adminMiddleware])
 	.handler(async ({ data }) => {
 		return await db.transaction(async (tx) => {
 			const newChallenge = await tx
 				.insert(challengesTable)
 				.values({
 					title: data.title,
+					status: data.status,
+					blocks: data.blocks,
 					difficulty: data.difficulty,
 					description: data.description,
-					status: "published",
-					blocks: "",
-					experienceForCompletion: 1000
+					experienceForCompletion: data.experienceForCompletion
 				})
 				.returning()
 				.get()

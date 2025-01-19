@@ -21,6 +21,21 @@ export const authedMiddleware = createMiddleware().server(async ({ next }) => {
 	})
 })
 
+export const adminMiddleware = createMiddleware().server(async ({ next }) => {
+	const [user, session] = await Promise.all([getCurrentUser(), getCurrentSession()])
+
+	if (!user?.id || !session?.userId || user.role !== "admin") {
+		throw new Error("Not an admin")
+	}
+
+	return next({
+		context: {
+			user,
+			session
+		}
+	})
+})
+
 export const csrfProtectionMiddleware = createMiddleware().server(async ({ next }) => {
 	const request = getWebRequest()
 

@@ -114,6 +114,29 @@ function RouteComponent() {
 						</fieldset>
 
 						<fieldset>
+							<Label>Experiência por completar</Label>
+							<Controller
+								control={challengeControl}
+								name="experienceForCompletion"
+								render={({ field }) => (
+									<Input
+										{...field}
+										min="1"
+										step="1"
+										pattern="[0-9]*"
+										inputMode="numeric"
+										placeholder="1000"
+										onChange={(e) => {
+											const value = e.target.value.replace(/[^0-9]/g, "").trim()
+											const cleanValue = value.replace(/^0+/, "") || ""
+											field.onChange(cleanValue)
+										}}
+									/>
+								)}
+							/>
+						</fieldset>
+
+						<fieldset>
 							<Label>Tags</Label>
 							<Controller
 								control={challengeControl}
@@ -123,6 +146,7 @@ function RouteComponent() {
 										maxCount={5}
 										placeholder="Selecione as tags"
 										onValueChange={field.onChange}
+										value={field.value}
 										options={
 											tags.data?.map((tag) => ({
 												label: tag.name,
@@ -190,8 +214,6 @@ function RouteComponent() {
 					</form>
 				</section>
 
-				{/* Daqui pra baixo ainda não vamos implementar */}
-
 				<section className="border p-3">
 					<h3 className="mb-3 border-b-2 font-lexend text-xl font-medium">
 						Recursos do desafio (Opcional)
@@ -244,9 +266,31 @@ function RouteComponent() {
 							onClick={onSubmitChallenge}
 							mode="loading"
 							isLoading={isPendingChallenge}>
-							Publicar
+							Criar
 						</Button>
 					</div>
+				</section>
+
+				<section className="border p-3">
+					<h3 className="mb-3 border-b-2 font-lexend text-xl font-medium">
+						Escolha o status inicial
+					</h3>
+					<Controller
+						control={challengeControl}
+						name="status"
+						render={({ field }) => (
+							<Select onValueChange={field.onChange} value={field.value}>
+								<SelectTrigger className="w-full">
+									<SelectValue placeholder="Status" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="draft">Rascunho</SelectItem>
+									<SelectItem value="published">Publicado</SelectItem>
+									<SelectItem value="archived">Arquivado</SelectItem>
+								</SelectContent>
+							</Select>
+						)}
+					/>
 				</section>
 
 				<section className="border p-3">
