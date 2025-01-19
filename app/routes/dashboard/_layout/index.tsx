@@ -3,15 +3,20 @@ import { createFileRoute } from "@tanstack/react-router"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useSuspenseQueries } from "@tanstack/react-query"
 import { CodeXml, Eye, Figma, GripVertical, ListChecks, Plus, Trash2 } from "lucide-react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 
 import { useCreateCategory } from "@/features/challenges/hooks/use-create-category"
+import { useCreateChallenge } from "@/features/challenges/hooks/use-create-challenge"
 import { useCreateTag } from "@/features/challenges/hooks/use-create-tag"
 import { categoriesQueryOptions, tagsQueryOptions } from "@/features/challenges/queries"
 import {
 	CreateCategorySchema,
 	type CreateCategoryData
 } from "@/features/challenges/schemas/create-category-schema"
+import {
+	CreateChallengeSchema,
+	type CreateChallengeData
+} from "@/features/challenges/schemas/create-challenge-schema"
 import {
 	CreateTagSchema,
 	type CreateTagData
@@ -48,6 +53,16 @@ function RouteComponent() {
 
 	const { mutate: createTag, isPending: isPendingTag } = useCreateTag()
 	const { mutate: createCategory, isPending: isPendingCategory } = useCreateCategory()
+	const { mutate: createChallenge, isPending: isPendingChallenge } = useCreateChallenge()
+
+	const {
+		control: challengeControl,
+		register: registerChallenge,
+		handleSubmit: handleSubmitChallenge,
+		formState: { errors: challengeErrors }
+	} = useForm<CreateChallengeData>({
+		resolver: zodResolver(CreateChallengeSchema)
+	})
 
 	const {
 		register: registerTag,
@@ -73,6 +88,10 @@ function RouteComponent() {
 		createCategory({ data })
 	})
 
+	const onSubmitChallenge = handleSubmitChallenge((data) => {
+		createChallenge(data)
+	})
+
 	return (
 		<div className="grid grid-cols-[1fr_360px] gap-3">
 			<div className="space-y-3">
@@ -82,66 +101,96 @@ function RouteComponent() {
 					</h3>
 					<form className="space-y-3">
 						<fieldset>
-							<Label>Título</Label>
-							<Input placeholder="DraftCode" />
+							<Label htmlFor={registerChallenge("title").name}>Título</Label>
+							<Input placeholder="DraftCode" {...registerChallenge("title")} />
 						</fieldset>
 
 						<fieldset>
-							<Label>Descrição</Label>
-							<Textarea placeholder="Descrição para o desafio" />
-						</fieldset>
-
-						<fieldset>
-							<Label>Tags</Label>
-							<MultiSelect
-								maxCount={5}
-								placeholder="Selecione as tags"
-								onValueChange={(value) => console.log(value)}
-								options={
-									tags.data?.map((tag) => ({
-										label: tag.name,
-										value: tag.id
-									})) || []
-								}
+							<Label htmlFor={registerChallenge("description").name}>Descrição</Label>
+							<Textarea
+								placeholder="Descrição para o desafio"
+								{...registerChallenge("description")}
 							/>
 						</fieldset>
 
 						<fieldset>
-							<Label>Categoria</Label>
-							<div className="flex items-center gap-3">
-								<Select>
-									<SelectTrigger className="w-full">
-										<SelectValue placeholder="Categoria" />
-									</SelectTrigger>
-									<SelectContent>
-										{categories.data?.map((category) => (
-											<SelectItem key={category.id} value={category.id}>
-												{category.name}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
+							<Label>Tags</Label>
+							<Controller
+								control={challengeControl}
+								name="tagsId"
+								render={({ field }) => (
+									<MultiSelect
+										maxCount={5}
+										placeholder="Selecione as tags"
+										onValueChange={field.onChange}
+										options={
+											tags.data?.map((tag) => ({
+												label: tag.name,
+												value: tag.id
+											})) || []
+										}
+									/>
+								)}
+							/>
+						</fieldset>
 
-								<Select>
-									<SelectTrigger className="w-full">
-										<SelectValue placeholder="Dificuldade" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="easy">Fácil</SelectItem>
-										<SelectItem value="medium">Médio</SelectItem>
-										<SelectItem value="hard">Difícil</SelectItem>
-										<SelectItem value="expert">Expert</SelectItem>
-									</SelectContent>
-								</Select>
+						<fieldset className="flex gap-3">
+							<div className="w-full">
+								<Label htmlFor={registerChallenge("categoryId").name}>Categoria</Label>
+								<Controller
+									control={challengeControl}
+									name="categoryId"
+									render={({ field }) => (
+										<Select onValueChange={field.onChange} value={field.value}>
+											<SelectTrigger className="w-full">
+												<SelectValue placeholder="Categoria" />
+											</SelectTrigger>
+											<SelectContent>
+												{categories.data?.map((category) => (
+													<SelectItem key={category.id} value={category.id}>
+														{category.name}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									)}
+								/>
+							</div>
+
+							<div className="w-full">
+								<Label htmlFor={registerChallenge("difficulty").name}>Dificuldade</Label>
+								<Controller
+									control={challengeControl}
+									name="difficulty"
+									render={({ field }) => (
+										<Select onValueChange={field.onChange} value={field.value}>
+											<SelectTrigger className="w-full">
+												<SelectValue placeholder="Dificuldade" />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectItem value="easy">Fácil</SelectItem>
+												<SelectItem value="medium">Médio</SelectItem>
+												<SelectItem value="hard">Difícil</SelectItem>
+												<SelectItem value="expert">Expert</SelectItem>
+											</SelectContent>
+										</Select>
+									)}
+								/>
 							</div>
 						</fieldset>
 
 						<fieldset>
 							<Label>Imagem de capa</Label>
-							<Dropzone />
+							<Controller
+								control={challengeControl}
+								name="challengeCover"
+								render={({ field }) => <Dropzone onFilesAccepted={field.onChange} />}
+							/>
 						</fieldset>
 					</form>
 				</section>
+
+				{/* Daqui pra baixo ainda não vamos implementar */}
 
 				<section className="border p-3">
 					<h3 className="mb-3 border-b-2 font-lexend text-xl font-medium">
@@ -190,7 +239,13 @@ function RouteComponent() {
 							Preview
 						</Button>
 
-						<Button className="uppercase">Publicar</Button>
+						<Button
+							className="uppercase"
+							onClick={onSubmitChallenge}
+							mode="loading"
+							isLoading={isPendingChallenge}>
+							Publicar
+						</Button>
 					</div>
 				</section>
 
