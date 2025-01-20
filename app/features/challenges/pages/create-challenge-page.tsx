@@ -1,6 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useSuspenseQueries } from "@tanstack/react-query"
-import { CodeXml, Eye, Figma, GripVertical, ListChecks, Trash2 } from "lucide-react"
+import {
+	ChevronsUpDown,
+	CodeXml,
+	Eye,
+	Figma,
+	GripVertical,
+	ListChecks,
+	Trash2
+} from "lucide-react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 
 import { CreateCategoryDialog } from "@/features/challenges/components/create-category-dialog"
@@ -11,8 +19,14 @@ import {
 	CreateChallengeSchema,
 	type CreateChallengeData
 } from "@/features/challenges/schemas/create-challenge-schema"
+import { cn } from "@/libs/utils"
 import { Dropzone } from "@/shared/components/dropzone"
-import { Button } from "@/shared/components/ui/button"
+import { Button, buttonVariants } from "@/shared/components/ui/button"
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger
+} from "@/shared/components/ui/collapsible"
 import { Input } from "@/shared/components/ui/input"
 import { Label } from "@/shared/components/ui/label"
 import { MultiSelect } from "@/shared/components/ui/multi-select"
@@ -33,14 +47,19 @@ export const CreateChallengePage = () => {
 	const { mutate, isPending } = useCreateChallenge()
 
 	const {
+		watch,
 		control,
 		register,
 		handleSubmit,
 		formState: { errors }
 	} = useForm<CreateChallengeData>({
-		resolver: zodResolver(CreateChallengeSchema)
+		resolver: zodResolver(CreateChallengeSchema),
+		defaultValues: {
+			experienceForCompletion: 1000
+		}
 	})
 
+	const watchResources = watch("resources")
 	const { fields, append, remove } = useFieldArray({
 		control,
 		name: "resources"
@@ -49,6 +68,15 @@ export const CreateChallengePage = () => {
 	const onSubmit = handleSubmit((data) => {
 		mutate(data)
 	})
+
+	const hasResourceErrors = (index: number) => {
+		return !!(
+			errors.resources?.[index]?.title ??
+			errors.resources?.[index]?.url ??
+			errors.resources?.[index]?.description ??
+			errors.resources?.[index]?.type
+		)
+	}
 
 	return (
 		<div className="grid grid-cols-[1fr_360px] gap-3">
@@ -200,36 +228,107 @@ export const CreateChallengePage = () => {
 						Recursos do desafio (Opcional)
 					</h3>
 					<form className="space-y-3">
-						<fieldset>
-							<Label>Tipo</Label>
-							<Select>
-								<SelectTrigger className="w-full">
-									<SelectValue placeholder="Documentação" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="documentation">Documentação</SelectItem>
-									<SelectItem value="youtube">YouTube</SelectItem>
-									<SelectItem value="tutorial">Tutorial</SelectItem>
-								</SelectContent>
-							</Select>
-						</fieldset>
+						{fields.map((field, index) => (
+							<Collapsible key={field.id}>
+								<CollapsibleTrigger
+									className={cn(
+										buttonVariants({
+											variant: hasResourceErrors(index) ? "destructive" : "secondary"
+										}),
+										"flex w-full items-center justify-between"
+									)}>
+									{watchResources?.[index]?.title &&
+									watchResources[index].title.length > 0 ? (
+										<span>{watchResources[index].title}</span>
+									) : (
+										<span>Recurso {index + 1}</span>
+									)}
 
-						<fieldset>
-							<Label>Título do recurso</Label>
-							<Input placeholder="Documentação do desafio" />
-						</fieldset>
+									{hasResourceErrors(index) && (
+										<span className="text-sm">Contém erros</span>
+									)}
 
-						<fieldset>
-							<Label>URL do recurso</Label>
-							<Input placeholder="https://mdn.com" />
-						</fieldset>
+									<div className="flex items-center gap-5">
+										<span
+											onClick={(e) => {
+												e.stopPropagation()
+												remove(index)
+											}}>
+											<Trash2 />
+										</span>
+										<ChevronsUpDown />
+									</div>
+								</CollapsibleTrigger>
+								<CollapsibleContent>
+									<fieldset>
+										<Label>Tipo</Label>
+										<Controller
+											control={control}
+											name={`resources.${index}.type`}
+											render={({ field }) => (
+												<Select onValueChange={field.onChange} value={field.value}>
+													<SelectTrigger className="w-full">
+														<SelectValue placeholder="Documentação" />
+													</SelectTrigger>
+													<SelectContent>
+														<SelectItem value="documentation">Documentação</SelectItem>
+														<SelectItem value="tutorial">Tutorial</SelectItem>
+													</SelectContent>
+												</Select>
+											)}
+										/>
+									</fieldset>
 
-						<fieldset>
-							<Label>Descrição do recurso</Label>
-							<Textarea placeholder="Referência oficial para HTML 5" />
-						</fieldset>
+									<fieldset>
+										<Label>Título do recurso</Label>
+										<Input
+											placeholder="Documentação do desafio"
+											{...register(`resources.${index}.title`)}
+										/>
+										{errors.resources?.[index]?.title && (
+											<span className="text-red-500">
+												{errors.resources[index]?.title.message}
+											</span>
+										)}
+									</fieldset>
 
-						<Button className="uppercase">Adicionar recurso</Button>
+									<fieldset>
+										<Label>URL do recurso</Label>
+										<Input
+											placeholder="https://mdn.com"
+											{...register(`resources.${index}.url`)}
+										/>
+										{errors.resources?.[index]?.url && (
+											<span className="text-red-500">
+												{errors.resources[index]?.url.message}
+											</span>
+										)}
+									</fieldset>
+
+									<fieldset>
+										<Label>Descrição do recurso</Label>
+										<Textarea
+											placeholder="Referência oficial para HTML 5"
+											{...register(`resources.${index}.description`)}
+										/>
+										{errors.resources?.[index]?.description && (
+											<span className="text-red-500">
+												{errors.resources[index]?.description.message}
+											</span>
+										)}
+									</fieldset>
+								</CollapsibleContent>
+							</Collapsible>
+						))}
+
+						<Button
+							type="button"
+							className="uppercase"
+							onClick={() => {
+								append({ type: "documentation", title: "", url: "", description: "" })
+							}}>
+							Adicionar recurso
+						</Button>
 					</form>
 				</section>
 			</div>

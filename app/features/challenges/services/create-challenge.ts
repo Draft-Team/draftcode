@@ -14,12 +14,12 @@ export const $createChallenge = createServerFn()
 	.validator(
 		z.object({
 			title: z.string().min(5).max(50),
-			tagsId: z.array(z.string().min(1).max(50)),
+			tagsId: z.array(z.string()),
 			description: z.string().min(10).max(500),
 			blocks: z.string().min(1).max(1000).default("WIP"), // TODO: Add block schema
 			difficulty: z.enum(["easy", "medium", "hard", "expert"]),
 			status: z.enum(["draft", "published", "archived"]),
-			categoryId: z.string().min(1).max(10),
+			categoryId: z.string(),
 			experienceForCompletion: z.number().int().min(1),
 			resources: z
 				.array(

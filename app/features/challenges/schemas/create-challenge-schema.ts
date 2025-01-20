@@ -13,7 +13,7 @@ export const CreateChallengeSchema = z.object({
 		.string()
 		.min(5, "Título deve ter no mínimo 5 caracteres")
 		.max(50, "Título deve ter no máximo 50 caracteres"),
-	tagsId: z.array(z.string().min(1).max(50), {
+	tagsId: z.array(z.string(), {
 		required_error: "Pelo menos uma tag é obrigatória"
 	}),
 	resources: z
@@ -45,12 +45,9 @@ export const CreateChallengeSchema = z.object({
 	status: z.enum(["draft", "published", "archived"], {
 		required_error: "Status é obrigatório"
 	}),
-	categoryId: z
-		.string({
-			required_error: "Categoria é obrigatória"
-		})
-		.min(1)
-		.max(50),
+	categoryId: z.string({
+		required_error: "Categoria é obrigatória"
+	}),
 	experienceForCompletion: z.coerce
 		.number({
 			message: "Experiência deve ser um número",
