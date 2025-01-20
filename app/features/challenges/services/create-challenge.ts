@@ -4,6 +4,7 @@ import { z } from "zod"
 import { db } from "@/server/db/client"
 import {
 	challengeCategoriesTable,
+	challengeResourcesTable,
 	challengesTable,
 	challengeTagsTable
 } from "@/server/db/schema"
@@ -15,20 +16,21 @@ export const $createChallenge = createServerFn()
 			title: z.string().min(5).max(50),
 			tagsId: z.array(z.string().min(1).max(50)),
 			description: z.string().min(10).max(500),
-			blocks: z.string().min(1).max(1000).default(""), // TODO: Add block schema
-			difficulty: z.union([
-				z.literal("easy"),
-				z.literal("medium"),
-				z.literal("hard"),
-				z.literal("expert")
-			]),
-			status: z.union([
-				z.literal("draft"),
-				z.literal("published"),
-				z.literal("archived")
-			]),
+			blocks: z.string().min(1).max(1000).default("WIP"), // TODO: Add block schema
+			difficulty: z.enum(["easy", "medium", "hard", "expert"]),
+			status: z.enum(["draft", "published", "archived"]),
 			categoryId: z.string().min(1).max(10),
-			experienceForCompletion: z.number().int().min(1)
+			experienceForCompletion: z.number().int().min(1),
+			resources: z
+				.array(
+					z.object({
+						title: z.string().min(5).max(50),
+						description: z.string().min(10).max(500),
+						type: z.enum(["documentation", "tutorial"]),
+						url: z.string().url()
+					})
+				)
+				.optional()
 		})
 	)
 	.middleware([csrfProtectionMiddleware, adminMiddleware])
@@ -63,6 +65,21 @@ export const $createChallenge = createServerFn()
 						tagId: tag
 					})
 					.execute()
+			}
+
+			if (data.resources) {
+				for (const resource of data.resources) {
+					await tx
+						.insert(challengeResourcesTable)
+						.values({
+							challengeId: newChallenge.id,
+							title: resource.title,
+							description: resource.description,
+							type: resource.type,
+							url: resource.url
+						})
+						.execute()
+				}
 			}
 
 			return {

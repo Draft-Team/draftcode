@@ -36,6 +36,7 @@ export const LOGS_ACTIVITY_TYPE = {
 type OauthProviderId = "github" | "google"
 type ImageEntityType = "profile" | "challenge"
 type UserRole = "user" | "admin" | "superadmin"
+type ChallengeResourceType = "documentation" | "tutorial"
 type ChallengeStatus = "draft" | "published" | "archived"
 type ChallengeDifficulty = "easy" | "medium" | "hard" | "expert"
 type ImageType = "profile-avatar" | "profile-cover" | "challenge-cover"
@@ -94,6 +95,12 @@ const imageEntityType = customType<{ data: ImageEntityType }>({
 const activityType = customType<{ data: ActivityType }>({
 	dataType() {
 		return "SIGN_UP"
+	}
+})
+
+const challengeResourceType = customType<{ data: ChallengeResourceType }>({
+	dataType() {
+		return "documentation"
 	}
 })
 
@@ -247,6 +254,35 @@ export const challengesTable = sqliteTable(
 			index("challenge_title_idx").on(table.title),
 			index("challenge_difficulty_idx").on(table.difficulty),
 			index("challenge_status_difficulty_idx").on(table.status, table.difficulty)
+		]
+	}
+)
+
+export const challengeResourcesTable = sqliteTable(
+	"challenge_resources",
+	{
+		id: text("id")
+			.primaryKey()
+			.$defaultFn(() => generateId()),
+		challengeId: text("challenge_id")
+			.notNull()
+			.references(() => challengesTable.id, { onDelete: "cascade" }),
+		type: challengeResourceType("type").notNull(),
+		description: text("description").notNull(),
+		title: text("title").notNull(),
+		url: text("url").notNull(),
+		createdAt: integer("created_at", { mode: "timestamp_ms" })
+			.notNull()
+			.$defaultFn(() => new Date()),
+		updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+			.notNull()
+			.$defaultFn(() => new Date())
+			.$onUpdate(() => new Date())
+	},
+	(table) => {
+		return [
+			index("challenge_resource_type_idx").on(table.type),
+			index("challenge_resource_challenge_id_idx").on(table.challengeId)
 		]
 	}
 )
