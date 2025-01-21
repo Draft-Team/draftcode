@@ -1,5 +1,20 @@
 import { z } from "zod"
 
+const BlockSchemas = {
+	text: z.object({
+		type: z.literal("text"),
+		content: z.object({
+			text: z.string().min(1, "Texto deve ter no mínimo 1 caractere")
+		})
+	}),
+	figma: z.object({
+		type: z.literal("figma"),
+		content: z.object({
+			url: z.string().url("URL inválida")
+		})
+	})
+}
+
 export const CreateChallengeSchema = z.object({
 	challengeCover: z.custom<FileList>().refine(
 		(value) => {
@@ -38,7 +53,9 @@ export const CreateChallengeSchema = z.object({
 		.string()
 		.min(10, "Descrição deve ter no mínimo 10 caracteres")
 		.max(500, "Descrição deve ter no máximo 500 caracteres"),
-	blocks: z.string().min(1).max(1000).default("WIP"), // TODO: Add block schema
+	blocks: z
+		.array(z.union([BlockSchemas.text, BlockSchemas.figma]))
+		.nonempty("Pelo menos um bloco é obrigatório"),
 	difficulty: z.enum(["easy", "medium", "hard", "expert"], {
 		required_error: "Dificuldade é obrigatória"
 	}),

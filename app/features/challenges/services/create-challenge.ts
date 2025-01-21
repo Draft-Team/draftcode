@@ -10,13 +10,28 @@ import {
 } from "@/server/db/schema"
 import { adminMiddleware, csrfProtectionMiddleware } from "@/server/utils/middlewares"
 
+const BlockSchemas = {
+	text: z.object({
+		type: z.literal("text"),
+		content: z.object({
+			text: z.string().min(1)
+		})
+	}),
+	figma: z.object({
+		type: z.literal("figma"),
+		content: z.object({
+			url: z.string().url()
+		})
+	})
+}
+
 export const $createChallenge = createServerFn()
 	.validator(
 		z.object({
 			title: z.string().min(5).max(50),
 			tagsId: z.array(z.string()),
 			description: z.string().min(10).max(500),
-			blocks: z.string().min(1).max(1000).default("WIP"), // TODO: Add block schema
+			blocks: z.array(z.union([BlockSchemas.text, BlockSchemas.figma])).nonempty(),
 			difficulty: z.enum(["easy", "medium", "hard", "expert"]),
 			status: z.enum(["draft", "published", "archived"]),
 			categoryId: z.string(),
@@ -40,8 +55,8 @@ export const $createChallenge = createServerFn()
 				.insert(challengesTable)
 				.values({
 					title: data.title,
-					status: data.status,
 					blocks: data.blocks,
+					status: data.status,
 					difficulty: data.difficulty,
 					description: data.description,
 					experienceForCompletion: data.experienceForCompletion
