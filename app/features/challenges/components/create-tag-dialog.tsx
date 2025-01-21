@@ -34,7 +34,7 @@ export const CreateTagDialog = () => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<button className="w-full flex-col gap-1 border bg-muted p-2">
+				<button className="w-full flex-col gap-1 border bg-muted p-2 transition-all duration-200 hover:border-primary hover:bg-background">
 					<Plus className="m-auto h-6 w-6" />
 					<span className="text-sm">Criar tag</span>
 				</button>

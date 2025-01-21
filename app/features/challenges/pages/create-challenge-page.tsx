@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useSuspenseQueries } from "@tanstack/react-query"
 import {
+	ChevronsDown,
 	ChevronsUpDown,
 	CodeXml,
 	Eye,
 	Figma,
-	GripVertical,
 	ListChecks,
 	Trash2
 } from "lucide-react"
@@ -37,6 +37,7 @@ import {
 	SelectTrigger,
 	SelectValue
 } from "@/shared/components/ui/select"
+import { Separator } from "@/shared/components/ui/separator"
 import { Textarea } from "@/shared/components/ui/textarea"
 
 export const CreateChallengePage = () => {
@@ -82,11 +83,10 @@ export const CreateChallengePage = () => {
 		<div className="grid grid-cols-[1fr_360px] gap-3">
 			<div className="space-y-3">
 				<section className="border p-3">
-					<h3 className="mb-3 border-b-2 font-lexend text-xl font-medium">
-						Informações do desafio
-					</h3>
+					<h3 className="font-lexend text-xl font-medium">Informações do desafio</h3>
+					<Separator className="my-4" />
 					<div className="space-y-3">
-						<fieldset>
+						<fieldset className="space-y-1">
 							<Label htmlFor={register("title").name}>Título</Label>
 							<Input placeholder="DraftCode" {...register("title")} />
 							{errors.title && (
@@ -94,7 +94,7 @@ export const CreateChallengePage = () => {
 							)}
 						</fieldset>
 
-						<fieldset>
+						<fieldset className="space-y-1">
 							<Label htmlFor={register("description").name}>Descrição</Label>
 							<Textarea
 								placeholder="Descrição para o desafio"
@@ -105,7 +105,7 @@ export const CreateChallengePage = () => {
 							)}
 						</fieldset>
 
-						<fieldset>
+						<fieldset className="space-y-1">
 							<Label>Experiência por completar</Label>
 							<Controller
 								control={control}
@@ -133,7 +133,7 @@ export const CreateChallengePage = () => {
 							)}
 						</fieldset>
 
-						<fieldset>
+						<fieldset className="space-y-1">
 							<Label>Tags</Label>
 							<Controller
 								control={control}
@@ -159,7 +159,7 @@ export const CreateChallengePage = () => {
 						</fieldset>
 
 						<fieldset className="flex gap-3">
-							<div className="w-full">
+							<div className="w-full space-y-1">
 								<Label htmlFor={register("categoryId").name}>Categoria</Label>
 								<Controller
 									control={control}
@@ -184,7 +184,7 @@ export const CreateChallengePage = () => {
 								)}
 							</div>
 
-							<div className="w-full">
+							<div className="w-full space-y-1">
 								<Label htmlFor={register("difficulty").name}>Dificuldade</Label>
 								<Controller
 									control={control}
@@ -209,7 +209,7 @@ export const CreateChallengePage = () => {
 							</div>
 						</fieldset>
 
-						<fieldset>
+						<fieldset className="space-y-1">
 							<Label>Imagem de capa</Label>
 							<Controller
 								control={control}
@@ -256,11 +256,11 @@ export const CreateChallengePage = () => {
 											}}>
 											<Trash2 />
 										</span>
-										<ChevronsUpDown />
+										<ChevronsDown />
 									</div>
 								</CollapsibleTrigger>
 								<CollapsibleContent>
-									<fieldset>
+									<fieldset className="space-y-1">
 										<Label>Tipo</Label>
 										<Controller
 											control={control}
@@ -279,7 +279,7 @@ export const CreateChallengePage = () => {
 										/>
 									</fieldset>
 
-									<fieldset>
+									<fieldset className="space-y-1">
 										<Label>Título do recurso</Label>
 										<Input
 											placeholder="Documentação do desafio"
@@ -292,7 +292,7 @@ export const CreateChallengePage = () => {
 										)}
 									</fieldset>
 
-									<fieldset>
+									<fieldset className="space-y-1">
 										<Label>URL do recurso</Label>
 										<Input
 											placeholder="https://mdn.com"
@@ -305,7 +305,7 @@ export const CreateChallengePage = () => {
 										)}
 									</fieldset>
 
-									<fieldset>
+									<fieldset className="space-y-1">
 										<Label>Descrição do recurso</Label>
 										<Textarea
 											placeholder="Referência oficial para HTML 5"
@@ -352,9 +352,8 @@ export const CreateChallengePage = () => {
 				</section>
 
 				<section className="border p-3">
-					<h3 className="mb-3 border-b-2 font-lexend text-xl font-medium">
-						Escolha o status inicial
-					</h3>
+					<h3 className="font-lexend text-xl font-medium">Escolha o status inicial</h3>
+					<Separator className="my-2" />
 					<Controller
 						control={control}
 						name="status"
@@ -375,9 +374,8 @@ export const CreateChallengePage = () => {
 				</section>
 
 				<section className="border p-3">
-					<h3 className="mb-3 border-b-2 font-lexend text-xl font-medium">
-						Criar categoria e tag
-					</h3>
+					<h3 className="font-lexend text-xl font-medium">Criar categoria e tag</h3>
+					<Separator className="my-2" />
 					<div className="flex items-center gap-3">
 						<CreateTagDialog />
 						<CreateCategoryDialog />
@@ -385,9 +383,8 @@ export const CreateChallengePage = () => {
 				</section>
 
 				<section className="border p-3">
-					<h3 className="mb-3 border-b-2 font-lexend text-xl font-medium">
-						Adicionar bloco
-					</h3>
+					<h3 className="font-lexend text-xl font-medium">Adicionar bloco</h3>
+					<Separator className="my-2" />
 					<div className="flex items-center gap-3">
 						<button className="w-full flex-col gap-1 border bg-muted p-2">
 							<ListChecks className="m-auto h-6 w-6" />
@@ -414,24 +411,24 @@ export const CreateChallengePage = () => {
 						<button className="flex w-full items-center justify-between gap-1 border bg-muted p-2">
 							<span className="text-sm">Check-List</span>
 							<span className="flex gap-3">
-								<Trash2 className="h-6 w-6 text-red-600" />
-								<GripVertical className="h-6 w-6" />
+								<Trash2 className="h-5 w-5 text-red-600" />
+								<ChevronsUpDown className="h-6 w-6" />
 							</span>
 						</button>
 
 						<button className="flex w-full items-center justify-between gap-1 border bg-muted p-2">
 							<span className="text-sm">Código</span>
 							<span className="flex gap-3">
-								<Trash2 className="h-6 w-6 text-red-600" />
-								<GripVertical className="h-6 w-6" />
+								<Trash2 className="h-5 w-5 text-red-600" />
+								<ChevronsUpDown className="h-6 w-6" />
 							</span>
 						</button>
 
 						<button className="flex w-full items-center justify-between gap-1 border bg-muted p-2">
 							<span className="text-sm">Figma</span>
 							<span className="flex gap-3">
-								<Trash2 className="h-6 w-6 text-red-600" />
-								<GripVertical className="h-6 w-6" />
+								<Trash2 className="h-5 w-5 text-red-600" />
+								<ChevronsUpDown className="h-6 w-6" />
 							</span>
 						</button>
 					</div>
