@@ -1,5 +1,6 @@
 import React from "react"
 
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { Bookmark, Eye } from "lucide-react"
 
 import {
@@ -14,23 +15,22 @@ import {
 import { DifficultyMeter } from "@/shared/components/ui/difficulty-meter"
 import { HeroSection } from "@/shared/components/ui/hero-section"
 import { PointsBadge } from "@/shared/components/ui/points-badge"
-import { createChallengeMock } from "@/shared/mocks/challenges"
 
 import { ChallengesFilters } from "../components/challenges-filters"
 import { useChallengesFilters } from "../hooks/use-challenges-filters"
+import { challengesQueryOptions } from "../queries"
 
 export const ChallengesPage = () => {
+	const { data: challenges } = useSuspenseQuery(challengesQueryOptions)
 	const [{ score, search, difficulty }] = useChallengesFilters()
 
 	const filteredChallenges = React.useMemo(() => {
-		const mockChallenges = createChallengeMock(10)
-
-		const filteredChallenges = mockChallenges.filter((challenge) => {
-			if (difficulty !== "all" && challenge.difficulty !== difficulty) {
+		const filteredChallenges = challenges.filter((v) => {
+			if (difficulty !== "all" && v.challenge.difficulty !== difficulty) {
 				return false
 			}
 
-			if (search && !challenge.title.toLowerCase().includes(search.toLowerCase())) {
+			if (search && !v.challenge.title.toLowerCase().includes(search.toLowerCase())) {
 				return false
 			}
 
@@ -38,19 +38,19 @@ export const ChallengesPage = () => {
 		})
 
 		if (score === "highest-score") {
-			return filteredChallenges.sort(
-				(a, b) => b.experienceForCompletion - a.experienceForCompletion
-			)
+			return filteredChallenges.sort((a, b) => {
+				return b.challenge.experienceForCompletion - a.challenge.experienceForCompletion
+			})
 		}
 
 		if (score === "lowest-score") {
-			return filteredChallenges.sort(
-				(a, b) => a.experienceForCompletion - b.experienceForCompletion
-			)
+			return filteredChallenges.sort((a, b) => {
+				return a.challenge.experienceForCompletion - b.challenge.experienceForCompletion
+			})
 		}
 
 		return filteredChallenges
-	}, [search, difficulty, score])
+	}, [search, difficulty, score, challenges])
 
 	return (
 		<main className="space-y-7">
@@ -69,26 +69,32 @@ export const ChallengesPage = () => {
 			</section>
 
 			<section className="container grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-				{filteredChallenges.map((challenge) => (
-					<ChallengeCard key={challenge.id}>
+				{filteredChallenges.map((v) => (
+					<ChallengeCard key={v.challenge.id}>
 						<div className="relative">
-							<ChallengeCardImage src="https://avatars.githubusercontent.com/u/94739199?v=4" />
+							<ChallengeCardImage
+								src={
+									v.coverImage ?? "https://avatars.githubusercontent.com/u/94739199?v=4"
+								}
+							/>
 							<PointsBadge
-								points={challenge.experienceForCompletion}
+								points={v.challenge.experienceForCompletion}
 								className="absolute right-1 top-1"
 							/>
 						</div>
 						<ChallengeCardContent>
 							<div className="flex items-center justify-between">
-								<ChallengeCardTitle>{challenge.title}</ChallengeCardTitle>
-								<DifficultyMeter difficulty={challenge.difficulty} />
+								<ChallengeCardTitle>{v.challenge.title}</ChallengeCardTitle>
+								<DifficultyMeter difficulty={v.challenge.difficulty} />
 							</div>
-							<ChallengeCardDescription>{challenge.description}</ChallengeCardDescription>
+							<ChallengeCardDescription>
+								{v.challenge.description}
+							</ChallengeCardDescription>
 
 							<div className="flex flex-wrap gap-3">
-								<ChallengeCardTag>HTML</ChallengeCardTag>
-								<ChallengeCardTag>CSS</ChallengeCardTag>
-								<ChallengeCardTag>Javascript</ChallengeCardTag>
+								{v.tags.map((tag) => (
+									<ChallengeCardTag key={tag.id}>{tag.name}</ChallengeCardTag>
+								))}
 							</div>
 						</ChallengeCardContent>
 						<ChallengeCardFooter className="flex items-center justify-between">

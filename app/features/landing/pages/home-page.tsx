@@ -1,5 +1,9 @@
+import { Link } from "@tanstack/react-router"
+
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { ArrowRight, Bookmark, Eye, StarsIcon } from "lucide-react"
 
+import { challengesQueryOptions } from "@/features/challenges/queries"
 import { Button } from "@/shared/components/ui/button"
 import {
 	ChallengeCard,
@@ -13,16 +17,15 @@ import {
 import { DifficultyMeter } from "@/shared/components/ui/difficulty-meter"
 import { HeroSection, HeroSectionContent } from "@/shared/components/ui/hero-section"
 import { PointsBadge } from "@/shared/components/ui/points-badge"
-import { createChallengeMock } from "@/shared/mocks/challenges"
 
 import { BenefitsCard } from "../components/benefits-card"
 import { FeatureCard } from "../components/feature-card"
 import { benefitsData } from "../constants/benefits-data"
 import { featureData } from "../constants/feature-data"
 
-const mockChallenges = createChallengeMock(3)
-
 export const HomePage = () => {
+	const { data: challenges } = useSuspenseQuery(challengesQueryOptions)
+
 	return (
 		<main>
 			<HeroSection className="border-none bg-background">
@@ -81,34 +84,38 @@ export const HomePage = () => {
 			<section className="container mt-11">
 				<h1 className="mb-4 text-2xl font-bold">Desafios</h1>
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-					{mockChallenges.map((challenge) => (
-						<ChallengeCard key={challenge.id}>
+					{challenges.map((v) => (
+						<ChallengeCard key={v.challenge.id}>
 							<div className="relative">
-								<ChallengeCardImage src="https://avatars.githubusercontent.com/u/94739199?v=4" />
+								<ChallengeCardImage
+									src={
+										v.coverImage ?? "https://avatars.githubusercontent.com/u/94739199?v=4"
+									}
+								/>
 								<PointsBadge
-									points={challenge.experienceForCompletion}
+									points={v.challenge.experienceForCompletion}
 									className="absolute right-1 top-1"
 								/>
 							</div>
 							<ChallengeCardContent>
 								<div className="flex items-center justify-between">
-									<ChallengeCardTitle>{challenge.title}</ChallengeCardTitle>
-									<DifficultyMeter difficulty={challenge.difficulty} />
+									<ChallengeCardTitle>{v.challenge.title}</ChallengeCardTitle>
+									<DifficultyMeter difficulty={v.challenge.difficulty} />
 								</div>
 								<ChallengeCardDescription>
-									{challenge.description}
+									{v.challenge.description}
 								</ChallengeCardDescription>
 
 								<div className="flex flex-wrap gap-3">
-									<ChallengeCardTag>HTML</ChallengeCardTag>
-									<ChallengeCardTag>CSS</ChallengeCardTag>
-									<ChallengeCardTag>Javascript</ChallengeCardTag>
+									{v.tags.map((tag) => (
+										<ChallengeCardTag key={tag.id}>{tag.name}</ChallengeCardTag>
+									))}
 								</div>
 							</ChallengeCardContent>
 							<ChallengeCardFooter className="flex items-center justify-between">
 								<Bookmark />
 								<div className="flex gap-1">
-									<Eye /> <span className="font-light">382</span>
+									<Eye /> <span className="font-light">1000</span>
 								</div>
 							</ChallengeCardFooter>
 						</ChallengeCard>
@@ -133,7 +140,9 @@ export const HomePage = () => {
 			<section className="container mt-20 flex justify-center">
 				<div className="flex flex-col items-center gap-4">
 					<h2 className="text-center text-4xl font-bold">Comece a evoluir agora</h2>
-					<Button>VER DESAFIOS</Button>
+					<Button asChild className="uppercase">
+						<Link to="/challenges">Ver desafios</Link>
+					</Button>
 				</div>
 			</section>
 		</main>
