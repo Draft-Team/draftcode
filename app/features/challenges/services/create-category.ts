@@ -13,7 +13,15 @@ export const $createCategory = createServerFn()
 	)
 	.middleware([csrfProtectionMiddleware, authedMiddleware])
 	.handler(async ({ data }) => {
-		await db.insert(categoriesTable).values({
-			name: data.name
-		})
+		await db
+			.insert(categoriesTable)
+			.values({
+				name: data.name
+			})
+			.onConflictDoUpdate({
+				target: [categoriesTable.name],
+				set: {
+					name: data.name
+				}
+			})
 	})

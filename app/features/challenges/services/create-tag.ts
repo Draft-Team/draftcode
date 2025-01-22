@@ -13,7 +13,15 @@ export const $createTag = createServerFn()
 	)
 	.middleware([csrfProtectionMiddleware, authedMiddleware])
 	.handler(async ({ data }) => {
-		await db.insert(tagsTable).values({
-			name: data.name
-		})
+		await db
+			.insert(tagsTable)
+			.values({
+				name: data.name
+			})
+			.onConflictDoUpdate({
+				target: [tagsTable.name],
+				set: {
+					name: data.name
+				}
+			})
 	})
