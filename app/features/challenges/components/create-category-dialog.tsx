@@ -37,10 +37,10 @@ export const CreateCategoryDialog = () => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<button className="w-full flex-col gap-1 border bg-muted p-2 transition-all duration-200 hover:border-primary hover:bg-background">
-					<Plus className="m-auto h-6 w-6" />
-					<span className="text-sm">Criar categoria</span>
-				</button>
+				<Button className="flex h-auto w-full flex-col gap-2" variant="outline">
+					<Plus className="h-5 w-5" />
+					<span>Criar categoria</span>
+				</Button>
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>

@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Figma, Text } from "lucide-react"
 import { Controller, FormProvider, useFieldArray, useForm } from "react-hook-form"
 
 import { CreateCategoryDialog } from "@/features/challenges/components/create-category-dialog"
@@ -104,8 +103,7 @@ export const CreateChallengePage = () => {
 						<Separator className="my-2" />
 						<div className="flex items-center gap-3">
 							<AddBlockButton
-								icon={Text}
-								label="Texto"
+								blockType="text"
 								onClickAdd={() => {
 									append({
 										type: "text",
@@ -117,8 +115,7 @@ export const CreateChallengePage = () => {
 							/>
 
 							<AddBlockButton
-								icon={Figma}
-								label="Figma"
+								blockType="figma"
 								onClickAdd={() => {
 									append({
 										type: "figma",
@@ -136,26 +133,13 @@ export const CreateChallengePage = () => {
 							Blocos adicionados
 						</h3>
 						<div className="flex flex-col items-center gap-3">
-							{fields.map((field, index) => {
-								switch (field.type) {
-									case "text":
-										return (
-											<RemoveBlockButton
-												key={field.id}
-												label="Texto"
-												onClickRemove={() => remove(index)}
-											/>
-										)
-									case "figma":
-										return (
-											<RemoveBlockButton
-												key={field.id}
-												label="Figma"
-												onClickRemove={() => remove(index)}
-											/>
-										)
-								}
-							})}
+							{fields.map((field, index) => (
+								<RemoveBlockButton
+									key={field.id}
+									type={field.type}
+									onClickRemove={() => remove(index)}
+								/>
+							))}
 						</div>
 					</section>
 				</div>

@@ -1,20 +1,23 @@
-import { type LucideIcon } from "lucide-react"
+import { Button } from "@/shared/components/ui/button"
+
+import { blockTypes } from "./configs/block-config"
 
 export const AddBlockButton = ({
-	icon,
-	label,
+	blockType,
 	onClickAdd
 }: {
-	label: string
-	icon: LucideIcon
+	blockType: keyof typeof blockTypes
 	onClickAdd: () => void
 }) => {
-	const Icon = icon
+	const { label, icon: Icon } = blockTypes[blockType]
 
 	return (
-		<button className="w-full flex-col gap-1 border bg-muted p-2" onClick={onClickAdd}>
-			<Icon className="m-auto h-6 w-6" />
-			<span className="text-sm">{label}</span>
-		</button>
+		<Button
+			variant="outline"
+			className="flex h-auto w-full flex-col gap-2"
+			onClick={onClickAdd}>
+			<Icon className="h-5 w-5" />
+			<span>{label}</span>
+		</Button>
 	)
 }
