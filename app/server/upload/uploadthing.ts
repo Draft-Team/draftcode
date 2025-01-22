@@ -1,11 +1,12 @@
 import { eq } from "drizzle-orm"
 import { createUploadthing, UploadThingError, UTApi } from "uploadthing/server"
 import type { FileRouter } from "uploadthing/server"
+import { z } from "zod"
 
 import { getCurrentUserProfile } from "../auth/sessions"
 import { db } from "../db/client"
 import type { DBTypes } from "../db/db-types"
-import { imagesEntityTable, imagesTable } from "../db/schema"
+import { challengesTable, imagesEntityTable, imagesTable } from "../db/schema"
 
 const utapi = new UTApi()
 const f = createUploadthing()
@@ -77,6 +78,29 @@ const getProfileImageMiddleware = async (imageType: DBTypes["imagesTable"]["type
 	return { entityId: profile.id, currentImage }
 }
 
+const getChallengeImageMiddleware = async (challengeId: string) => {
+	const challenge = await db
+		.select({
+			images: {
+				id: imagesTable.id,
+				key: imagesTable.key,
+				type: imagesTable.type,
+				url: imagesTable.url
+			}
+		})
+		.from(challengesTable)
+		.innerJoin(imagesEntityTable, eq(imagesEntityTable.entityId, challengeId))
+		.innerJoin(imagesTable, eq(imagesEntityTable.imageId, imagesTable.id))
+		.where(eq(challengesTable.id, challengeId))
+
+	if (!challenge) throw new UploadThingError("Challenge not found")
+
+	const currentImage = challenge
+		.map(({ images }) => images)
+		.find((image) => image.type === "challenge-cover")
+	return { entityId: challengeId, currentImage }
+}
+
 export const uploadRouter = {
 	profileCover: f({ image: IMAGE_CONFIG })
 		.middleware(async () => getProfileImageMiddleware("profile-cover"))
@@ -97,6 +121,18 @@ export const uploadRouter = {
 				metadata,
 				imageType: "profile-avatar",
 				entityType: "profile"
+			})
+		}),
+
+	challengeCover: f({ image: IMAGE_CONFIG })
+		.input(z.object({ challengeId: z.string() }))
+		.middleware(async ({ input }) => getChallengeImageMiddleware(input.challengeId))
+		.onUploadComplete(async ({ metadata, file }) => {
+			await handleImageUpload({
+				file,
+				metadata,
+				imageType: "challenge-cover",
+				entityType: "challenge"
 			})
 		})
 } satisfies FileRouter

@@ -15,7 +15,7 @@ export const createChallengeMock = (quantity: number): Challenge[] => {
 		id: index.toString(),
 		status: "published",
 		title: `Challenge ${index + 1}`,
-		blocks: "",
+		blocks: [{ type: "text", content: { text: "Text" } }],
 		experienceForCompletion: (index + 1) * 100,
 		difficulty: generateDifficulty(index),
 		description: `Description for challenge ${index}`,

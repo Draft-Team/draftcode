@@ -3,7 +3,10 @@ import tsconfigpaths from "vite-tsconfig-paths"
 
 export default defineConfig({
 	vite: {
-		plugins: [tsconfigpaths()]
+		plugins: [tsconfigpaths()],
+		ssr: {
+			noExternal: ["react-dropzone"]
+		}
 	},
 	tsr: {
 		quoteStyle: "double",

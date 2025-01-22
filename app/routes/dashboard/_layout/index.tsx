@@ -1,9 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
 
-export const Route = createFileRoute("/dashboard/_layout/")({
-	component: RouteComponent
-})
+import { CreateChallengePage } from "@/features/challenges/pages/create-challenge-page"
 
-function RouteComponent() {
-	return <div>Hello "/dashboard/_layout/"!</div>
-}
+export const Route = createFileRoute("/dashboard/_layout/")({
+	component: CreateChallengePage
+})

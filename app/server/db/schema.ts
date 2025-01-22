@@ -1,5 +1,4 @@
 import {
-	customType,
 	index,
 	integer,
 	primaryKey,
@@ -33,69 +32,30 @@ export const LOGS_ACTIVITY_TYPE = {
 	DELETE_TAG: "DELETE_TAG"
 } as const
 
+type Block =
+	| {
+			type: "text"
+			content: {
+				text: string
+			}
+	  }
+	| {
+			type: "figma"
+			content: {
+				url: string
+			}
+	  }
+
 type OauthProviderId = "github" | "google"
 type ImageEntityType = "profile" | "challenge"
 type UserRole = "user" | "admin" | "superadmin"
+type ChallengeResourceType = "documentation" | "tutorial"
 type ChallengeStatus = "draft" | "published" | "archived"
 type ChallengeDifficulty = "easy" | "medium" | "hard" | "expert"
 type ImageType = "profile-avatar" | "profile-cover" | "challenge-cover"
 type LogEntityType = "profile" | "challenge" | "category" | "tag" | "users"
 type ProfileLinkType = "github" | "linkedin" | "twitch" | "youtube" | "website"
 type ActivityType = (typeof LOGS_ACTIVITY_TYPE)[keyof typeof LOGS_ACTIVITY_TYPE]
-
-const oauthProviderId = customType<{ data: OauthProviderId }>({
-	dataType() {
-		return "github"
-	}
-})
-
-const challengeDifficulty = customType<{ data: ChallengeDifficulty }>({
-	dataType() {
-		return "easy"
-	}
-})
-
-const profileLinkType = customType<{ data: ProfileLinkType }>({
-	dataType() {
-		return "github"
-	}
-})
-
-const challengeStatus = customType<{ data: ChallengeStatus }>({
-	dataType() {
-		return "draft"
-	}
-})
-
-const userRole = customType<{ data: UserRole }>({
-	dataType() {
-		return "user"
-	}
-})
-
-const imageType = customType<{ data: ImageType }>({
-	dataType() {
-		return "profile"
-	}
-})
-
-const logEntityType = customType<{ data: LogEntityType }>({
-	dataType() {
-		return "profile"
-	}
-})
-
-const imageEntityType = customType<{ data: ImageEntityType }>({
-	dataType() {
-		return "profile"
-	}
-})
-
-const activityType = customType<{ data: ActivityType }>({
-	dataType() {
-		return "SIGN_UP"
-	}
-})
 
 export const activityLogsTable = sqliteTable(
 	"activity_logs",
@@ -106,9 +66,9 @@ export const activityLogsTable = sqliteTable(
 		userId: text("user_id")
 			.notNull()
 			.references(() => usersTable.id, { onDelete: "cascade" }),
-		entityType: logEntityType("entity_type").notNull(),
+		entityType: text("entity_type").$type<LogEntityType>().notNull(),
 		entityId: text("entity_id").notNull(),
-		type: activityType("type").notNull(),
+		type: text("type").$type<ActivityType>().notNull(),
 		createdAt: integer("created_at", { mode: "timestamp_ms" })
 			.notNull()
 			.$defaultFn(() => new Date())
@@ -124,7 +84,7 @@ export const imagesTable = sqliteTable("images", {
 		.$defaultFn(() => generateId()),
 	key: text("key"),
 	url: text("url").notNull(),
-	type: imageType("type").notNull(),
+	type: text("type").$type<ImageType>().notNull(),
 	createdAt: integer("created_at", { mode: "timestamp_ms" })
 		.notNull()
 		.$defaultFn(() => new Date()),
@@ -144,7 +104,7 @@ export const imagesEntityTable = sqliteTable(
 			.notNull()
 			.references(() => imagesTable.id, { onDelete: "cascade" }),
 		entityId: text("entity_id").notNull(),
-		entityType: imageEntityType("entity_type").notNull(),
+		entityType: text("entity_type").$type<ImageEntityType>().notNull(),
 		createdAt: integer("created_at", { mode: "timestamp_ms" })
 			.notNull()
 			.$defaultFn(() => new Date())
@@ -184,7 +144,7 @@ export const profilesTable = sqliteTable("profiles", {
 export const profileLinksTable = sqliteTable(
 	"profile_links",
 	{
-		type: profileLinkType("type").notNull(),
+		type: text("type").$type<ProfileLinkType>().notNull(),
 		url: text("url").notNull(),
 		profileId: text("profile_id")
 			.notNull()
@@ -207,7 +167,7 @@ export const usersTable = sqliteTable(
 			.$defaultFn(() => generateId()),
 		passwordHash: text("password_hash"),
 		name: text("name").notNull(),
-		role: userRole("role").notNull(),
+		role: text("role").$type<UserRole>().notNull(),
 		email: text("email").unique().notNull(),
 		createdAt: integer("created_at", { mode: "timestamp_ms" })
 			.notNull()
@@ -230,9 +190,9 @@ export const challengesTable = sqliteTable(
 			.$defaultFn(() => generateId()),
 		title: text("title").notNull(),
 		description: text("description").notNull(),
-		status: challengeStatus("status").notNull(),
-		blocks: text("blocks", { mode: "json" }).notNull(),
-		difficulty: challengeDifficulty("difficulty").notNull(),
+		status: text("status").$type<ChallengeStatus>().notNull(),
+		blocks: text("blocks", { mode: "json" }).notNull().$type<Block[]>(),
+		difficulty: text("difficulty").$type<ChallengeDifficulty>().notNull(),
 		experienceForCompletion: integer("experience_for_completion").notNull(),
 		createdAt: integer("created_at", { mode: "timestamp_ms" })
 			.notNull()
@@ -247,6 +207,35 @@ export const challengesTable = sqliteTable(
 			index("challenge_title_idx").on(table.title),
 			index("challenge_difficulty_idx").on(table.difficulty),
 			index("challenge_status_difficulty_idx").on(table.status, table.difficulty)
+		]
+	}
+)
+
+export const challengeResourcesTable = sqliteTable(
+	"challenge_resources",
+	{
+		id: text("id")
+			.primaryKey()
+			.$defaultFn(() => generateId()),
+		challengeId: text("challenge_id")
+			.notNull()
+			.references(() => challengesTable.id, { onDelete: "cascade" }),
+		type: text("type").$type<ChallengeResourceType>().notNull(),
+		description: text("description").notNull(),
+		title: text("title").notNull(),
+		url: text("url").notNull(),
+		createdAt: integer("created_at", { mode: "timestamp_ms" })
+			.notNull()
+			.$defaultFn(() => new Date()),
+		updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+			.notNull()
+			.$defaultFn(() => new Date())
+			.$onUpdate(() => new Date())
+	},
+	(table) => {
+		return [
+			index("challenge_resource_type_idx").on(table.type),
+			index("challenge_resource_challenge_id_idx").on(table.challengeId)
 		]
 	}
 )
@@ -333,7 +322,7 @@ export const oauthAccountsTable = sqliteTable(
 	"oauth_accounts",
 	{
 		providerUserId: text("provider_user_id").notNull(),
-		providerId: oauthProviderId("provider_id").notNull(),
+		providerId: text("provider_id").$type<OauthProviderId>().notNull(),
 		userId: text("user_id")
 			.notNull()
 			.references(() => usersTable.id, { onDelete: "cascade" }),
