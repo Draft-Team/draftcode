@@ -14,6 +14,15 @@ export const NavContent = () => {
 		<SidebarGroup>
 			<SidebarMenu>
 				<SidebarMenuItem>
+					<SidebarMenuButton asChild tooltip="Home">
+						<Link to="/">
+							<Hash />
+							<span>Home</span>
+						</Link>
+					</SidebarMenuButton>
+				</SidebarMenuItem>
+
+				<SidebarMenuItem>
 					<SidebarMenuButton asChild tooltip="Dashboard">
 						<Link to="/dashboard">
 							<Hash />
