@@ -19,11 +19,13 @@ import {
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[]
 	data: TData[]
+	getRowClassName?: (row: TData) => string
 }
 
 export function DataTable<TData, TValue>({
 	columns,
-	data
+	data,
+	getRowClassName
 }: DataTableProps<TData, TValue>) {
 	const table = useReactTable({
 		data,
@@ -54,7 +56,10 @@ export function DataTable<TData, TValue>({
 					<TableBody>
 						{table.getRowModel().rows?.length ? (
 							table.getRowModel().rows.map((row) => (
-								<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+								<TableRow
+									key={row.id}
+									data-state={row.getIsSelected() && "selected"}
+									className={getRowClassName?.(row.original)}>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id}>
 											{flexRender(cell.column.columnDef.cell, cell.getContext())}

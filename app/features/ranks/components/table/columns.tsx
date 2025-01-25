@@ -1,27 +1,43 @@
 import type { ColumnDef } from "@tanstack/react-table"
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar"
 import { Badge } from "@/shared/components/ui/badge"
 
-interface FakeRankingData {
+interface RankingData {
+	name: string
+	totalExperience: number | null
+	imageUrl: string | null
 	rank: number
-	pontos: number
-	nome: string
 }
 
-export const columns: ColumnDef<FakeRankingData>[] = [
+export const columns: ColumnDef<RankingData>[] = [
+	{
+		accessorKey: "imageUrl",
+		header: "",
+		cell: ({ row }) => {
+			const imageUrl = row.getValue<string | null>("imageUrl")
+			return (
+				<Avatar className="h-8 w-8">
+					<AvatarImage src={imageUrl ? imageUrl : "/logo.svg"} alt="User Avatar" />
+					<AvatarFallback>{row.getValue<string>("name").slice(0, 1)}</AvatarFallback>
+				</Avatar>
+			)
+		}
+	},
 	{
 		accessorKey: "rank",
 		header: "Rank"
 	},
 	{
-		accessorKey: "nome",
+		accessorKey: "name",
 		header: "Nome"
 	},
 	{
-		accessorKey: "pontos",
+		accessorKey: "totalExperience",
 		header: "Pontos",
 		cell: ({ getValue }) => {
-			return <Badge>{getValue<number>()}</Badge>
+			const value = getValue<number | null>()
+			return <Badge>{value ?? 0}</Badge>
 		}
 	}
 ]

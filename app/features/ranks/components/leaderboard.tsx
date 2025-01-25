@@ -5,10 +5,9 @@ import { Badge } from "@/shared/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card"
 
 interface LeaderboardEntry {
-	rank: number
 	name: string
-	score: number
-	avatar: string
+	totalExperience: number | null
+	imageUrl: string | null
 }
 
 interface LeaderboardProps {
@@ -26,15 +25,18 @@ export const Leaderboard = ({ entries, title }: LeaderboardProps) => {
 				</CardTitle>
 			</CardHeader>
 			<CardContent className="space-y-3">
-				{entries.map((entry, index) => (
+				{entries.slice(0, 3).map((entry, index) => (
 					<div
 						key={index}
 						className="flex items-center gap-4 p-3 transition-colors hover:bg-zinc-900">
 						<div className="flex h-8 w-8 items-center justify-center bg-primary font-bold">
-							{entry.rank}
+							{index + 1}
 						</div>
 						<Avatar className="h-12 w-12 rounded-[4px] border-2">
-							<AvatarImage src={entry.avatar} alt={`${entry.name}'s avatar`} />
+							<AvatarImage
+								src={entry.imageUrl ? entry.imageUrl : "/icon.svg"}
+								alt={`${entry.name}'s avatar`}
+							/>
 							<AvatarFallback>{entry.name[0]}</AvatarFallback>
 						</Avatar>
 						<div className="min-w-0 flex-1">
@@ -43,7 +45,7 @@ export const Leaderboard = ({ entries, title }: LeaderboardProps) => {
 						<Badge
 							variant="secondary"
 							className="bg-primary text-white hover:bg-primary/50">
-							{entry.score.toLocaleString()}
+							{entry.totalExperience ? entry.totalExperience.toLocaleString() : 0}
 						</Badge>
 					</div>
 				))}

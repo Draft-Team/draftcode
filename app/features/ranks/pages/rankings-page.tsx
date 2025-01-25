@@ -1,15 +1,24 @@
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { Star } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card"
 import { HeroSection } from "@/shared/components/ui/hero-section"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs"
+import { useUser } from "@/shared/hooks/use-user"
 
 import { Leaderboard } from "../components/leaderboard"
 import { columns } from "../components/table/columns"
 import { DataTable } from "../components/table/data-table"
-import { FakeRankingData, fakeRankingsData } from "../constants/fake-rankings-data"
+import { rankingQueryOption } from "../queries"
 
 export const RankingsPage = () => {
+	const { data: rankings } = useSuspenseQuery(rankingQueryOption)
+	const { user } = useUser()
+
+	const getRowClassName = (row: { name: string }) => {
+		return row.name === user?.name ? "bg-primary/10" : ""
+	}
+
 	return (
 		<main>
 			<HeroSection>
@@ -26,24 +35,16 @@ export const RankingsPage = () => {
 				<Tabs defaultValue="geral" className="space-y-4">
 					<TabsList>
 						<TabsTrigger value="geral">Pontos</TabsTrigger>
-						<TabsTrigger value="concluidos">Desafios Concluídos</TabsTrigger>
-						<TabsTrigger value="conquistas">Conquistas</TabsTrigger>
 					</TabsList>
 					<TabsContent value="geral" className="space-y-4">
-						<Leaderboard title="Pontos" entries={fakeRankingsData} />
-					</TabsContent>
-					<TabsContent value="concluidos" className="space-y-4">
-						<Leaderboard title="Desafios Concluídos" entries={fakeRankingsData} />
-					</TabsContent>
-					<TabsContent value="conquistas" className="space-y-4">
-						<Leaderboard title="Conquistas" entries={fakeRankingsData} />
+						<Leaderboard title="Pontos" entries={rankings} />
 					</TabsContent>
 				</Tabs>
 			</section>
 
 			<section className="container mt-6 space-y-4">
 				<h1 className="text-3xl font-bold">Ranking</h1>
-				<DataTable columns={columns} data={FakeRankingData} />
+				<DataTable columns={columns} data={rankings} getRowClassName={getRowClassName} />
 			</section>
 
 			<section className="container space-y-4">
