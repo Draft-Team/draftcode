@@ -57,15 +57,25 @@ export const RankingsPage = () => {
 						<ul className="space-y-2">
 							<li className="flex items-center gap-2">
 								<Star className="h-4 w-4 text-yellow-500" />
-								<span>Fácil: 100 pontos</span>
+								<span>Fácil: Pontos variáveis (definidos pelo criador do desafio)</span>
 							</li>
 							<li className="flex items-center gap-2">
 								<Star className="h-4 w-4 text-yellow-500" />
-								<span>Intermediário: +150 pontos</span>
+								<span>
+									Intermediário: Pontos variáveis (definidos pelo criador do desafio)
+								</span>
 							</li>
 							<li className="flex items-center gap-2">
 								<Star className="h-4 w-4 text-yellow-500" />
-								<span>Avançado: +200 pontos</span>
+								<span>
+									Avançado: Pontos variáveis (definidos pelo criador do desafio)
+								</span>
+							</li>
+							<li className="flex items-center gap-2">
+								<Star className="h-4 w-4 text-yellow-500" />
+								<span>
+									Especialista: Pontos variáveis (definidos pelo criador do desafio)
+								</span>
 							</li>
 						</ul>
 					</CardContent>

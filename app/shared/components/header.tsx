@@ -39,16 +39,19 @@ export const Header = () => {
 	const navData: { to: LinkOptions["to"]; label: string }[] = [
 		{ to: "/", label: "Inicio" },
 		{ to: "/challenges", label: "Desafios" },
-		{ to: "/solutions", label: "Soluções" }
+		{ to: "/solutions", label: "Soluções" },
+		{ to: "/ranks", label: "Rankings" }
 	]
 
 	return (
 		<header className="container mx-auto flex min-h-16 items-center justify-between">
 			<div className="hidden items-center gap-6 sm:flex">
-				<BrandName as="h1" />
+				<Link to="/">
+					<BrandName as="h1" />
+				</Link>
 
 				<nav>
-					<ul className="flex items-center gap-5 leading-6 text-muted-foreground">
+					<ul className="flex items-center gap-3 leading-6 text-muted-foreground">
 						{navData.map(({ to, label }) => (
 							<li key={to}>
 								<Link
