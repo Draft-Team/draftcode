@@ -8,7 +8,10 @@ const ChallengeCard = React.forwardRef<
 >(({ className, ...props }, ref) => (
 	<div
 		ref={ref}
-		className={cn("border bg-card text-card-foreground shadow", className)}
+		className={cn(
+			"flex h-full flex-col border bg-card text-card-foreground shadow",
+			className
+		)}
 		{...props}
 	/>
 ))
@@ -28,7 +31,10 @@ const ChallengeCardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
 	<div
 		ref={ref}
-		className={cn("text-2xl font-medium leading-8 tracking-tight", className)}
+		className={cn(
+			"line-clamp-2 text-2xl font-medium leading-8 tracking-tight",
+			className
+		)}
 		{...props}
 	/>
 ))
@@ -40,7 +46,7 @@ const ChallengeCardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
 	<div
 		ref={ref}
-		className={cn("leading-6 text-muted-foreground", className)}
+		className={cn("line-clamp-2 leading-6 text-muted-foreground", className)}
 		{...props}
 	/>
 ))
@@ -73,7 +79,7 @@ const ChallengeCardContent = React.forwardRef<
 	HTMLDivElement,
 	React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-	<div ref={ref} className={cn("space-y-4 px-3 py-2", className)} {...props} />
+	<div ref={ref} className={cn("flex-1 space-y-4 px-3 py-2", className)} {...props} />
 ))
 ChallengeCardContent.displayName = "ChallengeCardContent"
 
