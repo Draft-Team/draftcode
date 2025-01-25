@@ -5,6 +5,7 @@ import { Badge } from "@/shared/components/ui/badge"
 
 interface RankingData {
 	name: string
+	email: string
 	totalExperience: number | null
 	imageUrl: string | null
 	rank: number
@@ -31,6 +32,10 @@ export const columns: ColumnDef<RankingData>[] = [
 	{
 		accessorKey: "name",
 		header: "Nome"
+	},
+	{
+		accessorKey: "email",
+		header: ""
 	},
 	{
 		accessorKey: "totalExperience",

@@ -14,6 +14,7 @@ export const $getPointsRanking = createServerFn().handler(async () => {
 		.select({
 			name: usersTable.name,
 			totalExperience: profilesTable.totalExperience,
+			email: usersTable.email,
 			imageUrl: imagesTable.url,
 			rank: sql<number>`ROW_NUMBER() OVER (ORDER BY ${profilesTable.totalExperience} DESC)`.as(
 				"rank"

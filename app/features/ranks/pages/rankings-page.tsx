@@ -15,8 +15,8 @@ export const RankingsPage = () => {
 	const { data: rankings } = useSuspenseQuery(rankingQueryOption)
 	const { user } = useUser()
 
-	const getRowClassName = (row: { name: string }) => {
-		return row.name === user?.name ? "bg-primary/10" : ""
+	const getRowClassName = (row: { email: string }) => {
+		return row.email === user?.email ? "bg-primary/10" : ""
 	}
 
 	return (

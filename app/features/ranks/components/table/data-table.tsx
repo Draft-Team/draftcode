@@ -31,7 +31,12 @@ export function DataTable<TData, TValue>({
 		data,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel()
+		getPaginationRowModel: getPaginationRowModel(),
+		initialState: {
+			columnVisibility: {
+				email: false
+			}
+		}
 	})
 
 	return (
