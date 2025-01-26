@@ -90,6 +90,14 @@ export const Header = () => {
 							<Link to="/profile">Perfil</Link>
 						</DropdownMenuItem>
 						<DropdownMenuSeparator />
+						{user.role === "admin" && (
+							<>
+								<DropdownMenuItem className="cursor-pointer" asChild>
+									<Link to="/dashboard">Dashboard</Link>
+								</DropdownMenuItem>
+								<DropdownMenuSeparator />
+							</>
+						)}
 						<DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
 							Sair
 						</DropdownMenuItem>
@@ -115,7 +123,7 @@ export const Header = () => {
 						<SheetDescription>Encontre o desafio perfeito para você.</SheetDescription>
 					</SheetHeader>
 					<nav className="mt-10">
-						<ul className="flex flex-col items-center gap-5 leading-6 text-muted-foreground [&>*]:w-full">
+						<ul className="text-muted-foreground flex flex-col items-center gap-5 leading-6 [&>*]:w-full">
 							{navData.map(({ to, label }) => (
 								<li key={to}>
 									<Link

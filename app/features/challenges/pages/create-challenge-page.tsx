@@ -132,6 +132,11 @@ export const CreateChallengePage = () => {
 						<h3 className="mb-3 border-b-2 font-lexend text-xl font-medium">
 							Blocos adicionados
 						</h3>
+						{methods.formState.errors.blocks && (
+							<span className="text-red-500">
+								{methods.formState.errors.blocks.message}
+							</span>
+						)}
 						<div className="flex flex-col items-center gap-3">
 							{fields.map((field, index) => (
 								<RemoveBlockButton
