@@ -4,6 +4,7 @@ packages:
   - tooling/*
 
 catalog:
+  hono: 4.6.19
   typescript: 5.7.3
   tailwindcss: 3.4.17
 
