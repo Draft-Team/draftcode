@@ -6,6 +6,9 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"]
-		}
+		},
+		"composite": true,
+		"noEmit": false,
+		"emitDeclarationOnly": true
 	}
 }
