@@ -1,0 +1,13 @@
+{
+	"name": "@draftcode/types",
+	"scripts": {
+		"clean": "rm -rf .turbo node_modules"
+	},
+	"devDependencies": {
+		"@types/node": "^22.12.0",
+		"typescript": "catalog:"
+	},
+	"exports": {
+		".": "./src/index.ts"
+	}
+}
