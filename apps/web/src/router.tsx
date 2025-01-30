@@ -17,9 +17,11 @@ const queryClient = new QueryClient({
 
 export const router = createRouter({
 	routeTree,
+	scrollRestoration: true,
 	defaultPreload: "intent",
 	context: { queryClient },
 	defaultPreloadStaleTime: 0,
+	scrollRestorationBehavior: "smooth",
 	Wrap: ({ children }) => (
 		<QueryClientProvider client={queryClient}>
 			<NuqsAdapter>{children}</NuqsAdapter>

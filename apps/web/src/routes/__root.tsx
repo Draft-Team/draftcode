@@ -7,11 +7,7 @@ import {
 import type { QueryClient } from "@tanstack/react-query"
 import { Toaster } from "@draftcode/ui/components/sonner"
 import { TailwindIndicator } from "@draftcode/ui/components/tailwind-indicator"
-import {
-	createRootRouteWithContext,
-	Outlet,
-	ScrollRestoration
-} from "@tanstack/react-router"
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router"
 
 export const Route = createRootRouteWithContext<{
 	queryClient: QueryClient
@@ -40,7 +36,6 @@ export const Route = createRootRouteWithContext<{
 function Root() {
 	return (
 		<>
-			<ScrollRestoration />
 			<Outlet />
 			<TailwindIndicator />
 			<Toaster />

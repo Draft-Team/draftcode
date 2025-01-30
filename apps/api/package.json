@@ -9,6 +9,7 @@
 		"db:push": "drizzle-kit push",
 		"db:studio": "drizzle-kit studio",
 		"db:generate": "drizzle-kit generate",
+		"db:reset": "rm -rf db.sqlite && pnpm db:push",
 		"clean": "rm -rf node_modules"
 	},
 	"dependencies": {
