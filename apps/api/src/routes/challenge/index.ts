@@ -141,9 +141,24 @@ export const challengeRouter = new Hono()
 
 		const challengesFormatted = Array.from(challengesMap.values())
 
-		return c.json<SuccessResponse<typeof challengesFormatted>>({
+		const groupedChallenges = challengesFormatted.reduce(
+			(acc, value) => {
+				const status = value.challenge.status
+				if (status === "draft") acc.draft.push(value)
+				if (status === "published") acc.published.push(value)
+				if (status === "archived") acc.archived.push(value)
+				return acc
+			},
+			{
+				draft: [] as typeof challengesFormatted,
+				published: [] as typeof challengesFormatted,
+				archived: [] as typeof challengesFormatted
+			}
+		)
+
+		return c.json<SuccessResponse<typeof groupedChallenges>>({
 			success: true,
-			data: challengesFormatted
+			data: groupedChallenges
 		})
 	})
 	.post(

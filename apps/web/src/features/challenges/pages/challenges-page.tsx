@@ -25,7 +25,7 @@ export const ChallengesPage = () => {
 	const [{ score, search, difficulty }] = useChallengesFilters()
 
 	const filteredChallenges = React.useMemo(() => {
-		const filteredChallenges = challenges.filter((v) => {
+		const filteredChallenges = challenges.published.filter((v) => {
 			if (difficulty !== "all" && v.challenge.difficulty !== difficulty) {
 				return false
 			}

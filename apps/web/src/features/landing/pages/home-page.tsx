@@ -87,7 +87,7 @@ export const HomePage = () => {
 			<section className="container mt-11">
 				<h1 className="mb-4 text-2xl font-bold">Desafios</h1>
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-					{challenges.slice(0, 6).map((v) => (
+					{challenges.published.slice(0, 6).map((v) => (
 						<ChallengeCard key={v.challenge.id}>
 							<div className="relative">
 								<ChallengeCardImage
