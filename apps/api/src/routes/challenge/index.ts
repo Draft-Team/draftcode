@@ -109,18 +109,17 @@ export const challengeRouter = new Hono()
 		for (const row of challenges) {
 			const challengeId = row.challenge.id
 
-			if (!challengesMap.has(challengeId)) {
-				challengesMap.set(challengeId, {
+			let current = challengesMap.get(challengeId)
+			if (!current) {
+				current = {
 					challenge: row.challenge,
 					tags: [],
 					categories: [],
 					resources: [],
 					coverImage: row.coverImage
-				})
+				}
+				challengesMap.set(challengeId, current)
 			}
-
-			// biome-ignore lint/style/noNonNullAssertion: biome é zap
-			const current = challengesMap.get(challengeId)!
 
 			if (row.tag && !current.tags.some((t) => t.id === row.tag?.id)) {
 				current.tags.push(row.tag)
