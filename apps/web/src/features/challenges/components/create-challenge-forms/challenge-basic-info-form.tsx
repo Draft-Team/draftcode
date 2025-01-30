@@ -17,6 +17,7 @@ import { Textarea } from "@draftcode/ui/components/textarea"
 
 import { categoriesQueryOptions, tagsQueryOptions } from "../../queries"
 import type { CreateChallengeData } from "../../schemas/create-challenge-schema"
+import { useCharacterLimit } from "@/shared/hooks/use-character-limit"
 
 export const ChallengeBasicInfoForm = () => {
 	const [tags, categories] = useSuspenseQueries({
@@ -36,16 +37,66 @@ export const ChallengeBasicInfoForm = () => {
 			<div className="space-y-3">
 				<fieldset className="space-y-1">
 					<Label htmlFor={register("title").name}>Título</Label>
-					<Input placeholder="DraftCode" {...register("title")} />
-					{errors.title && <span className="text-red-500">{errors.title.message}</span>}
+					<Controller
+						control={control}
+						name="title"
+						render={({ field }) => {
+							const limit = 50
+							const { inputProps, characterCount, isExceeded } = useCharacterLimit({
+								max: limit,
+								value: field.value,
+								onChange: field.onChange
+							})
+
+							return (
+								<>
+									<Input {...inputProps} placeholder="DraftCode" />
+									<div className="flex items-center justify-between">
+										{errors.title && (
+											<span className="text-red-500">{errors.title.message}</span>
+										)}
+										<span
+											className={`text-sm text-left ${isExceeded ? "text-red-500" : "text-muted-foreground"}`}
+										>
+											{characterCount}/{limit}
+										</span>
+									</div>
+								</>
+							)
+						}}
+					/>
 				</fieldset>
 
 				<fieldset className="space-y-1">
 					<Label htmlFor={register("description").name}>Descrição</Label>
-					<Textarea placeholder="Descrição para o desafio" {...register("description")} />
-					{errors.description && (
-						<span className="text-red-500">{errors.description.message}</span>
-					)}
+					<Controller
+						control={control}
+						name="description"
+						render={({ field }) => {
+							const limit = 500
+							const { inputProps, characterCount, isExceeded } = useCharacterLimit({
+								max: limit,
+								value: field.value,
+								onChange: field.onChange
+							})
+
+							return (
+								<>
+									<Textarea {...inputProps} placeholder="Descrição para o desafio" />
+									<div className="flex items-center justify-between">
+										{errors.description && (
+											<span className="text-red-500">{errors.description.message}</span>
+										)}
+										<span
+											className={`text-sm text-left ${isExceeded ? "text-red-500" : "text-muted-foreground"}`}
+										>
+											{characterCount}/{limit}
+										</span>
+									</div>
+								</>
+							)
+						}}
+					/>
 				</fieldset>
 
 				<fieldset className="space-y-1">

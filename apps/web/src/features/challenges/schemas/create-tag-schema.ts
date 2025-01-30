@@ -2,7 +2,9 @@ import { z } from "zod"
 
 export const CreateTagSchema = z.object({
 	name: z
-		.string()
+		.string({
+			required_error: "Nome é obrigatório"
+		})
 		.min(2, "Nome deve ter no mínimo 2 caracteres")
 		.max(10, "Nome deve ter no máximo 10 caracteres")
 })

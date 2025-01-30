@@ -67,8 +67,8 @@ importers:
         specifier: ^3.2.1
         version: 3.2.1
       drizzle-orm:
-        specifier: ^0.39.0
-        version: 0.39.0(@libsql/client@0.14.0)(@types/react@19.0.4)(react@19.0.0)
+        specifier: ^0.39.1
+        version: 0.39.1(@libsql/client@0.14.0)(@types/react@19.0.4)(react@19.0.0)
       hono:
         specifier: 'catalog:'
         version: 4.6.19
@@ -92,8 +92,8 @@ importers:
         specifier: ^4.4.5
         version: 4.4.5
       drizzle-kit:
-        specifier: ^0.30.3
-        version: 0.30.3
+        specifier: ^0.30.4
+        version: 0.30.4
       typescript:
         specifier: 'catalog:'
         version: 5.7.3
@@ -113,8 +113,8 @@ importers:
         specifier: ^5.65.1
         version: 5.65.1(react@19.0.0)
       '@tanstack/react-router':
-        specifier: ^1.98.0
-        version: 1.98.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^1.98.1
+        version: 1.98.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@tanstack/react-table':
         specifier: ^8.20.6
         version: 8.20.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -159,8 +159,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/types
       '@tanstack/router-plugin':
-        specifier: ^1.98.0
-        version: 1.98.0(@tanstack/react-router@1.98.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(vite@6.0.11(@types/node@22.12.0)(jiti@2.4.2)(terser@5.37.0)(tsx@4.19.2)(yaml@2.7.0))
+        specifier: ^1.98.2
+        version: 1.98.2(@tanstack/react-router@1.98.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(vite@6.0.11(@types/node@22.12.0)(jiti@2.4.2)(terser@5.37.0)(tsx@4.19.2)(yaml@2.7.0))
       '@types/node':
         specifier: ^22.12.0
         version: 22.12.0
@@ -1779,8 +1779,8 @@ packages:
       zod:
         optional: true
 
-  '@tanstack/history@1.98.0':
-    resolution: {integrity: sha512-zFGRdwz/+lLLSKPfKJ0AA8yVb7lXGrI2WwzhQqYXMKg6npUjlq06+XnrIIml99tQGZi+LFVZidtjBZTi2C/4+A==}
+  '@tanstack/history@1.98.1':
+    resolution: {integrity: sha512-fDu7eOUSUB0MK7YYdCVHQczwJr6p8Fyzso4FKt3xm9MGaRMs9RTmsmk0KQOygGxFOgD44ETavMah5/0JOqFDaw==}
     engines: {node: '>=12'}
 
   '@tanstack/query-core@5.65.0':
@@ -1791,8 +1791,8 @@ packages:
     peerDependencies:
       react: ^18 || ^19
 
-  '@tanstack/react-router@1.98.0':
-    resolution: {integrity: sha512-mnYadj+fOC8o0lIJBnvxYrVy6/5Vh+rLX1l8UuCfpIyRBxHxXarQwfgkczIdpljtQ43QU2mDtYyWdN1ADyko2A==}
+  '@tanstack/react-router@1.98.1':
+    resolution: {integrity: sha512-GtIACHqL4X8b4hwOteRziCKOcB1oFlkr19UHfTjXcAtDDI02xV8g9Gd/o8p37VVDDCecvDbYut1rP5f4MxeCAA==}
     engines: {node: '>=12'}
     peerDependencies:
       react: '>=18.0.0 || >=19.0.0'
@@ -1811,21 +1811,21 @@ packages:
       react: '>=16.8'
       react-dom: '>=16.8'
 
-  '@tanstack/router-core@1.98.0':
-    resolution: {integrity: sha512-ExfX1njbU5OksaB/LLPDnspTsxFXyfsblGEesUg5wxlV0s6doeh3gWj4PK06oNvSbW/S+ryu00HRv0F3y4wIsA==}
+  '@tanstack/router-core@1.98.1':
+    resolution: {integrity: sha512-s0ZBWTB5oIUP/Fb2z0OFK3wZTa831qZzG2ju0hSYhSxwX2d8ZDjXO4aClrGg1tK1O9+ZOb6n+PHdghpF1K9QTg==}
     engines: {node: '>=12'}
 
-  '@tanstack/router-generator@1.98.0':
-    resolution: {integrity: sha512-Bwejqnaj7TIDxSRw9MUT9GcTeBAXMoY839Oct8FuFodRg6a4YnjxcDDIWztmQJMOWrtERvVy+O6nqAakfP0DIQ==}
+  '@tanstack/router-generator@1.98.1':
+    resolution: {integrity: sha512-wyLHGdDEA2euGjQu1P6hVgjvN8AroYwXk91qUtWFkSt/6lIgNlVun1EqeypXvNZnUJzOLYxktG4mIyKyVQvWAg==}
     engines: {node: '>=12'}
     peerDependencies:
-      '@tanstack/react-router': ^1.98.0
+      '@tanstack/react-router': ^1.98.1
     peerDependenciesMeta:
       '@tanstack/react-router':
         optional: true
 
-  '@tanstack/router-plugin@1.98.0':
-    resolution: {integrity: sha512-NjTLWaajcgrQckW6K71bL2sMXNmqjkFq4Qr+mbSgehGZJzXXJIkvGrYKigNFCIGvVrOklUIPgcGS8yGH0cSB/w==}
+  '@tanstack/router-plugin@1.98.2':
+    resolution: {integrity: sha512-y0klwyZZj166AKK3wNAxvIPxJew/8R36Cbug4/T4hUX+w/efDDB5XvZZps1+aw46qT5xByOfO42apSwg8DVzsA==}
     engines: {node: '>=12'}
     peerDependencies:
       '@rsbuild/core': '>=1.0.2'
@@ -1846,8 +1846,8 @@ packages:
     resolution: {integrity: sha512-P9dF7XbibHph2PFRz8gfBKEXEY/HJPOhym8CHmjF8y3q5mWpKx9xtZapXQUWCgkqvsK0R46Azuz+VaxD4Xl+Tg==}
     engines: {node: '>=12'}
 
-  '@tanstack/virtual-file-routes@1.98.0':
-    resolution: {integrity: sha512-L9xZy8eu/zyvz3lWj/C/YpBTgzCoZ7XTKIjQ++uWEFRVPdmTVrp+/O/2/ZYnGa315UNEK2+sEtE3/F/2ZPYMWA==}
+  '@tanstack/virtual-file-routes@1.98.1':
+    resolution: {integrity: sha512-LBO5HEs6F9oeEgvqmu5ghJSyIQ242KwUJSlxq34AmMYDFOm5m9pVzRMbqbXFKva5CjDQcN8a7SNSy/hYovAwLg==}
     engines: {node: '>=12'}
 
   '@total-typescript/ts-reset@0.6.1':
@@ -2057,12 +2057,12 @@ packages:
   dlv@1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
 
-  drizzle-kit@0.30.3:
-    resolution: {integrity: sha512-kT8sgyC2hZrtOh5okhEBiwgx8jx+EjLUFoANFVVkBbxIjcb8XjaUorZ0rwCEUEd7THclI3ZARR64pmxloMW3Aw==}
+  drizzle-kit@0.30.4:
+    resolution: {integrity: sha512-B2oJN5UkvwwNHscPWXDG5KqAixu7AUzZ3qbe++KU9SsQ+cZWR4DXEPYcvWplyFAno0dhRJECNEhNxiDmFaPGyQ==}
     hasBin: true
 
-  drizzle-orm@0.39.0:
-    resolution: {integrity: sha512-kkZwo3Jvht0fdJD/EWGx0vYcEK0xnGrlNVaY07QYluRZA9N21B9VFbY+54bnb/1xvyzcg97tE65xprSAP/fFGQ==}
+  drizzle-orm@0.39.1:
+    resolution: {integrity: sha512-2bDHlzTY31IDmrYn8i+ZZrxK8IyBD4mPZ7JmZdVDQj2tpBZXs/gxB/1kK5pSvkjxPUMNOVsTnoGkSltgjuJwcA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -2159,8 +2159,8 @@ packages:
   effect@3.11.5:
     resolution: {integrity: sha512-oSzaR/S/2A/qDTnDqMWxQUNSjCG2sRLB4NEvTu+l9RqE122MTgKXOWzw0x4MHsdovRTzAihfkpgBj2aLFnH2+w==}
 
-  electron-to-chromium@1.5.88:
-    resolution: {integrity: sha512-K3C2qf1o+bGzbilTDCTBhTQcMS9KW60yTAaTeeXsfvQuTDDwlokLam/AdqlqcSy9u4UainDgsHV23ksXAOgamw==}
+  electron-to-chromium@1.5.89:
+    resolution: {integrity: sha512-okLMJSmbI+XHr8aG+wCK+VPH+d38sHMED6/q1CTsCNkqfdOZL3k2ThWnh44HL6bJKj9cabPCSVLDv9ynsIm8qg==}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -4125,7 +4125,7 @@ snapshots:
       typescript: 5.7.3
       zod: 3.24.1
 
-  '@tanstack/history@1.98.0': {}
+  '@tanstack/history@1.98.1': {}
 
   '@tanstack/query-core@5.65.0': {}
 
@@ -4134,11 +4134,11 @@ snapshots:
       '@tanstack/query-core': 5.65.0
       react: 19.0.0
 
-  '@tanstack/react-router@1.98.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@tanstack/react-router@1.98.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
-      '@tanstack/history': 1.98.0
+      '@tanstack/history': 1.98.1
       '@tanstack/react-store': 0.7.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@tanstack/router-core': 1.98.0
+      '@tanstack/router-core': 1.98.1
       jsesc: 3.1.0
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
@@ -4158,21 +4158,21 @@ snapshots:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  '@tanstack/router-core@1.98.0':
+  '@tanstack/router-core@1.98.1':
     dependencies:
-      '@tanstack/history': 1.98.0
+      '@tanstack/history': 1.98.1
       '@tanstack/store': 0.7.0
 
-  '@tanstack/router-generator@1.98.0(@tanstack/react-router@1.98.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
+  '@tanstack/router-generator@1.98.1(@tanstack/react-router@1.98.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
     dependencies:
-      '@tanstack/virtual-file-routes': 1.98.0
+      '@tanstack/virtual-file-routes': 1.98.1
       prettier: 3.4.2
       tsx: 4.19.2
       zod: 3.24.1
     optionalDependencies:
-      '@tanstack/react-router': 1.98.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@tanstack/react-router': 1.98.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
-  '@tanstack/router-plugin@1.98.0(@tanstack/react-router@1.98.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(vite@6.0.11(@types/node@22.12.0)(jiti@2.4.2)(terser@5.37.0)(tsx@4.19.2)(yaml@2.7.0))':
+  '@tanstack/router-plugin@1.98.2(@tanstack/react-router@1.98.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(vite@6.0.11(@types/node@22.12.0)(jiti@2.4.2)(terser@5.37.0)(tsx@4.19.2)(yaml@2.7.0))':
     dependencies:
       '@babel/core': 7.26.7
       '@babel/generator': 7.26.5
@@ -4182,8 +4182,8 @@ snapshots:
       '@babel/template': 7.25.9
       '@babel/traverse': 7.26.7
       '@babel/types': 7.26.7
-      '@tanstack/router-generator': 1.98.0(@tanstack/react-router@1.98.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
-      '@tanstack/virtual-file-routes': 1.98.0
+      '@tanstack/router-generator': 1.98.1(@tanstack/react-router@1.98.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@tanstack/virtual-file-routes': 1.98.1
       '@types/babel__core': 7.20.5
       '@types/babel__generator': 7.6.8
       '@types/babel__template': 7.4.4
@@ -4205,7 +4205,7 @@ snapshots:
 
   '@tanstack/table-core@8.20.5': {}
 
-  '@tanstack/virtual-file-routes@1.98.0': {}
+  '@tanstack/virtual-file-routes@1.98.1': {}
 
   '@total-typescript/ts-reset@0.6.1': {}
 
@@ -4333,7 +4333,7 @@ snapshots:
   browserslist@4.24.4:
     dependencies:
       caniuse-lite: 1.0.30001696
-      electron-to-chromium: 1.5.88
+      electron-to-chromium: 1.5.89
       node-releases: 2.0.19
       update-browserslist-db: 1.1.2(browserslist@4.24.4)
 
@@ -4414,7 +4414,7 @@ snapshots:
 
   dlv@1.1.3: {}
 
-  drizzle-kit@0.30.3:
+  drizzle-kit@0.30.4:
     dependencies:
       '@drizzle-team/brocli': 0.10.2
       '@esbuild-kit/esm-loader': 2.6.5
@@ -4423,7 +4423,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.39.0(@libsql/client@0.14.0)(@types/react@19.0.4)(react@19.0.0):
+  drizzle-orm@0.39.1(@libsql/client@0.14.0)(@types/react@19.0.4)(react@19.0.0):
     optionalDependencies:
       '@libsql/client': 0.14.0
       '@types/react': 19.0.4
@@ -4435,7 +4435,7 @@ snapshots:
     dependencies:
       fast-check: 3.23.2
 
-  electron-to-chromium@1.5.88: {}
+  electron-to-chromium@1.5.89: {}
 
   emoji-regex@8.0.0: {}
 

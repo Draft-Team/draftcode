@@ -4,7 +4,10 @@ const BlockSchemas = {
 	text: z.object({
 		type: z.literal("text"),
 		content: z.object({
-			text: z.string().min(1, "Texto deve ter no mínimo 1 caractere")
+			text: z
+				.string()
+				.min(1, "Texto deve ter no mínimo 1 caractere")
+				.max(100, "Texto deve ter no máximo 100 caracteres")
 		})
 	}),
 	figma: z.object({

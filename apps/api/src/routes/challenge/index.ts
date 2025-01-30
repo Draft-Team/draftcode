@@ -20,7 +20,7 @@ const BlockSchemas = {
 	text: z.object({
 		type: z.literal("text"),
 		content: z.object({
-			text: z.string().min(1)
+			text: z.string().min(1).max(100)
 		})
 	}),
 	figma: z.object({

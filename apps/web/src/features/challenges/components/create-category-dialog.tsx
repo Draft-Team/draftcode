@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 
 import { Button } from "@draftcode/ui/components/button"
 import {
@@ -18,11 +18,13 @@ import {
 	CreateCategorySchema,
 	type CreateCategoryData
 } from "../schemas/create-category-schema"
+import { useCharacterLimit } from "@/shared/hooks/use-character-limit"
 
 export const CreateCategoryDialog = () => {
 	const { mutate, isPending } = useCreateCategory()
 
 	const {
+		control,
 		register,
 		handleSubmit,
 		formState: { errors }
@@ -50,8 +52,34 @@ export const CreateCategoryDialog = () => {
 				<form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
 					<fieldset>
 						<Label htmlFor={register("name").name}>Nome</Label>
-						<Input placeholder="Frontend" {...register("name")} />
-						{errors.name && <span className="text-red-500">{errors.name.message}</span>}
+						<Controller
+							control={control}
+							name="name"
+							render={({ field }) => {
+								const limit = 20
+								const { inputProps, characterCount, isExceeded } = useCharacterLimit({
+									max: limit,
+									value: field.value,
+									onChange: field.onChange
+								})
+
+								return (
+									<>
+										<Input {...inputProps} placeholder="Frontend" />
+										<div className="flex items-center justify-between">
+											{errors.name && (
+												<span className="text-red-500">{errors.name.message}</span>
+											)}
+											<span
+												className={`text-sm text-left ${isExceeded ? "text-red-500" : "text-muted-foreground"}`}
+											>
+												{characterCount}/{limit}
+											</span>
+										</div>
+									</>
+								)
+							}}
+						/>
 					</fieldset>
 
 					<Button mode="loading" isLoading={isPending} className="w-full">

@@ -51,20 +51,18 @@ export const LoginCard = () => {
 
 			<hr />
 
-			<fieldset className="flex flex-col gap-4">
-				<Label className="space-y-2" htmlFor={register("email").name}>
-					<span>Email</span>
-					<Input {...register("email")} />
-					{errors.email && <span className="text-red-500">{errors.email.message}</span>}
-				</Label>
+			<fieldset>
+				<Label htmlFor={register("email").name}>Email</Label>
+				<Input {...register("email")} />
+				{errors.email && <span className="text-red-500">{errors.email.message}</span>}
+			</fieldset>
 
-				<Label className="space-y-2" htmlFor={register("password").name}>
-					<span>Senha</span>
-					<PasswordInput {...register("password")} />
-					{errors.password && (
-						<span className="text-red-500">{errors.password.message}</span>
-					)}
-				</Label>
+			<fieldset>
+				<Label htmlFor={register("password").name}>Senha</Label>
+				<PasswordInput {...register("password")} />
+				{errors.password && (
+					<span className="text-red-500">{errors.password.message}</span>
+				)}
 			</fieldset>
 
 			<Button type="submit" mode="loading" isLoading={isPending}>

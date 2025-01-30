@@ -14,7 +14,7 @@
 		"@hookform/resolvers": "^3.10.0",
 		"@t3-oss/env-core": "^0.12.0",
 		"@tanstack/react-query": "^5.65.1",
-		"@tanstack/react-router": "^1.98.0",
+		"@tanstack/react-router": "^1.98.1",
 		"@tanstack/react-table": "^8.20.6",
 		"hono": "catalog:",
 		"lucide-react": "^0.474.0",
@@ -31,7 +31,7 @@
 	"devDependencies": {
 		"@draftcode/tsconfig": "workspace:*",
 		"@draftcode/types": "workspace:*",
-		"@tanstack/router-plugin": "^1.98.0",
+		"@tanstack/router-plugin": "^1.98.2",
 		"@types/node": "^22.12.0",
 		"@types/react": "catalog:react19",
 		"@types/react-dom": "catalog:react19",
