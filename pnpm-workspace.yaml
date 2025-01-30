@@ -1,0 +1,16 @@
+packages:
+  - apps/*
+  - packages/*
+  - tooling/*
+
+catalog:
+  hono: 4.6.19
+  typescript: 5.7.3
+  tailwindcss: 3.4.17
+
+catalogs:
+  react19:
+    react: 19.0.0
+    react-dom: 19.0.0
+    "@types/react": 19.0.4
+    "@types/react-dom": 19.0.2

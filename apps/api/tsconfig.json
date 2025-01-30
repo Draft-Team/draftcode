@@ -1,0 +1,14 @@
+{
+	"extends": "@draftcode/tsconfig/internal-package.json",
+	"include": ["src"],
+	"exclude": ["node_modules"],
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"composite": true,
+		"noEmit": false,
+		"emitDeclarationOnly": true
+	}
+}

@@ -1,0 +1,45 @@
+{
+	"name": "tanstack-start-template",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"preview": "vite preview",
+		"clean": "rm -rf node_modules .vinxi .output"
+	},
+	"dependencies": {
+		"@draftcode/ui": "workspace:*",
+		"@hookform/resolvers": "^3.10.0",
+		"@t3-oss/env-core": "^0.12.0",
+		"@tanstack/react-query": "^5.65.1",
+		"@tanstack/react-router": "^1.98.3",
+		"@tanstack/react-table": "^8.20.6",
+		"hono": "catalog:",
+		"lucide-react": "^0.474.0",
+		"motion": "^12.0.6",
+		"nuqs": "^2.3.1",
+		"react": "catalog:react19",
+		"react-dom": "catalog:react19",
+		"react-dropzone": "^14.3.5",
+		"react-hook-form": "^7.54.2",
+		"sonner": "^1.7.3",
+		"uploadthing": "^7.4.4",
+		"zod": "^3.24.1"
+	},
+	"devDependencies": {
+		"@draftcode/tsconfig": "workspace:*",
+		"@draftcode/types": "workspace:*",
+		"@tanstack/router-plugin": "^1.98.3",
+		"@types/node": "^22.12.0",
+		"@types/react": "catalog:react19",
+		"@types/react-dom": "catalog:react19",
+		"@vitejs/plugin-react": "^4.3.4",
+		"postcss": "^8.5.1",
+		"tailwindcss": "catalog:",
+		"typescript": "catalog:",
+		"vite": "^6.0.11",
+		"vite-tsconfig-paths": "^5.1.4"
+	}
+}
