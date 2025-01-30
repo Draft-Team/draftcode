@@ -6,7 +6,7 @@ const BlockSchemas = {
 		content: z.object({
 			text: z
 				.string()
-				.min(1, "Texto deve ter no mínimo 1 caractere")
+				.min(10, "Texto deve ter no mínimo 10 caracteres")
 				.max(100, "Texto deve ter no máximo 100 caracteres")
 		})
 	}),
