@@ -1,17 +1,29 @@
 import { api } from "@/libs/api"
 import { queryOptions } from "@tanstack/react-query"
 
-const userQueryKeys = {
+export const userQueryKeys = {
 	currentUser: ["currentUser"] as const,
 	currentSession: ["currentSession"] as const
 }
 
-const challengeQueryKeys = {
+const challengesQueryKeys = {
 	challenges: ["challenges"] as const
 }
 
-export const challengeQueryOptions = queryOptions({
-	queryKey: challengeQueryKeys.challenges,
+export const userProfileQueryKeys = {
+	userProfile: ["userProfile"] as const
+}
+
+export const currentUserProfileQueryOptions = queryOptions({
+	queryKey: userProfileQueryKeys.userProfile,
+	queryFn: async () => {
+		const profile = await api.profile.$get().then((res) => res.json())
+		return profile.data
+	}
+})
+
+export const challengesQueryOptions = queryOptions({
+	queryKey: challengesQueryKeys.challenges,
 	queryFn: async () => {
 		const challenges = await api.challenge.$get().then((res) => res.json())
 		return challenges.data

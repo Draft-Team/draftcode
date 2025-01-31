@@ -1,7 +1,7 @@
 import { BarChart, Star, Trophy } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
-import { useProfile } from "@/features/profile/hooks/use-profile"
+import { useProfile } from "@/shared/hooks/use-profile"
 import { LevelSystem } from "@/libs/level-system"
 import {
 	Tooltip,

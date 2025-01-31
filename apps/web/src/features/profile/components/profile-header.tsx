@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router"
 
 import { Edit2, Globe } from "lucide-react"
 
-import { useProfile } from "@/features/profile/hooks/use-profile"
+import { useProfile } from "@/shared/hooks/use-profile"
 import { cn } from "@draftcode/ui/libs/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@draftcode/ui/components/avatar"
 import { buttonVariants } from "@draftcode/ui/components/button"

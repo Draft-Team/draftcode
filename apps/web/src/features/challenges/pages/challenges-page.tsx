@@ -18,14 +18,14 @@ import { PointsBadge } from "@/shared/components/points-badge"
 
 import { ChallengesFilters } from "../components/challenges-filters"
 import { useChallengesFilters } from "../hooks/use-challenges-filters"
-import { challengeQueryOptions } from "@/shared/queries"
+import { challengesQueryOptions } from "@/shared/queries"
 
 export const ChallengesPage = () => {
-	const { data: challenges } = useSuspenseQuery(challengeQueryOptions)
+	const { data: challenges } = useSuspenseQuery(challengesQueryOptions)
 	const [{ score, search, difficulty }] = useChallengesFilters()
 
 	const filteredChallenges = React.useMemo(() => {
-		const filteredChallenges = challenges.published.filter((v) => {
+		const filteredChallenges = challenges.filter((v) => {
 			if (difficulty !== "all" && v.challenge.difficulty !== difficulty) {
 				return false
 			}

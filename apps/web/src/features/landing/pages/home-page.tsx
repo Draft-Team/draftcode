@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { ArrowRight, Bookmark, Eye, StarsIcon } from "lucide-react"
 
-import { challengeQueryOptions } from "@/shared/queries"
+import { challengesQueryOptions } from "@/shared/queries"
 import { Button } from "@draftcode/ui/components/button"
 import {
 	ChallengeCard,
@@ -24,7 +24,7 @@ import { benefitsData } from "../constants/benefits-data"
 import { featureData } from "../constants/feature-data"
 
 export const HomePage = () => {
-	const { data: challenges } = useSuspenseQuery(challengeQueryOptions)
+	const { data: challenges } = useSuspenseQuery(challengesQueryOptions)
 
 	return (
 		<main>
@@ -87,7 +87,7 @@ export const HomePage = () => {
 			<section className="container mt-11">
 				<h1 className="mb-4 text-2xl font-bold">Desafios</h1>
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-					{challenges.published.slice(0, 6).map((v) => (
+					{challenges.slice(0, 6).map((v) => (
 						<ChallengeCard key={v.challenge.id}>
 							<div className="relative">
 								<ChallengeCardImage

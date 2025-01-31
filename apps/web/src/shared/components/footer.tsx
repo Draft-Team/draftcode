@@ -3,6 +3,10 @@ import { ChevronsUp } from "lucide-react"
 import { BrandName } from "./brand-name"
 
 export const Footer = () => {
+	const scrollToTop = () => {
+		window.scrollTo({ top: 0, behavior: "smooth" })
+	}
+
 	return (
 		<footer className="mx-auto mt-40 w-full space-y-10 border-t bg-card">
 			<section className="container grid pt-4 sm:grid-cols-2">
@@ -32,9 +36,13 @@ export const Footer = () => {
 				<p className="order-2 self-center justify-self-center text-center text-sm sm:order-1 sm:justify-self-start">
 					© 2024 DraftCode Team. Todos os direitos reservados.
 				</p>
-				<p className="order-1 self-center justify-self-center text-center text-sm sm:order-2 sm:justify-self-end">
+				<button
+					type="button"
+					onClick={scrollToTop}
+					className="order-1 self-center justify-self-center text-center text-sm sm:order-2 sm:justify-self-end"
+				>
 					Voltar para topo <ChevronsUp className="inline text-primary" />
-				</p>
+				</button>
 			</section>
 		</footer>
 	)
