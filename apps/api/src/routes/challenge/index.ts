@@ -63,6 +63,7 @@ export const challengeRouter = new Hono()
 				coverImage: imagesTable.url
 			})
 			.from(challengesTable)
+			.where(eq(challengesTable.status, "published"))
 			.leftJoin(
 				challengeTagsTable,
 				eq(challengesTable.id, challengeTagsTable.challengeId)
@@ -140,24 +141,9 @@ export const challengeRouter = new Hono()
 
 		const challengesFormatted = Array.from(challengesMap.values())
 
-		const groupedChallenges = challengesFormatted.reduce(
-			(acc, value) => {
-				const status = value.challenge.status
-				if (status === "draft") acc.draft.push(value)
-				if (status === "published") acc.published.push(value)
-				if (status === "archived") acc.archived.push(value)
-				return acc
-			},
-			{
-				draft: [] as typeof challengesFormatted,
-				published: [] as typeof challengesFormatted,
-				archived: [] as typeof challengesFormatted
-			}
-		)
-
-		return c.json<SuccessResponse<typeof groupedChallenges>>({
+		return c.json<SuccessResponse<typeof challengesFormatted>>({
 			success: true,
-			data: groupedChallenges
+			data: challengesFormatted
 		})
 	})
 	.post(

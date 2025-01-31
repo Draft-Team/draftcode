@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Globe } from "lucide-react"
 import { useForm } from "react-hook-form"
 
-import { useProfile } from "@/features/profile/hooks/use-profile"
+import { useProfile } from "@/shared/hooks/use-profile"
 import type { DBTypes } from "@draftcode/types"
 import { Button } from "@draftcode/ui/components/button"
 import { Input } from "@draftcode/ui/components/input"

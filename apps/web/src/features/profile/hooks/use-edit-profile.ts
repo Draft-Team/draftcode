@@ -6,9 +6,17 @@ import { validateImageDimensions } from "@/libs/validate-image"
 import type { ProfileData } from "../schemas/profile-schema"
 import { uploadFiles } from "@/libs/upload"
 import { api } from "@/libs/api"
+import { userProfileQueryKeys, userQueryKeys } from "@/shared/queries"
 
 export const useEditProfile = () => {
 	return useMutation({
+		meta: {
+			invalidates: [
+				userQueryKeys.currentUser,
+				userQueryKeys.currentSession,
+				userProfileQueryKeys.userProfile
+			]
+		},
 		mutationFn: async (props: ProfileData) => {
 			const { profileAvatar, profileCover, ...rest } = props
 

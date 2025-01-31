@@ -3,7 +3,7 @@ import { Link, type ActiveLinkOptions, type LinkOptions } from "@tanstack/react-
 import { Avatar, AvatarFallback, AvatarImage } from "@draftcode/ui/components/avatar"
 import { ChevronDown, Menu } from "lucide-react"
 
-import { useProfile } from "@/features/profile/hooks/use-profile"
+import { useProfile } from "@/shared/hooks/use-profile"
 import { cn } from "@draftcode/ui/libs/utils"
 
 import { useLogout } from "../hooks/use-logout"

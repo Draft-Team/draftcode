@@ -7,7 +7,7 @@ import {
 	Sparkles
 } from "lucide-react"
 
-import { useProfile } from "@/features/profile/hooks/use-profile"
+import { useProfile } from "@/shared/hooks/use-profile"
 
 import { useLogout } from "../../hooks/use-logout"
 import { useUser } from "../../hooks/use-user"
