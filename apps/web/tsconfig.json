@@ -7,6 +7,11 @@
 			"@/*": ["./src/*"]
 		}
 	},
+	"references": [
+		{
+			"path": "../api/tsconfig.json"
+		}
+	],
 	"exclude": ["node_modules"],
 	"include": ["vite.config.ts", "**/*.ts", "**/*.tsx"]
 }
