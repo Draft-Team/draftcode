@@ -2,7 +2,8 @@ import {
 	challengesQueryOptions,
 	currentSessionQueryOptions,
 	currentUserProfileQueryOptions,
-	currentUserQueryOptions
+	currentUserQueryOptions,
+	userBookmarksQueryOptions
 } from "@/shared/queries"
 import type { QueryClient } from "@tanstack/react-query"
 import { Toaster } from "@draftcode/ui/components/sonner"
@@ -19,12 +20,14 @@ export const Route = createRootRouteWithContext<{
 		const $session = context.queryClient.ensureQueryData(currentSessionQueryOptions)
 		const $profile = context.queryClient.ensureQueryData(currentUserProfileQueryOptions)
 		const $challenges = context.queryClient.ensureQueryData(challengesQueryOptions)
+		const $bookmarks = context.queryClient.ensureQueryData(userBookmarksQueryOptions)
 
 		const [user, session, profile] = await Promise.all([
 			$user,
 			$session,
 			$profile,
-			$challenges
+			$challenges,
+			$bookmarks
 		])
 
 		const isAuthenticated = !!user && !!session

@@ -206,6 +206,25 @@ export const challengesTable = sqliteTable(
 	}
 )
 
+export const userChallengeBookmarksTable = sqliteTable(
+	"user_bookmarks",
+	{
+		userId: text("user_id")
+			.notNull()
+			.references(() => usersTable.id, { onDelete: "cascade" }),
+		challengeId: text("challenge_id")
+			.notNull()
+			.references(() => challengesTable.id, { onDelete: "cascade" })
+	},
+	(table) => {
+		return [
+			primaryKey({ columns: [table.userId, table.challengeId] }),
+			index("user_bookmarks_user_id_idx").on(table.userId),
+			index("user_bookmarks_challenge_id_idx").on(table.challengeId)
+		]
+	}
+)
+
 export const challengeResourcesTable = sqliteTable(
 	"challenge_resources",
 	{

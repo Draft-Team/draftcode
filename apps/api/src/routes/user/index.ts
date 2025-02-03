@@ -8,7 +8,8 @@ import {
 import { Hono } from "hono"
 import { authedMiddleware } from "@/middlewares/authed-middleware"
 import { db } from "@/db/client"
-import { activityLogsTable } from "@/db/schema"
+import { activityLogsTable, userChallengeBookmarksTable } from "@/db/schema"
+import { eq } from "drizzle-orm"
 
 export const userRouter = new Hono()
 	.get("/", async (c) => {
@@ -40,4 +41,25 @@ export const userRouter = new Hono()
 		})
 
 		return c.json<SuccessResponse>({ success: true })
+	})
+	.get("/bookmarks", async (c) => {
+		const user = await getCurrentUser()
+
+		if (!user?.id) {
+			return c.json<SuccessResponse<string[]>>({
+				success: true,
+				data: []
+			})
+		}
+
+		const bookmarks = await db
+			.select()
+			.from(userChallengeBookmarksTable)
+			.where(eq(userChallengeBookmarksTable.userId, user.id))
+			.all()
+
+		return c.json<SuccessResponse<string[]>>({
+			success: true,
+			data: bookmarks.map((bookmark) => bookmark.challengeId)
+		})
 	})

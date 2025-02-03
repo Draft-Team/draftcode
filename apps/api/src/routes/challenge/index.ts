@@ -8,9 +8,11 @@ import {
 	challengeTagsTable,
 	imagesEntityTable,
 	imagesTable,
-	tagsTable
+	tagsTable,
+	userChallengeBookmarksTable
 } from "@/db/schema"
 import { adminMiddleware } from "@/middlewares/admin-middleware"
+import { authedMiddleware } from "@/middlewares/authed-middleware"
 import type { ErrorResponse, SuccessResponse } from "@/types/response"
 import { and, eq } from "drizzle-orm"
 import { Hono } from "hono"
@@ -228,3 +230,48 @@ export const challengeRouter = new Hono()
 			})
 		}
 	)
+	.post("/bookmark/:challengeId", authedMiddleware, async (c) => {
+		const user = c.get("user")
+		const challengeId = c.req.param("challengeId")
+
+		await db.insert(userChallengeBookmarksTable).values({
+			challengeId,
+			userId: user.id
+		})
+
+		return c.json<SuccessResponse>({ success: true })
+	})
+	.delete("/bookmark/:challengeId", authedMiddleware, async (c) => {
+		const user = c.get("user")
+		const challengeId = c.req.param("challengeId")
+
+		const existingBookmark = await db
+			.select()
+			.from(userChallengeBookmarksTable)
+			.where(
+				and(
+					eq(userChallengeBookmarksTable.userId, user.id),
+					eq(userChallengeBookmarksTable.challengeId, challengeId)
+				)
+			)
+			.get()
+
+		if (!existingBookmark) {
+			return c.json<ErrorResponse>(
+				{ success: false, error: "Bookmark não encontrado" },
+				404
+			)
+		}
+
+		await db
+			.delete(userChallengeBookmarksTable)
+			.where(
+				and(
+					eq(userChallengeBookmarksTable.userId, user.id),
+					eq(userChallengeBookmarksTable.challengeId, challengeId)
+				)
+			)
+			.execute()
+
+		return c.json<SuccessResponse>({ success: true })
+	})
