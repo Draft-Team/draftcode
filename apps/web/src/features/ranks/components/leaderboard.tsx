@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@draftcode/ui/componen
 
 interface LeaderboardEntry {
 	name: string
+	email: string
 	totalExperience: number | null
 	imageUrl: string | null
 }
@@ -27,7 +28,7 @@ export const Leaderboard = ({ entries, title }: LeaderboardProps) => {
 			<CardContent className="space-y-3">
 				{entries.slice(0, 3).map((entry, index) => (
 					<div
-						key={Math.random()}
+						key={entry.email}
 						className="flex items-center gap-4 p-3 transition-colors hover:bg-zinc-900"
 					>
 						<div className="flex h-8 w-8 items-center justify-center bg-primary font-bold">
