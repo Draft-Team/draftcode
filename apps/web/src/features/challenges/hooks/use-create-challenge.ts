@@ -2,7 +2,6 @@ import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 import { api } from "@/libs/api"
-import { uploadFiles } from "@/libs/upload"
 
 type Block =
 	| {
@@ -51,9 +50,11 @@ export const useCreateChallenge = () => {
 				})
 				.then((res) => res.json())
 
-			await uploadFiles("challengeCover", {
-				files: [challengeCover[0]],
-				input: { challengeId: challenge.data.challengeId }
+			await api.upload.challenge.cover.$post({
+				form: {
+					file: challengeCover[0],
+					challengeId: challenge.data.challengeId
+				}
 			})
 		},
 		onSuccess: () => {

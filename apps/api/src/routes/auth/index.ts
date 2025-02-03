@@ -9,7 +9,7 @@ import { validator } from "hono/validator"
 import { setSession } from "../../auth/sessions"
 import { db } from "../../db/client"
 import { eq } from "drizzle-orm"
-import { profilesTable, usersTable } from "../../db/schema"
+import { activityLogsTable, profilesTable, usersTable } from "../../db/schema"
 import { Hono } from "hono"
 import type { ErrorResponse, SuccessResponse } from "@/types/response"
 
@@ -20,7 +20,7 @@ const LoginSchema = z.object({
 
 const RegisterSchema = z.object({
 	email: z.string().email(),
-	name: z.string().min(2).max(50),
+	name: z.string().min(3).max(50),
 	password: z.string().min(6).max(100)
 })
 
@@ -79,6 +79,12 @@ export const authRouter = new Hono()
 			}
 
 			await setSession({ userId: existingUser.id })
+			await db.insert(activityLogsTable).values({
+				type: "LOGIN",
+				entityType: "user",
+				userId: existingUser.id,
+				entityId: existingUser.id
+			})
 
 			return c.json<SuccessResponse>({ success: true })
 		}
@@ -141,6 +147,13 @@ export const authRouter = new Hono()
 				await tx.insert(profilesTable).values({
 					userId: user.id,
 					totalExperience: 0
+				})
+
+				await db.insert(activityLogsTable).values({
+					userId: user.id,
+					type: "REGISTER",
+					entityId: user.id,
+					entityType: "user"
 				})
 
 				return user

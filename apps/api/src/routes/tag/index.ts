@@ -1,5 +1,5 @@
 import { db } from "@/db/client"
-import { tagsTable } from "@/db/schema"
+import { activityLogsTable, tagsTable } from "@/db/schema"
 import { adminMiddleware } from "@/middlewares/admin-middleware"
 import type { ErrorResponse, SuccessResponse } from "@/types/response"
 import { Hono } from "hono"
@@ -26,19 +26,33 @@ export const tagRouter = new Hono()
 			return parsed.data
 		}),
 		async (c) => {
+			const user = c.get("user")
 			const data = c.req.valid("json")
 
-			await db
-				.insert(tagsTable)
-				.values({
-					name: data.name
-				})
-				.onConflictDoUpdate({
-					target: [tagsTable.name],
-					set: {
+			await db.transaction(async (tx) => {
+				const newTag = await tx
+					.insert(tagsTable)
+					.values({
 						name: data.name
-					}
+					})
+					.onConflictDoUpdate({
+						target: [tagsTable.name],
+						set: {
+							name: data.name
+						}
+					})
+					.returning()
+					.get()
+
+				const isNew = newTag.createdAt.getTime() === newTag.updatedAt.getTime()
+
+				await tx.insert(activityLogsTable).values({
+					userId: user.id,
+					entityType: "tag",
+					entityId: newTag.id,
+					type: isNew ? "CREATE_TAG" : "UPDATE_TAG"
 				})
+			})
 
 			return c.json<SuccessResponse>({ success: true })
 		}

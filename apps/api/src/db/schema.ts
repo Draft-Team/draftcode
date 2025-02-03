@@ -12,26 +12,19 @@ import { randomUUID } from "node:crypto"
 export const generateId = () => randomUUID()
 
 export const LOGS_ACTIVITY_TYPE = {
-	SIGN_UP: "SIGN_UP",
-	SIGN_IN: "SIGN_IN",
-	SIGN_OUT: "SIGN_OUT",
+	LOGIN: "LOGIN",
+	LOGOUT: "LOGOUT",
+	REGISTER: "REGISTER",
 
 	UPDATE_ACCOUNT: "UPDATE_ACCOUNT",
 
-	UPDATE_PROFILE: "UPDATE_PROFILE",
-
 	CREATE_CHALLENGE: "CREATE_CHALLENGE",
-	UPDATE_CHALLENGE: "UPDATE_CHALLENGE",
-	DELETE_CHALLENGE: "DELETE_CHALLENGE",
-	CHALLENGE_COMPLETED: "CHALLENGE_COMPLETED",
 
 	CREATE_CATEGORY: "CREATE_CATEGORY",
 	UPDATE_CATEGORY: "UPDATE_CATEGORY",
-	DELETE_CATEGORY: "DELETE_CATEGORY",
 
 	CREATE_TAG: "CREATE_TAG",
-	UPDATE_TAG: "UPDATE_TAG",
-	DELETE_TAG: "DELETE_TAG"
+	UPDATE_TAG: "UPDATE_TAG"
 } as const
 
 type Block =
@@ -55,7 +48,7 @@ type ChallengeResourceType = "documentation" | "tutorial"
 type ChallengeStatus = "draft" | "published" | "archived"
 type ChallengeDifficulty = "easy" | "medium" | "hard" | "expert"
 type ImageType = "profile-avatar" | "profile-cover" | "challenge-cover"
-type LogEntityType = "profile" | "challenge" | "category" | "tag" | "users"
+type LogEntityType = "profile" | "challenge" | "category" | "tag" | "user"
 type ProfileLinkType = "github" | "linkedin" | "twitch" | "youtube" | "website"
 type ActivityType = (typeof LOGS_ACTIVITY_TYPE)[keyof typeof LOGS_ACTIVITY_TYPE]
 

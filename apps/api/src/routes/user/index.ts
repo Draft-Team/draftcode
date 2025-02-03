@@ -7,6 +7,8 @@ import {
 } from "../../auth/sessions"
 import { Hono } from "hono"
 import { authedMiddleware } from "@/middlewares/authed-middleware"
+import { db } from "@/db/client"
+import { activityLogsTable } from "@/db/schema"
 
 export const userRouter = new Hono()
 	.get("/", async (c) => {
@@ -26,10 +28,16 @@ export const userRouter = new Hono()
 		})
 	})
 	.post("/logout", authedMiddleware, async (c) => {
-		const session = c.var.session
+		const session = c.get("session")
 
 		await invalidateSession({ sessionId: session.id })
 		deleteSessionTokenCookie()
+		await db.insert(activityLogsTable).values({
+			type: "LOGOUT",
+			entityType: "user",
+			userId: session.userId,
+			entityId: session.userId
+		})
 
 		return c.json<SuccessResponse>({ success: true })
 	})
