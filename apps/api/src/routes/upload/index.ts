@@ -15,6 +15,10 @@ import { getCurrentUserProfile } from "@/auth/sessions"
 type ImageType = DBTypes["imagesTable"]["type"]
 type EntityType = DBTypes["imagesEntityTable"]["entityType"]
 
+type ValidateImageResult =
+	| { success: true; error: null }
+	| { success: false; error: string }
+
 interface ImageUploadMetadata {
 	entityId: string
 	currentImage?: {
@@ -47,19 +51,46 @@ const ChallengeImageSchema = BaseImageSchema.extend({
 	challengeId: z.string()
 })
 
-const validateImageSize = async (file: File, type: keyof typeof IMAGE_SIZES) => {
+const validateImageSize = async (
+	file: File,
+	type: keyof typeof IMAGE_SIZES
+): Promise<ValidateImageResult> => {
 	const metadata = await sharp(Buffer.from(await file.arrayBuffer())).metadata()
 
 	if (!metadata?.width || !metadata?.height) {
-		throw new Error("Erro ao processar a imagem")
+		return { error: "Não foi possível obter as dimensões da imagem", success: false }
 	}
 
 	const expectedSize = IMAGE_SIZES[type]
 	if (metadata.width < expectedSize.width || metadata.height < expectedSize.height) {
-		throw new Error(
-			`Imagem deve ter no mínimo ${expectedSize.width}x${expectedSize.height}`
-		)
+		switch (type) {
+			case "profile-cover":
+				return {
+					success: false,
+					error: `A imagem de capa deve ter no mínimo ${expectedSize.width}x${expectedSize.height}px`
+				}
+
+			case "profile-avatar":
+				return {
+					success: false,
+					error: `A imagem de avatar deve ter no mínimo ${expectedSize.width}x${expectedSize.height}px`
+				}
+
+			case "challenge-cover":
+				return {
+					success: false,
+					error: `A imagem de capa do desafio deve ter no mínimo ${expectedSize.width}x${expectedSize.height}px`
+				}
+
+			default:
+				return {
+					success: false,
+					error: `A imagem deve ter no mínimo ${expectedSize.width}x${expectedSize.height}px`
+				}
+		}
 	}
+
+	return { success: true, error: null }
 }
 
 const uploadToCloudinary = async (file: File) => {
@@ -165,7 +196,11 @@ export const uploadRouter = new Hono()
 		async (c) => {
 			const { file } = c.req.valid("form")
 
-			await validateImageSize(file, "profile-avatar")
+			const isValid = await validateImageSize(file, "profile-avatar")
+
+			if (!isValid.success) {
+				return c.json<ErrorResponse>({ error: isValid.error, success: false }, 400)
+			}
 
 			const { public_id, secure_url } = await uploadToCloudinary(file)
 			const metadata = await getProfileImageMetadata("profile-avatar")
@@ -192,7 +227,11 @@ export const uploadRouter = new Hono()
 		async (c) => {
 			const { file } = c.req.valid("form")
 
-			await validateImageSize(file, "profile-cover")
+			const isValid = await validateImageSize(file, "profile-cover")
+
+			if (!isValid.success) {
+				return c.json<ErrorResponse>({ error: isValid.error, success: false }, 400)
+			}
 
 			const { public_id, secure_url } = await uploadToCloudinary(file)
 			const metadata = await getProfileImageMetadata("profile-cover")
@@ -219,7 +258,11 @@ export const uploadRouter = new Hono()
 		async (c) => {
 			const { file, challengeId } = c.req.valid("form")
 
-			await validateImageSize(file, "challenge-cover")
+			const isValid = await validateImageSize(file, "challenge-cover")
+
+			if (!isValid.success) {
+				return c.json<ErrorResponse>({ error: isValid.error, success: false }, 400)
+			}
 
 			const { public_id, secure_url } = await uploadToCloudinary(file)
 			const metadata = await getChallengeImageMetadata(challengeId)
