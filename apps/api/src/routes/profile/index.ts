@@ -1,7 +1,12 @@
 import { getCurrentUserProfile } from "@/auth/sessions"
 import { db } from "@/db/client"
 import type { DBTypes } from "@/db/db-types"
-import { profileLinksTable, profilesTable, usersTable } from "@/db/schema"
+import {
+	activityLogsTable,
+	profileLinksTable,
+	profilesTable,
+	usersTable
+} from "@/db/schema"
 import { authedMiddleware } from "@/middlewares/authed-middleware"
 import type { ErrorResponse, SuccessResponse } from "@/types/response"
 import { and, eq, inArray, sql } from "drizzle-orm"
@@ -71,9 +76,8 @@ export const profileRouter = new Hono()
 			return parsed.data
 		}),
 		async (c) => {
+			const user = c.get("user")
 			const data = c.req.valid("json")
-
-			const user = c.var.user
 
 			await db.transaction(async (tx) => {
 				await tx
@@ -128,6 +132,13 @@ export const profileRouter = new Hono()
 							set: { url: sql`excluded.url` }
 						})
 				}
+
+				await tx.insert(activityLogsTable).values({
+					userId: user.id,
+					entityId: profile.id,
+					entityType: "profile",
+					type: "UPDATE_ACCOUNT"
+				})
 			})
 
 			return c.json<SuccessResponse>({ success: true })

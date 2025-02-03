@@ -6,7 +6,7 @@ export const RegisterSchema = z.object({
 		.string({
 			required_error: "Nome é obrigatório"
 		})
-		.min(2, "Nome deve ter no mínimo 2 caracteres")
+		.min(3, "Nome deve ter no mínimo 3 caracteres")
 		.max(50, "Nome deve ter no máximo 50 caracteres"),
 	password: z
 		.string()

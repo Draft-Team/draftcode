@@ -1,5 +1,6 @@
 import { db } from "@/db/client"
 import {
+	activityLogsTable,
 	categoriesTable,
 	challengeCategoriesTable,
 	challengeResourcesTable,
@@ -157,6 +158,7 @@ export const challengeRouter = new Hono()
 			return parsed.data
 		}),
 		async (c) => {
+			const user = c.get("user")
 			const data = c.req.valid("json")
 
 			const newChallenge = await db.transaction(async (tx) => {
@@ -205,6 +207,13 @@ export const challengeRouter = new Hono()
 							.execute()
 					}
 				}
+
+				await tx.insert(activityLogsTable).values({
+					userId: user.id,
+					entityType: "challenge",
+					type: "CREATE_CHALLENGE",
+					entityId: newChallenge.id
+				})
 
 				return {
 					challengeId: newChallenge.id

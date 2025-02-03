@@ -1,5 +1,5 @@
 import { db } from "@/db/client"
-import { categoriesTable } from "@/db/schema"
+import { activityLogsTable, categoriesTable } from "@/db/schema"
 import { adminMiddleware } from "@/middlewares/admin-middleware"
 import type { ErrorResponse, SuccessResponse } from "@/types/response"
 import { Hono } from "hono"
@@ -26,19 +26,33 @@ export const categoryRouter = new Hono()
 			return parsed.data
 		}),
 		async (c) => {
+			const user = c.get("user")
 			const data = c.req.valid("json")
 
-			await db
-				.insert(categoriesTable)
-				.values({
-					name: data.name
-				})
-				.onConflictDoUpdate({
-					target: [categoriesTable.name],
-					set: {
+			await db.transaction(async (tx) => {
+				const newCategory = await tx
+					.insert(categoriesTable)
+					.values({
 						name: data.name
-					}
+					})
+					.onConflictDoUpdate({
+						target: [categoriesTable.name],
+						set: {
+							name: data.name
+						}
+					})
+					.returning()
+					.get()
+
+				const isNew = newCategory.createdAt.getTime() === newCategory.updatedAt.getTime()
+
+				await tx.insert(activityLogsTable).values({
+					userId: user.id,
+					entityType: "category",
+					entityId: newCategory.id,
+					type: isNew ? "CREATE_CATEGORY" : "UPDATE_CATEGORY"
 				})
+			})
 
 			return c.json<SuccessResponse>({ success: true })
 		}

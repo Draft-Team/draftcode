@@ -1,7 +1,7 @@
 import { github } from "@/auth/oauth"
 import { setSession } from "@/auth/sessions"
 import { db } from "@/db/client"
-import { oauthAccountsTable, usersTable } from "@/db/schema"
+import { activityLogsTable, oauthAccountsTable, usersTable } from "@/db/schema"
 import { env } from "@/environment/env"
 import type { ErrorResponse } from "@/types/response"
 import { createOAuthUser } from "@/utils/create-oauth-user"
@@ -98,6 +98,12 @@ export const githubOauthRouter = new Hono()
 
 			if (existingGithubUser) {
 				await setSession({ userId: existingGithubUser.id })
+				await db.insert(activityLogsTable).values({
+					type: "LOGIN",
+					entityType: "user",
+					userId: existingGithubUser.id,
+					entityId: existingGithubUser.id
+				})
 				return c.redirect(env.FRONTEND_URL, 302)
 			}
 
@@ -110,6 +116,12 @@ export const githubOauthRouter = new Hono()
 			})
 
 			await setSession({ userId: newUser.id })
+			await db.insert(activityLogsTable).values({
+				type: "REGISTER",
+				entityType: "user",
+				userId: newUser.id,
+				entityId: newUser.id
+			})
 
 			return c.redirect(env.FRONTEND_URL, 302)
 		} catch (error) {
