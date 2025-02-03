@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router"
 
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { ArrowRight, Bookmark, Eye, StarsIcon } from "lucide-react"
+import { ArrowRight, Eye, StarsIcon } from "lucide-react"
 
 import { challengesQueryOptions } from "@/shared/queries"
 import { Button } from "@draftcode/ui/components/button"
@@ -22,6 +22,7 @@ import { BenefitsCard } from "../components/benefits-card"
 import { FeatureCard } from "../components/feature-card"
 import { benefitsData } from "../constants/benefits-data"
 import { featureData } from "../constants/feature-data"
+import { BookmarkChallengeButton } from "../components/bookmark-challenge-button"
 
 export const HomePage = () => {
 	const { data: challenges } = useSuspenseQuery(challengesQueryOptions)
@@ -116,7 +117,7 @@ export const HomePage = () => {
 								</div>
 							</ChallengeCardContent>
 							<ChallengeCardFooter className="flex items-center justify-between">
-								<Bookmark />
+								<BookmarkChallengeButton challengeId={v.challenge.id} />
 								<div className="flex gap-1">
 									<Eye /> <span className="font-light">1000</span>
 								</div>

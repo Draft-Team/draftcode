@@ -1,8 +1,9 @@
 import React from "react"
 
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { Bookmark, Eye } from "lucide-react"
+import { Eye } from "lucide-react"
 
+import { BookmarkChallengeButton } from "../components/bookmark-challenge-button"
 import {
 	ChallengeCard,
 	ChallengeCardContent,
@@ -98,7 +99,7 @@ export const ChallengesPage = () => {
 							</div>
 						</ChallengeCardContent>
 						<ChallengeCardFooter className="flex items-center justify-between">
-							<Bookmark />
+							<BookmarkChallengeButton challengeId={v.challenge.id} />
 							<div className="flex gap-1">
 								<Eye /> <span className="font-light">382</span>
 							</div>
