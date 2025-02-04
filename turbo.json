@@ -4,6 +4,7 @@
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"],
 			"outputs": ["public/**", "dist/**", ".dist/**"]
 		},
 		"start": {
@@ -37,5 +38,17 @@
 			"cache": false,
 			"interactive": true
 		}
-	}
+	},
+	"globalEnv": [
+		"DATABASE_URL",
+		"FRONTEND_URL",
+		"CLOUDINARY_CLOUD_NAME",
+		"CLOUDINARY_API_KEY",
+		"CLOUDINARY_API_SECRET",
+		"GITHUB_CLIENT_ID",
+		"GITHUB_CLIENT_SECRET",
+		"GOOGLE_CLIENT_ID",
+		"GOOGLE_CLIENT_SECRET",
+		"VITE_BACKEND_URL"
+	]
 }
