@@ -149,7 +149,7 @@ export const authRouter = new Hono()
 					totalExperience: 0
 				})
 
-				await db.insert(activityLogsTable).values({
+				await tx.insert(activityLogsTable).values({
 					userId: user.id,
 					type: "REGISTER",
 					entityId: user.id,
