@@ -9,8 +9,8 @@ import { useUser } from "@/shared/hooks/use-user"
 import { Leaderboard } from "../components/leaderboard"
 import { columns } from "../components/table/columns"
 import { DataTable } from "../components/table/data-table"
-import { rankingQueryOption } from "../queries"
 import { BrandName } from "@/shared/components/brand-name"
+import { rankingQueryOption } from "@/shared/queries"
 
 export const RankingsPage = () => {
 	const { data: rankings } = useSuspenseQuery(rankingQueryOption)

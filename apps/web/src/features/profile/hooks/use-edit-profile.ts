@@ -3,12 +3,13 @@ import { toast } from "sonner"
 
 import type { ProfileData } from "../schemas/profile-schema"
 import { api } from "@/libs/api"
-import { userProfileQueryKeys, userQueryKeys } from "@/shared/queries"
+import { rankingQueryKeys, userProfileQueryKeys, userQueryKeys } from "@/shared/queries"
 
 export const useEditProfile = () => {
 	return useMutation({
 		meta: {
 			invalidates: [
+				rankingQueryKeys.rankings,
 				userQueryKeys.currentUser,
 				userQueryKeys.currentSession,
 				userProfileQueryKeys.userProfile
