@@ -1,7 +1,10 @@
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
-RUN curl -fsSL https://bun.sh/install | bash && \ cp /root/.bun/bin/bun /usr/local/bin/bun
+RUN npm install -g pnpm
+
+RUN curl -fsSL https://bun.sh/install | bash
+ENV BUN_INSTALL="/root/.bun"
+ENV PATH="$BUN_INSTALL/bin:$PATH"
 
 WORKDIR /app
 
