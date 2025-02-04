@@ -13,7 +13,6 @@ COPY apps/api/package.json ./apps/api/
 COPY packages/utils/package.json ./packages/utils/
 
 RUN pnpm install --frozen-lockfile --prod=false
-RUN pnpm -r exec pnpm link --global
 
 COPY . .
 
