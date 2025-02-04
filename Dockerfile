@@ -17,8 +17,6 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN pnpm build
-
 FROM oven/bun:1
 
 WORKDIR /app
