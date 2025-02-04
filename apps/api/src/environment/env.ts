@@ -5,6 +5,7 @@ export const env = createEnv({
 	server: {
 		FRONTEND_URL: z.string(),
 		DATABASE_URL: z.string(),
+		DATABASE_AUTH_TOKEN: z.string(),
 		CLOUDINARY_API_KEY: z.string(),
 		CLOUDINARY_API_SECRET: z.string(),
 		CLOUDINARY_CLOUD_NAME: z.string(),
@@ -12,6 +13,7 @@ export const env = createEnv({
 		GITHUB_CLIENT_SECRET: z.string(),
 		GOOGLE_CLIENT_ID: z.string(),
 		GOOGLE_CLIENT_SECRET: z.string(),
+		DATABASE_URL_DEV: z.string().optional().default("file:./db.sqlite"),
 		NODE_ENV: z.enum(["development", "production", "test"]).default("development")
 	},
 	runtimeEnv: process.env,
