@@ -15,6 +15,18 @@ export const userProfileQueryKeys = {
 	userProfile: ["userProfile"] as const
 }
 
+export const rankingQueryKeys = {
+	rankings: ["rankings"] as const
+}
+
+export const rankingQueryOption = queryOptions({
+	queryKey: rankingQueryKeys.rankings,
+	queryFn: async () => {
+		const rankings = await api.rank.$get().then((res) => res.json())
+		return rankings.data
+	}
+})
+
 export const userBookmarksQueryOptions = queryOptions({
 	queryKey: userQueryKeys.userBookmarks,
 	queryFn: async () => {
