@@ -8,7 +8,9 @@ const globalForDb = globalThis as unknown as {
 	client: Client | undefined
 }
 
-export const client = globalForDb.client ?? createClient({ url: env.DATABASE_URL })
+const url = env.NODE_ENV === "production" ? env.DATABASE_URL : env.DATABASE_URL_DEV
+
+export const client = globalForDb.client ?? createClient({ url })
 
 if (env.NODE_ENV === "production") globalForDb.client = client
 
