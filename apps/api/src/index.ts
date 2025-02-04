@@ -56,7 +56,10 @@ const routes = app
 	.route("/login/github", githubOauthRouter)
 	.route("/login/google", googleOauthRouter)
 
-export default app
+export default {
+	fetch: app.fetch,
+	port: process.env.PORT ?? 3000
+}
 
 export type ApiRoutes = typeof routes
 export type UploadRouter = typeof uploadRouter
