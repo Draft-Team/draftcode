@@ -1,7 +1,6 @@
 FROM node:20-slim AS builder
 
 RUN npm install -g pnpm
-
 RUN curl -fsSL https://bun.sh/install | bash
 
 ENV BUN_INSTALL="/root/.bun"
@@ -9,7 +8,7 @@ ENV PATH="$BUN_INSTALL/bin:$PATH"
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml turbo.json ./
+COPY package.json pnpm-lock.yaml turbo.json .npmrc* ./
 COPY apps/api/package.json ./apps/api/
 COPY packages/utils/package.json ./packages/utils/
 
@@ -22,11 +21,7 @@ FROM oven/bun:1
 WORKDIR /app
 
 COPY --from=builder /app/package.json /app/pnpm-lock.yaml /app/turbo.json ./
-
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
-COPY --from=builder /app/packages/utils/node_modules ./packages/utils/node_modules
-
 COPY --from=builder /app/apps/api ./apps/api
 COPY --from=builder /app/packages/utils ./packages/utils
 
