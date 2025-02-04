@@ -8,22 +8,19 @@ ENV PATH="$BUN_INSTALL/bin:$PATH"
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml turbo.json .npmrc* ./
-COPY apps/api/package.json ./apps/api/
-COPY packages/utils/package.json ./packages/utils/
+COPY . .
+
+RUN rm -rf /app/apps/web
+RUN rm -rf /app/packages/ui
+RUN rm -rf /app/packages/types
 
 RUN pnpm install --frozen-lockfile
-
-COPY . .
 
 FROM oven/bun:1
 
 WORKDIR /app
 
-COPY --from=builder /app/package.json /app/pnpm-lock.yaml /app/turbo.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/apps/api ./apps/api
-COPY --from=builder /app/packages/utils ./packages/utils
+COPY --from=builder /app ./
 
 ENV PORT=${PORT:-3000}
 ENV NODE_ENV=production
