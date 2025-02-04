@@ -149,9 +149,9 @@ export const setSessionTokenCookie = ({
 	setCookie(context, "session", token, {
 		httpOnly: true,
 		path: "/",
+		expires: expiresAt,
 		secure: env.NODE_ENV === "production",
-		sameSite: "none",
-		expires: expiresAt
+		sameSite: env.NODE_ENV === "production" ? "none" : "lax"
 	})
 }
 
@@ -161,9 +161,9 @@ export const deleteSessionTokenCookie = () => {
 	setCookie(context, "session", "", {
 		httpOnly: true,
 		path: "/",
+		maxAge: 0,
 		secure: env.NODE_ENV === "production",
-		sameSite: "none",
-		maxAge: 0
+		sameSite: env.NODE_ENV === "production" ? "none" : "lax"
 	})
 }
 
