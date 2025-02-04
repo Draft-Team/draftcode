@@ -39,4 +39,4 @@ ENV GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
 
 EXPOSE $PORT
 
-CMD ["bun", "apps/api/server.ts"]
+CMD ["bun", "apps/api/index.ts"]
