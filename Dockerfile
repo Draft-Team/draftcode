@@ -1,25 +1,26 @@
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
-RUN curl -fsSL https://bun.sh/install | bash && \ cp /root/.bun/bin/bun /usr/local/bin/bun
+RUN npm install -g pnpm
+RUN curl -fsSL https://bun.sh/install | bash
+
+ENV BUN_INSTALL="/root/.bun"
+ENV PATH="$BUN_INSTALL/bin:$PATH"
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml turbo.json ./
-COPY apps/api/package.json ./apps/api/
-COPY packages/utils/package.json ./packages/utils/
-
-RUN pnpm install --frozen-lockfile --prod=false
-
 COPY . .
+
+RUN rm -rf /app/apps/web
+RUN rm -rf /app/packages/ui
+RUN rm -rf /app/packages/types
+
+RUN pnpm install --frozen-lockfile
 
 FROM oven/bun:1
 
 WORKDIR /app
 
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/apps/api ./apps/api
-COPY --from=builder /app/packages/utils ./packages/utils
+COPY --from=builder /app ./
 
 ENV PORT=${PORT:-3000}
 ENV NODE_ENV=production
@@ -36,4 +37,4 @@ ENV GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
 
 EXPOSE $PORT
 
-CMD ["bun", "apps/api/server.ts"]
+CMD ["bun", "apps/api/src/index.ts"]
